@@ -1,26 +1,20 @@
-import { connect } from '../helpers/database';
+import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
+import connect from '../database';
 
 /**
  * @method authenticate
  * @param {Object} request
  * @param {Object} response
- * @return {void} 
+ * @return {Promise} 
  */
-export async function authenticate(request, response) {
+export default async function authenticate(request, response) {
 
-    const client = connect();
-    
-    const user = await new Promise(resolve => {
+    const db = connect();
+    const [{ username, password, salt }] = await db.select().from('users').where('username', request.query.username);
+    const isValid = await argon2.verify(password, `${salt}${request.query.password}`);
+    const token = jwt.sign({ username }, process.env.CARPETBASE_SECRET);
 
-        const sql = 'SELECT * FROM `users` WHERE username = :username AND password = :password LIMIT 1';
-
-        client.query(sql, request.params, (err, [row]) => {
-            console.log(row);
-            resolve(row);
-        });
-
-    });
-
-    return void response.send(user);
+    return response.send({ authorised: isValid, token: isValid ? token : null });
     
 }

@@ -17,6 +17,10 @@ module.exports = {
             }
         ]
     },
+    externals: {
+        knex: 'commonjs knex',
+        argon2: 'argon2'
+    },
     node: {
         fs: "empty",
         net: "empty"

@@ -1,5 +1,5 @@
-import Client from 'mariasql';
-import { parse } from 'pg-connection-string';
+import knex from 'knex';
+import parse from 'pg-connection-string';
 
 /**
  * @constant credentials
@@ -12,5 +12,12 @@ const credentials = parse(process.env.CARPETBASE_DB);
  * @return {Object}
  */
 export default function connect() {
-    return new Client({ ...credentials, db: credentials.database, charset: 'utf8' });
+
+    return knex({
+        dialect: 'maria',
+        connection: {
+            ...credentials, db: credentials.database
+        }
+    });
+
 }
