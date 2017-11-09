@@ -6,7 +6,7 @@
   "scripts": {
     "test": "ava",
     "build": "mkdir -p public && npm run html && webpack --config webpack.development.js && npm run assets",
-    "watch": "concurrently 'nodemon public/server.js' 'webpack --config webpack.development.js --watch' 'node-sass --watch src/sass/index.scss public/assets/css/main.css'",
+    "watch": "npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack.development.js --watch' 'node-sass --watch src/sass/index.scss public/assets/css/main.css'",
     "assets": "mkdir -p public/assets && npm run sass",
     "sass": "node-sass src/sass/index.scss public/assets/css/main.css",
     "html": "ncp src/index.html public/index.html",
