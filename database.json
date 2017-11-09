@@ -1,0 +1,7 @@
+{
+    "mysql": {
+        "ENV": "CARPETBASE_DB",
+        "multipleStatements": true,
+        "native": true
+    }
+}
