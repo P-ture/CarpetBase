@@ -19,7 +19,6 @@ exports.setup = function(options, seedLink) {
 
 exports.up = async function(db, callback) {
   const salt = csprng(160, 36);
-  console.log(salt, process.env.CARPETBASE_PW);
   const password = await argon2.hash(`${salt}${process.env.CARPETBASE_PW}`);
   db.insert('users', ['salt', 'username', 'password'], [salt, 'admin', password], callback);
 };
