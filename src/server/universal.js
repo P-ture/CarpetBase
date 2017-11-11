@@ -38,22 +38,36 @@ async function compile(request, response) {
     const LayoutWithRouter = withRouter(Index.Layout);
     const params = { dispatch: store.dispatch, headers, request, response };
     
-    // Await the population of the Redux store before rendering the application tree.
-    Index.fetchData && await Index.fetchData(params);
-    await Promise.all(routes.map(async route => {
-        const match = matchPath(path, route);
-        return (match && route.fetch) ? await route.fetch(params) : Promise.resolve();
-    }));
+    try {
 
-    const html = renderToString((
-        <Provider store={store}>
-            <StaticRouter context={{}} location={path}>
-                <LayoutWithRouter />
-            </StaticRouter>
-        </Provider>
-    ));
+        // Await the population of the Redux store before rendering the application tree.
+        Index.fetchData && await Index.fetchData(params);
+        await Promise.all(routes.map(async route => {
+            const match = matchPath(path, route);
+            return (match && route.fetch) ? await route.fetch(params) : Promise.resolve();
+        }));
 
-    return { html, state: store.getState() };
+        const html = renderToString((
+            <Provider store={store}>
+                <StaticRouter context={{}} location={path}>
+                    <LayoutWithRouter />
+                </StaticRouter>
+            </Provider>
+        ));
+    
+        return { html, state: store.getState(), isError: false };
+
+    } catch (err) {
+
+        const html = renderToString(
+            <section className="error">
+                We're currently experiencing difficulties. Please <a href="/">try again</a> later.
+            </section>
+        );
+
+        return { html, state: store.getState(), isError: true };
+
+    }
 
 }
 
@@ -62,7 +76,7 @@ export default function(request, response) {
     return readFile('public/index.html', 'utf8', async (_, document) => {
 
         // Render the application to string, and parse the template HTML file.
-        const { html, state } = await compile(request, response);
+        const { html, state, isError } = await compile(request, response);
         const dom = format(document, { ...options, html });
         
         // Append the data taken from the Redux store and append it to the <body /> tag.
@@ -72,6 +86,17 @@ export default function(request, response) {
         script.setAttribute('charset', 'UTF-8');
         script.innerHTML = `window.__state__ = '${JSON.stringify(state)}';`;
         jsDom.window.document.body.appendChild(script);
+
+        if (isError) {
+
+            // Remove all of the script files if we have an error, as there's no sense in trying
+            // to render a broken universal application, since we probably don't have the relevant data
+            // from the store.
+            jsDom.window.document.querySelectorAll('script').forEach(script => {
+                script.remove();
+            });
+
+        }
 
         return response.send(jsDom.serialize());
     });

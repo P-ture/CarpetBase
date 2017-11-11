@@ -1,5 +1,5 @@
 import { get } from 'axios';
-import { URL } from '../../config';
+import instance from '../../request';
 import * as type from './types';
 
 /**
@@ -10,7 +10,7 @@ import * as type from './types';
 export function fetchPage(slug) {
 
     return async dispatch => {
-        const { data } = await get(`${URL}/api/page/${slug}.json`);
+        const { data } = await instance.get(`page/${slug}.json`);
         return dispatch(({ type: type.FETCH_PAGE, result: data }));
     };
 
