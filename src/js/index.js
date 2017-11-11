@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Route, Switch, NavLink } from 'react-router-dom';
-import * as Home from './containers/home/index';
-import * as About from './containers/about/index';
+import hash from 'object-hash';
+import routes from './routes';
 
 /**
  * @class Index
@@ -24,8 +24,9 @@ export default class Index extends PureComponent {
                 </nav>
                 <main>
                     <Switch>
-                        <Route path="/" exact render={() => <Home.Index />} />
-                        <Route path="/about.html" render={() => <About.Index />} />
+                        {routes.map(route => {
+                            return <Route key={hash(route)} {...route} />
+                        })};
                     </Switch>
                 </main>
                 <footer />
