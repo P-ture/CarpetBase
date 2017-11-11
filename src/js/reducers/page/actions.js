@@ -1,4 +1,3 @@
-import { get } from 'axios';
 import instance from '../../request';
 import * as type from './types';
 
