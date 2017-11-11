@@ -44,7 +44,10 @@ class Login extends Component {
         this.setState({ error: null });
 
         const error = 'Incorrect username and/or password.';
-        const { data: { authenticated, token } } = await post('/api/authenticate.json', { username, password });
+        const data = { username, password };
+        const { data: { authenticated, token } } = await post('/api/authenticate.json', data, {
+            withCredentials: true
+        });
 
         return authenticated ? this.props.history.push('/admin/dashboard.html') : this.setState({ error });
 
@@ -82,4 +85,4 @@ class Login extends Component {
 
 }
 
-export default withRouter(Login);
+export const Index = withRouter(Login);

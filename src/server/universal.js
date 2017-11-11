@@ -8,10 +8,10 @@ import { Provider } from 'react-redux';
 import format from 'string-template';
 import { compose } from 'ramda';
 import { readFile, readFileSync } from 'fs';
-import App from '../js/index';
-import Index from '../js/index';
+import App, { Layout } from '../js/index';
 import routes from '../js/routes';
 import reducers from '../js/reducers';
+import * as Index from '../js/index';
 import * as Home from '../js/containers/home/index';
 import * as About from '../js/containers/about/index';
 
@@ -26,19 +26,23 @@ const options = compose(
 
 /**
  * @method compile
- * @param {String} path
+ * @param {Object} request
+ * @param {Object} response
  * @return {Object}
  */
-async function compile(path) {
+async function compile(request, response) {
 
+    const { path, headers } = request;
     const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
     const store = createStoreWithMiddleware(reducers);
-    const LayoutWithRouter = withRouter(Index);
+    const LayoutWithRouter = withRouter(Index.Layout);
+    const params = { dispatch: store.dispatch, headers, request, response };
     
     // Await the population of the Redux store before rendering the application tree.
+    Index.fetchData && await Index.fetchData(params);
     await Promise.all(routes.map(async route => {
         const match = matchPath(path, route);
-        return (match && route.actions) ? await route.actions(store.dispatch) : null;
+        return (match && route.fetch) ? await route.fetch(params) : Promise.resolve();
     }));
 
     const html = renderToString((
@@ -58,7 +62,7 @@ export default function(request, response) {
     return readFile('public/index.html', 'utf8', async (_, document) => {
 
         // Render the application to string, and parse the template HTML file.
-        const { html, state } = await compile(request.url);
+        const { html, state } = await compile(request, response);
         const dom = format(document, { ...options, html });
         
         // Append the data taken from the Redux store and append it to the <body /> tag.

@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 
 /**
- * @class Dashboard
+ * @class Index
  * @extends {PureComponent}
  */
-export default class Dashboard extends PureComponent {
+export class Index extends PureComponent {
     
     /**
      * @constant displayName

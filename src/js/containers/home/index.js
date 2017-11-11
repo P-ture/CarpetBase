@@ -9,7 +9,7 @@ import * as actions from '../../reducers/page/actions'
  * @param {Function} dispatch
  * @return {Promise}
  */
-export async function fetchData(dispatch) {
+export function fetchData({ dispatch }) {
     return dispatch(actions.fetchPage('home'));
 }
 

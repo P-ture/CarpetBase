@@ -11,9 +11,9 @@ import connect from '../database';
  */
 export async function fetchUser(request, response) {
 
+    const db = connect();
+
     try {
-        
-        const db = connect();
 
         // Verify the JSON web token from the user's cookies.
         const record = jwt.verify(request.cookies.jwttoken, process.env.CARPETBASE_SECRET);
@@ -26,6 +26,8 @@ export async function fetchUser(request, response) {
         // Otherwise the user is unauthenticated.
         response.send({ authenticated: false });
 
+    } finally {
+        db.destroy();
     }
 
 } 
@@ -47,10 +49,12 @@ export async function authenticate(request, response) {
     
         // Verify their Argon2 hashed password with the salt, and sign the JWT.
         const isValid = await argon2.verify(password, `${salt}${request.body.password}`);
-        const token = jwt.sign({ username }, process.env.CARPETBASE_SECRET);
-    
+        const token = jwt.sign({ username }, process.env.CARPETBASE_SECRET, {
+            expiresIn: '7d'
+        });
+
         // Save the JWT to cookies if we have been successfully authenticated.
-        isValid && setCookie('jwttoken', token, { res: response });
+        isValid && setCookie('jwttoken', token, { res: response, path: '/' });
     
         return response.send({ authenticated: isValid, token: isValid ? token : null });
 
@@ -59,6 +63,8 @@ export async function authenticate(request, response) {
         // Otherwise the supplied username doesn't have a record in the database.
         return response.send({ authenticated: false, token: null });
 
+    } finally {
+        db.destroy();
     }
     
 }
