@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, NavLink } from 'react-router-dom';
 import hash from 'object-hash';
-import { bindActionCreators, compose } from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actions from './reducers/auth/actions'
+import * as actions from './reducers/auth/actions';
 import routes from './routes';
 
 /**
@@ -22,7 +23,7 @@ export function fetchData({ dispatch, headers }) {
  * @return {Object}
  */
 export const mapStateToProps = state => {
-    
+
     return {
         user: state.auth.user
     };
@@ -45,6 +46,25 @@ const mapDispatchToProps = dispatch => {
 export const Layout = connect(mapStateToProps, mapDispatchToProps)(class Layout extends PureComponent {
 
     /**
+     * @constant propTypes
+     * @type {Object}
+     */
+    static propTypes = {
+        user: PropTypes.shape({
+            authenticated: PropTypes.bool.isRequired,
+            username: PropTypes.string.isRequired
+        })
+    };
+
+    /**
+     * @constant defaultProps
+     * @type {Object}
+     */
+    static defaultProps = {
+        user: {}
+    };
+
+    /**
      * @method render
      * @return {JSX.Element}
      */
@@ -65,7 +85,7 @@ export const Layout = connect(mapStateToProps, mapDispatchToProps)(class Layout 
 
                 {user.authenticated && (
                     <nav className="subnavigation">
-                        <span className="username">You're signed in as <em>{user.username}</em></span>
+                        <span className="username">You&apos;re signed in as <em>{user.username}</em></span>
                         <NavLink to="/admin/dashboard.html">Dashboard</NavLink>
                         <NavLink to="/admin/logout.html">Sign Out</NavLink>
                     </nav>
@@ -74,8 +94,8 @@ export const Layout = connect(mapStateToProps, mapDispatchToProps)(class Layout 
                 <main>
                     <Switch>
                         {routes.map(route => {
-                            return <Route key={hash(route)} {...route} />
-                        })};
+                            return <Route key={hash(route)} {...route} />;
+                        })}
                     </Switch>
                 </main>
 

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators, compose } from 'redux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actions from '../../reducers/page/actions'
+import * as actions from '../../reducers/page/actions';
 
 /**
  * @method fetchData
@@ -19,7 +19,7 @@ export function fetchData({ dispatch }) {
  * @return {Object}
  */
 export const mapStateToProps = state => {
-    
+
     return {
         page: state.page.content
     };
@@ -40,7 +40,7 @@ const mapDispatchToProps = dispatch => {
  * @extends {PureComponent}
  */
 export const Index = connect(mapStateToProps, mapDispatchToProps)(class Home extends PureComponent {
-    
+
     /**
      * @constant displayName
      * @type {String}

@@ -4,11 +4,10 @@ import setCookie from 'set-cookie';
 
 /**
  * @method fetchData
- * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export function fetchData({ request, response }) {
+export function fetchData({ response }) {
     return setCookie('jwttoken', null, { res: response, path: '/' });
 }
 
@@ -17,7 +16,7 @@ export function fetchData({ request, response }) {
  * @extends {PureComponent}
  */
 export class Index extends PureComponent {
-    
+
     /**
      * @constant displayName
      * @type {String}

@@ -1,6 +1,6 @@
 import { get } from 'axios';
-import * as type from './types';
 import { URL } from '../../config';
+import * as type from './types';
 
 /**
  * @method fetchPage

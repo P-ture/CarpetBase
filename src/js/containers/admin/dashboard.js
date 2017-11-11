@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react';
  * @extends {PureComponent}
  */
 export class Index extends PureComponent {
-    
+
     /**
      * @constant displayName
      * @type {String}
