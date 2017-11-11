@@ -62,9 +62,9 @@ export const Index = connect(mapStateToProps, mapDispatchToProps)(class Home ext
     render() {
 
         return (
-            <main className="home">
+            <section className="home">
                 <h1>{this.props.page.title}</h1>
-            </main>
+            </section>
         );
 
     }

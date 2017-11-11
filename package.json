@@ -5,8 +5,8 @@
   "main": "public/index.html",
   "scripts": {
     "test": "ava",
-    "build": "mkdir -p public && npm run html && webpack --config webpack.development.js && npm run assets && npm run migrate",
-    "watch": "npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack.development.js --watch' 'node-sass --watch src/sass/index.scss public/assets/css/main.css'",
+    "build": "mkdir -p public && npm run html && webpack --config webpack/development.server.js && webpack --config webpack/development.application.js && npm run assets && npm run migrate",
+    "watch": "npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack/development.server.js --watch' 'webpack --config webpack/development.application.js --watch' 'node-sass --watch src/sass/index.scss public/assets/css/main.css'",
     "assets": "mkdir -p public/assets && npm run sass",
     "sass": "node-sass src/sass/index.scss public/assets/css/main.css",
     "html": "ncp src/index.html public/index.html",
@@ -27,6 +27,7 @@
   "dependencies": {
     "argon2": "~0.16.2",
     "axios": "~0.16.2",
+    "body-parser": "~1.17.2",
     "compression": "~1.6.2",
     "cookie-parser": "~1.4.3",
     "csprng": "~0.1.2",

@@ -43,10 +43,10 @@ export async function authenticate(request, response) {
     try {
 
         // Gather the password and associated hashing salt based on the supplied username.
-        const [{ username, password, salt }] = await db.select().from('users').where('username', request.params.username);
+        const [{ username, password, salt }] = await db.select().from('users').where('username', request.body.username);
     
         // Verify their Argon2 hashed password with the salt, and sign the JWT.
-        const isValid = await argon2.verify(password, `${salt}${request.params.password}`);
+        const isValid = await argon2.verify(password, `${salt}${request.body.password}`);
         const token = jwt.sign({ username }, process.env.CARPETBASE_SECRET);
     
         // Save the JWT to cookies if we have been successfully authenticated.
