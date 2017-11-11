@@ -41,13 +41,13 @@ export async function fetchUser(request, response) {
 export async function authenticate(request, response) {
 
     const db = connect();
-    
+
     try {
 
         // Gather the password and associated hashing salt based on the supplied username.
         const [{ username, password, salt }] = await db.select().from('users').where('username', request.body.username);
     
-        // Verify their Argon2 hashed password with the salt, and sign the JWT.
+        // Verify their Argon2 ha   shed password with the salt, and sign the JWT.
         const isValid = await argon2.verify(password, `${salt}${request.body.password}`);
         const token = jwt.sign({ username }, process.env.CARPETBASE_SECRET, {
             expiresIn: '7d'
@@ -55,13 +55,13 @@ export async function authenticate(request, response) {
 
         // Save the JWT to cookies if we have been successfully authenticated.
         isValid && setCookie('jwttoken', token, { res: response, path: '/' });
-    
-        return response.send({ authenticated: isValid, token: isValid ? token : null });
+
+        return response.redirect(isValid ? '/admin/dashboard.html' : '/admin/login.html?error=invalid');
 
     } catch (err) {
 
         // Otherwise the supplied username doesn't have a record in the database.
-        return response.send({ authenticated: false, token: null });
+        return response.redirect('/admin/login.html?error=invalid');
 
     } finally {
         db.destroy();

@@ -10,6 +10,6 @@ export default [
     { path: '/about.html', component: About.Index, fetch: About.fetchData },
     { path: '/admin/login.html', component: AdminLogin.Index },
     { path: '/admin/logout.html', component: AdminLogout.Index, fetch: AdminLogout.fetchData },
-    { path: '/admin/dashboard.html', component: AdminDashboard.Index },
+    { path: '/admin/dashboard.html', component: AdminDashboard.Index, requiresAuth: true },
     { path: '/', component: ErrorNotFound.Index }
 ];

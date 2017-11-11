@@ -12,11 +12,13 @@ const app = express();
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const server = http.createServer(app);
 
 app.get(/[/|.*\.html]$/, renderApplication);
-app.post('/api/authenticate.json', authenticate);
+app.post('/admin/login.html', authenticate);
+// app.post('/api/authenticate.json', authenticate);
 app.get('/api/user.json', fetchUser);
 app.get('/api/page/:slug.json', fetchPage);
 

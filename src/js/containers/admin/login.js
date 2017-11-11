@@ -1,13 +1,18 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { post } from 'axios';
 import { withRouter } from 'react-router-dom';
+
+/**
+ * @constant isInvalid
+ * @type {String}
+ */
+const isInvalid = '?error=invalid';
 
 /**
  * @class Login
  * @extends {Component}
  */
-class Login extends Component {
+class Login extends PureComponent {
 
     /**
      * @constant displayName
@@ -20,60 +25,10 @@ class Login extends Component {
      * @type {Object}
      */
     static propTypes = {
-        history: PropTypes.shape({
-            push: PropTypes.func.isRequired
+        location: PropTypes.shape({
+            search: PropTypes.string.isRequired
         }).isRequired
     };
-
-    /**
-     * @constant state
-     * @type {Object}
-     */
-    state = {
-        username: '',
-        password: '',
-        errors: null
-    };
-
-    /**
-     * @method update
-     * @param {String} field
-     * @return {Function}
-     */
-    update(field) {
-        return event => this.setState({ [field]: event.target.value });
-    }
-
-    /**
-     * @method authenticate
-     * @param {String} username
-     * @param {String} password
-     * @return {Promise}
-     */
-    async authenticate(username, password) {
-
-        this.setState({ error: null });
-
-        const error = 'Incorrect username and/or password.';
-        const data = { username, password };
-        const { data: { authenticated } } = await post('/api/authenticate.json', data, {
-            withCredentials: true
-        });
-
-        return authenticated ? this.props.history.push('/admin/dashboard.html') : this.setState({ error });
-
-    }
-
-    /**
-     * @method handleSubmit
-     * @param {Object} event
-     * @return {void}
-     */
-    handleSubmit(event) {
-        event.preventDefault();
-        const { username, password } = this.state;
-        this.authenticate(username, password);
-    }
 
     /**
      * @method render
@@ -81,21 +36,21 @@ class Login extends Component {
      */
     render() {
 
-        const { username, password, error } = this.state;
+        const isError = this.props.location.search === isInvalid;
 
         return (
             <section className="login">
                 <fieldset>
                     <legend>Login</legend>
-                    {error && <section className="error">{error}</section>}
-                    <form method="post" onSubmit={this.handleSubmit.bind(this)}>
+                    {isError && <section className="error">Incorrect username and/or password.</section>}
+                    <form method="post" encType="application/x-www-form-urlencoded">
                         <div className="username">
                             <label htmlFor="username">Username:</label>
-                            <input type="text" name="username" value={username} onChange={this.update('username')} />
+                            <input type="text" name="username" />
                         </div>
                         <div className="password">
                             <label htmlFor="password">Password:</label>
-                            <input type="text" name="password" value={password} onChange={this.update('password')} />
+                            <input type="password" name="password" />
                         </div>
                         <button type="submit">Login</button>
                     </form>

@@ -52,7 +52,7 @@ export const Layout = connect(mapStateToProps, mapDispatchToProps)(class Layout 
     static propTypes = {
         user: PropTypes.shape({
             authenticated: PropTypes.bool.isRequired,
-            username: PropTypes.string.isRequired
+            username: PropTypes.string
         })
     };
 

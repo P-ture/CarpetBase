@@ -1,6 +1,7 @@
 import React from 'react';
 import { StaticRouter, withRouter, matchPath } from 'react-router-dom';
 import { renderToString } from 'react-dom/server';
+import jwt from 'jsonwebtoken';
 import { JSDOM } from 'jsdom';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -25,6 +26,21 @@ const options = compose(
 )('package.json');
 
 /**
+ * @method isAuthenticated
+ * @param {Object} cookies
+ * @return {Boolean}
+ */
+function isAuthenticated(cookies) {
+
+    try {
+        return Boolean(jwt.verify(cookies.jwttoken, process.env.CARPETBASE_SECRET));
+    } catch (err) {
+        return false;
+    }
+
+}
+
+/**
  * @method compile
  * @param {Object} request
  * @param {Object} response
@@ -32,7 +48,7 @@ const options = compose(
  */
 async function compile(request, response) {
 
-    const { path, headers } = request;
+    const { url, headers, cookies } = request;
     const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
     const store = createStoreWithMiddleware(reducers);
     const LayoutWithRouter = withRouter(Index.Layout);
@@ -43,13 +59,20 @@ async function compile(request, response) {
         // Await the population of the Redux store before rendering the application tree.
         Index.fetchData && await Index.fetchData(params);
         await Promise.all(routes.map(async route => {
-            const match = matchPath(path, route);
+
+            const match = matchPath(url, route);
+
+            // Determine if the user is authenticated, and if not redirect to the login page.
+            match && route.requiresAuth === true && !isAuthenticated(cookies) && response.redirect('/admin/login.html');
+
+            // Fetch any data the current container requires to function.
             return (match && route.fetch) ? await route.fetch(params) : Promise.resolve();
+
         }));
 
         const html = renderToString((
             <Provider store={store}>
-                <StaticRouter context={{}} location={path}>
+                <StaticRouter context={{}} location={url}>
                     <LayoutWithRouter />
                 </StaticRouter>
             </Provider>
@@ -58,6 +81,8 @@ async function compile(request, response) {
         return { html, state: store.getState(), isError: false };
 
     } catch (err) {
+
+        console.log('Error: ', err);
 
         const html = renderToString(
             <section className="error">
@@ -98,7 +123,8 @@ export default function(request, response) {
 
         }
 
-        return response.send(jsDom.serialize());
+        return !response.headersSent && response.send(jsDom.serialize());
+
     });
 
 }
