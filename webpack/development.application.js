@@ -1,7 +1,7 @@
-const webpack = require('../webpack');
+const config = require('../webpack');
 
 module.exports = {
-    ...webpack,
+    ...config,
     entry: ['babel-polyfill', './src/js/bootstrap.js'],
     output: {
         path: __dirname + '/../public/assets/js',

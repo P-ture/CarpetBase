@@ -1,7 +1,7 @@
-const webpack = require('../webpack');
+const config = require('../webpack');
 
 module.exports = {
-    ...webpack,
+    ...config,
     target: 'node',
     entry: ['babel-polyfill', './src/server/index.js'],
     output: {
