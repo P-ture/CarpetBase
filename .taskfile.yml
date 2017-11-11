@@ -19,4 +19,4 @@
 
 
 - name: watch
-  task: npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack/development.server.js --watch' 'webpack --config webpack/development.application.js --watch' 'node-sass --watch src/sass/index.scss public/assets/css/main.css'
+  task: npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack/development.server.js --watch' 'webpack --config webpack/development.application.js --watch' 'node-sass --watch src/sass/index.scss public/assets/css/application.css'
