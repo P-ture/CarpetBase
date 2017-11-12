@@ -49,10 +49,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(class About extends 
     /**
      * @method fetchData
      * @param {Function} dispatch
+     * @param {Object} instance
      * @return {Promise}
      */
-    static fetchData = ({ dispatch }) => {
-        return dispatch(actions.fetchPage('about'));
+    static fetchData = ({ dispatch, instance }) => {
+        return dispatch(actions.fetchPage('about', { instance }));
     };
 
     /**

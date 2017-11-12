@@ -19,6 +19,12 @@ export default class Dashboard extends PureComponent {
     static requiresAuth = true;
 
     /**
+     * @constant assets
+     * @type {Object}
+     */
+    static assets = ['/css/dashboard.css', '/js/dashboard.js'];
+
+    /**
      * @method render
      * @return {Object}
      */

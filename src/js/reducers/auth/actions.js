@@ -1,15 +1,14 @@
-import instance from '../../request';
 import * as type from './types';
 
 /**
  * @method fetchUser
- * @param {Object} headers
+ * @param {Object} instance
  * @return {Function}
  */
-export function fetchUser({ headers }) {
+export function fetchUser({ instance }) {
 
     return async dispatch => {
-        const { data } = await instance.request({ url: 'user.json', method: 'GET', headers });
+        const { data } = await instance.get('user.json');
         return dispatch(({ type: type.FETCH_USER, result: data }));
     };
 

@@ -13,8 +13,8 @@ import routes from './routes';
  * @param {Object} headers
  * @return {Promise}
  */
-export function fetchData({ dispatch, headers }) {
-    return dispatch(actions.fetchUser({ headers }));
+export function fetchData({ dispatch, instance }) {
+    return dispatch(actions.fetchUser({ instance }));
 }
 
 /**
