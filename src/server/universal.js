@@ -53,7 +53,7 @@ async function render(request, response) {
     const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
     const store = createStoreWithMiddleware(reducers);
     const LayoutWithRouter = withRouter(Index);
-    const transform = compose(groupBy(a => extname(a)), filter(identity), flatten);
+    const transform = compose(groupBy(extname), filter(identity), flatten);
     const instance = create({
         baseURL: `http://${headers.host}/api/`,
         timeout: 1000,
