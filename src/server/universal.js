@@ -54,11 +54,7 @@ async function render(request, response) {
     const store = createStoreWithMiddleware(reducers);
     const LayoutWithRouter = withRouter(Index);
     const transform = compose(groupBy(extname), filter(identity), flatten);
-    const instance = create({
-        baseURL: `http://${headers.host}/api/`,
-        timeout: 1000,
-        headers: request.headers
-    });
+    const instance = create({ baseURL: `http://${headers.host}/api/`, timeout: 1000, headers: request.headers });
     const params = { dispatch: store.dispatch, instance, response };
 
     try {
@@ -104,7 +100,7 @@ async function render(request, response) {
 
         const html = renderToString(
             <section className="error">
-                We're currently experiencing difficulties. Please <a href="/">try again</a> later.
+                We&apos;re currently experiencing difficulties. Please <a href="/">try again</a> later.
             </section>
         );
 
