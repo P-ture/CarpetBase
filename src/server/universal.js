@@ -13,9 +13,9 @@ import { compose, flatten, identity, groupBy, filter } from 'ramda';
 import App, { Layout } from '../js/index';
 import routes from '../js/routes';
 import reducers from '../js/reducers';
-import * as Index from '../js/index';
-import * as Home from '../js/containers/home/index';
-import * as About from '../js/containers/about/index';
+import Index from '../js/index';
+import Home from '../js/containers/home/index';
+import About from '../js/containers/about/index';
 
 /**
  * @constant options
@@ -52,7 +52,7 @@ async function render(request, response) {
     const { url, headers, cookies } = request;
     const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
     const store = createStoreWithMiddleware(reducers);
-    const LayoutWithRouter = withRouter(Index.Layout);
+    const LayoutWithRouter = withRouter(Index);
     const transform = compose(groupBy(a => extname(a)), filter(identity), flatten);
     const instance = create({
         baseURL: `http://${headers.host}/api/`,

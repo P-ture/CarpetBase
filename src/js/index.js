@@ -8,16 +8,6 @@ import * as actions from './reducers/auth/actions';
 import routes from './routes';
 
 /**
- * @method fetchData
- * @param {Function} dispatch
- * @param {Object} headers
- * @return {Promise}
- */
-export function fetchData({ dispatch, instance }) {
-    return dispatch(actions.fetchUser({ instance }));
-}
-
-/**
  * @method mapStateToProps
  * @param {Object} state
  * @return {Object}
@@ -43,7 +33,7 @@ const mapDispatchToProps = dispatch => {
  * @class Layout
  * @extends {PureComponent}
  */
-export const Layout = connect(mapStateToProps, mapDispatchToProps)(class Layout extends PureComponent {
+export default connect(mapStateToProps, mapDispatchToProps)(class Layout extends PureComponent {
 
     /**
      * @constant propTypes
@@ -62,6 +52,16 @@ export const Layout = connect(mapStateToProps, mapDispatchToProps)(class Layout 
      */
     static defaultProps = {
         user: {}
+    };
+
+    /**
+     * @method fetchData
+     * @param {Function} dispatch
+     * @param {Object} headers
+     * @return {Promise}
+     */
+    static fetchData = ({ dispatch, instance }) => {
+        return dispatch(actions.fetchUser({ instance }));
     };
 
     /**
