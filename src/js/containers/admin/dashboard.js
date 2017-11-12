@@ -1,16 +1,22 @@
 import React, { PureComponent } from 'react';
 
 /**
- * @class Index
+ * @class Dashboard
  * @extends {PureComponent}
  */
-export class Index extends PureComponent {
+export default class Dashboard extends PureComponent {
 
     /**
      * @constant displayName
      * @type {String}
      */
     static displayName = 'Authenticate/Index/Dashboard';
+
+    /**
+     * @constant requiresAuth
+     * @type {Boolean}
+     */
+    static requiresAuth = true;
 
     /**
      * @method render

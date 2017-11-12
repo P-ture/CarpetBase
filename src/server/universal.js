@@ -61,12 +61,13 @@ async function compile(request, response) {
         await Promise.all(routes.map(async route => {
 
             const match = matchPath(url, route);
+            const { component } = route;
 
             // Determine if the user is authenticated, and if not redirect to the login page.
-            match && route.requiresAuth === true && !isAuthenticated(cookies) && response.redirect('/admin/login.html');
+            match && component && component.requiresAuth === true && !isAuthenticated(cookies) && response.redirect('/admin/login.html');
 
             // Fetch any data the current container requires to function.
-            return (match && route.fetch) ? await route.fetch(params) : Promise.resolve();
+            return (match && component && component.fetchData) ? await component.fetchData(params) : Promise.resolve();
 
         }));
 

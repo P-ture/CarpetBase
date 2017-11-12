@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 
 /**
- * @class Index
+ * @class NotFound
  * @extends {PureComponent}
  */
-export class Index extends PureComponent {
+export default class NotFound extends PureComponent {
 
     /**
      * @constant displayName

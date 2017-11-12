@@ -12,7 +12,7 @@ const isInvalid = '?error=invalid';
  * @class Login
  * @extends {Component}
  */
-class Login extends PureComponent {
+export default withRouter(class Login extends PureComponent {
 
     /**
      * @constant displayName
@@ -60,6 +60,4 @@ class Login extends PureComponent {
 
     }
 
-}
-
-export const Index = withRouter(Login);
+});

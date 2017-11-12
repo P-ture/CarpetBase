@@ -3,25 +3,25 @@ import { NavLink } from 'react-router-dom';
 import setCookie from 'set-cookie';
 
 /**
- * @method fetchData
- * @param {Object} response
- * @return {Promise}
- */
-export function fetchData({ response }) {
-    return setCookie('jwttoken', null, { res: response, path: '/' });
-}
-
-/**
- * @class Index
+ * @class Logout
  * @extends {PureComponent}
  */
-export class Index extends PureComponent {
+export default class Logout extends PureComponent {
 
     /**
      * @constant displayName
      * @type {String}
      */
     static displayName = 'Authenticate/Index/Logout';
+
+    /**
+     * @method fetchData
+     * @param {Object} response
+     * @return {Promise}
+     */
+    static fetchData = ({ response }) => {
+        return setCookie('jwttoken', null, { res: response, path: '/' });
+    };
 
     /**
      * @method render
