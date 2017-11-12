@@ -20,7 +20,7 @@ export default class Logout extends PureComponent {
      * @return {Promise}
      */
     static fetchData = ({ response }) => {
-        return setCookie('jwttoken', null, { res: response, path: '/' });
+        return setCookie('jwttoken', null, { res: response, path: '/', expires: new Date() });
     };
 
     /**
