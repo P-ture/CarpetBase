@@ -5,7 +5,6 @@
     - - webpack --config webpack/development.server.js
     - - webpack --config webpack/development.application.js
     - - npm run assets
-    - - npm run migrate
 
 - name: build
   env: production
@@ -15,8 +14,6 @@
     - - webpack --config webpack/development.server.js
     - - webpack --config webpack/production.application.js
     - - npm run assets
-    - - npm run migrate
-
 
 - name: watch
   task: npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack/development.server.js --watch' 'webpack --config webpack/development.application.js --watch' 'node-sass --watch src/sass/index.scss public/assets/css/application.css'

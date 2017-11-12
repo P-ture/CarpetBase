@@ -2,8 +2,7 @@ language: node_js
 node_js: stable
 
 script:
-  - npm install
-  - npm run lint
+  - npm install --production=false
   - npm run build
 
 deploy:
@@ -11,5 +10,7 @@ deploy:
   api_key:
     secure: iZFzJo2gxk31zEnPbjE1eycx6cbdPt0WLCcggUdAcMOY3aH1V0GQ70PNJVqFMQeuxhmzx0jQ2BfgdSJMY5Fk7wXTDeY2zawZzsO7soCOPK9PSiS70pKCBy1zcDaPuyHO/t/gxKT6N2fupD6NwANOlRo1CMLsRHNfW1HHMwJ0Y8EsdrUIJLqogIg4B0bf7ShtQqDESNibKg4HvMRmshVz0FVpOZ6lZX5Lbs9oxWxNLG0o7lyoHRBtdDpKxpu3Fmf/qtP9MFzswdzqJDIU4dOxADH9KJTUBndF70g+H+uaucHB2Vrslzn7gi1FsJ9r04lNipD/Fk3E8sm5+SeRxeIlIfiVM022q4CoNs3eMSojKJFzKYtZ0qaepgqMcy2NNxN4SrVCZEz/yhPC7je9yTfM1lOb6lCQ15Ex8rw87oMQD1u2Y8XN4wNX1GA1jy4yDfGaCu5HVxMHPy/uZMkfbQ0W4RvQYkRVs42H31agLvdJBnGMtc2J+op5f/S0Wfj4CQkSj6eNoDal48ZJjUA8ZyqJJtGhWflp5l69K9ZtyV9blNza78gjt5kM/3A2SOYucDbR5oC/el3cvjb1xBEF6D8zq4iYHsleVydillyu2EHfzdVC/XFqexhSIaF+RIBA2BjVeyB6EOSW7HIj9frMD/wuk//HIeYl0W2XClogvvEHLfM=
   app: carpetbase
+  run:
+    - "npm run migrate"
   on:
     repo: Pture/CarpetBase
