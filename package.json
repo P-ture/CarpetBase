@@ -35,7 +35,7 @@
     "db-migrate": "~0.10.0-beta.24",
     "db-migrate-mysql": "~1.1.10",
     "express": "~4.15.3",
-    "jsdom": "~11.3.0",
+    "handlebars": "~4.0.11",
     "jsonwebtoken": "~8.1.0",
     "knex": "~0.14.0",
     "mariasql": "~0.2.6",
@@ -49,8 +49,7 @@
     "react-router-dom": "~4.2.2",
     "redux": "~3.7.2",
     "redux-thunk": "~2.2.0",
-    "set-cookie": "0.0.4",
-    "string-template": "~1.0.0"
+    "set-cookie": "0.0.4"
   },
   "devDependencies": {
     "ava": "~0.23.0",

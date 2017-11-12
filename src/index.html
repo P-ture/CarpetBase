@@ -1,17 +1,26 @@
 <!DOCTYPE html>
-<!-- Version: {version} -->
+<!-- Version: {{version}} -->
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>CarpetBase</title>
-    <link rel="stylesheet" type="text/css" href="/css/application.css?version={version}" />
-    <!-- <script type="text/javascript" src="/js/application.js?version={version}" async defer></script> -->
+    
+    <link rel="stylesheet" type="text/css" href="/css/application.css?version={{version}}" />
+
+    {{#each resources.css}}
+        <link rel="stylesheet" type="text/css" href="{{.}}?version={{../version}}" />
+    {{/each}}
+    
+    {{#each resources.js}}
+        <script type="text/javascript" src="{{.}}?version={{../version}}" async defer></script>
+    {{/each}}
+
 </head>
 <body>
 
-    <section class="app">{html}</section>
+    {{{html}}}
 
 </body>
 </html>

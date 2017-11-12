@@ -5,12 +5,11 @@ import { StaticRouter, withRouter, matchPath } from 'react-router-dom';
 import { renderToString } from 'react-dom/server';
 import { create } from 'axios';
 import jwt from 'jsonwebtoken';
-import { JSDOM } from 'jsdom';
+import { compile } from 'handlebars';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import format from 'string-template';
-import { compose, flatten, identity } from 'ramda';
+import { compose, flatten, identity, groupBy, filter } from 'ramda';
 import App, { Layout } from '../js/index';
 import routes from '../js/routes';
 import reducers from '../js/reducers';
@@ -43,17 +42,18 @@ function isAuthenticated(cookies) {
 }
 
 /**
- * @method compile
+ * @method render
  * @param {Object} request
  * @param {Object} response
  * @return {Object}
  */
-async function compile(request, response) {
+async function render(request, response) {
 
     const { url, headers, cookies } = request;
     const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
     const store = createStoreWithMiddleware(reducers);
     const LayoutWithRouter = withRouter(Index.Layout);
+    const transform = compose(groupBy(a => extname(a)), filter(identity), flatten);
     const instance = create({
         baseURL: `http://${headers.host}/api/`,
         timeout: 1000,
@@ -95,8 +95,8 @@ async function compile(request, response) {
                 </StaticRouter>
             </Provider>
         ));
-    
-        return { html, state: store.getState(), assets: flatten(assets.filter(identity)) };
+
+        return { html, state: store.getState(), assets: transform(assets) };
 
     } catch (err) {
 
@@ -114,54 +114,16 @@ async function compile(request, response) {
 
 }
 
-/**
- * @method insertJS
- * @param {Object} jsDom 
- * @param {String} asset
- * @return {Object} 
- */
-function insertJS(jsDom, asset) {
-
-    const script = jsDom.window.document.createElement('script');
-    script.setAttribute('charset', 'UTF-8');
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('async', true);
-    script.setAttribute('defer', true);
-    script.setAttribute('src', `${asset}?version=${options.version}`);
-
-    jsDom.window.document.head.appendChild(script);
-
-    return jsDom;
-
-}
-
 export default function(request, response) {
 
     return readFile('public/index.html', 'utf8', async (_, document) => {
 
         // Render the application to string, and parse the template HTML file.
-        const { html, state, assets } = await compile(request, response);
-        const dom = format(document, { ...options, html });
-        
-        // Append the data taken from the Redux store and append it to the <body /> tag.
-        const jsDom = new JSDOM(dom);
-        // const script = jsDom.window.document.createElement('script');
-        // script.setAttribute('type', 'text/javascript');
-        // script.setAttribute('charset', 'UTF-8');
-        // script.innerHTML = `window.__state__ = '${JSON.stringify(state)}';`;
-        // jsDom.window.document.body.appendChild(script);
+        const { html, state, assets } = await render(request, response);
+        const resources = { css: assets['.css'], js: assets['.js'] };
+        const template = compile(document)({ ...options, html, resources });
 
-        // Insert any additional assets into the DOM.
-        assets.forEach(asset => {
-
-            switch (extname(asset)) {
-                case '.js': insertJS(jsDom, asset); break;
-                // case '.css': insertCSS(jsDom, asset); break;
-            }
-
-        });
-
-        return !response.headersSent && response.send(jsDom.serialize());
+        return !response.headersSent && response.send(template);
 
     });
 
