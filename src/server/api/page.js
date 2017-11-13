@@ -16,7 +16,7 @@ export default async function fetchPage(request, response) {
         // Fetch the content from the database by the passed slug.
         const slug = request.params.slug === 'home' ? null : request.params.slug;
         const [record] = await db.select().from('pages').where('slug', slug);
-        return response.send(record);
+        return record ? response.send(record) : response.status(404).send({});
 
     } catch (err) {
         return response.send({});

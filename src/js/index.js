@@ -4,6 +4,7 @@ import { Route, Switch, NavLink } from 'react-router-dom';
 import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import by from 'sort-by';
 import * as authActions from './reducers/auth/actions';
 import * as pageActions from './reducers/page/actions';
 import routes from './routes';
@@ -93,7 +94,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Layout extends
 
                 <nav className="navigation">
 
-                    {this.props.navigation.map(model => {
+                    {[...this.props.navigation].sort(by('order')).map(model => {
                         const slug = model.slug ? `/${model.slug}.html` : '/';
                         return <NavLink key={hash(model)} to={slug}>{model.name}</NavLink>;
                     })}

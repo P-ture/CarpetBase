@@ -71,8 +71,14 @@ async function render(request, response) {
                 // Determine if the user is authenticated, and if not redirect to the login page.
                 component && component.requiresAuth === true && !isAuthenticated(cookies) && response.redirect('/admin/login.html');
             
-                // Fetch any data the current container requires to function.
-                component && component.fetchData && await component.fetchData({ ...params, params: match.params });
+                try {
+
+                    // Fetch any data the current container requires to function.
+                    component && component.fetchData && await component.fetchData({ ...params, params: match.params });
+                
+                } catch (err) {
+
+                }
 
                 // Yield any assets that the component wants to load.
                 return component.assets || null;
@@ -98,9 +104,12 @@ async function render(request, response) {
         console.log('Error: ', err);
 
         const html = renderToString(
-            <section className="error">
-                We&apos;re currently experiencing difficulties. Please <a href="/">try again</a> later.
-            </section>
+            <DocumentTitle title="Error">
+                <section className="error">
+                    <h1>CarpetBase</h1>
+                    <p>We&apos;re currently experiencing difficulties. Please <a href="/">try again</a> later.</p>
+                </section>
+            </DocumentTitle>
         );
 
         return { html, state: store.getState(), assets: [] };

@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import * as actions from '../../reducers/page/actions';
+import NotFound from '../error/not-found';
 
 /**
  * @method mapStateToProps
@@ -44,7 +45,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
      * @type {Object}
      */
     static propTypes = {
-        page: PropTypes.object.isRequired
+        page: PropTypes.object
+    };
+
+    /**
+     * @constant defaultProps
+     * @type {Object}
+     */
+    static defaultProps = {
+        page: null
     };
 
     /**
@@ -72,14 +81,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
 
         const { page } = this.props;
 
-        return (
+        return page ? (
             <DocumentTitle title={page.title}>
                 <section className={`page ${page.slug || actions.HOME}`}>
                     <h1>{page.title}</h1>
                     <p>{page.content}</p>
                 </section>
             </DocumentTitle>
-        );
+        ) : <NotFound />;
 
     }
 
