@@ -14,8 +14,6 @@ import App, { Layout } from '../js/index';
 import routes from '../js/routes';
 import reducers from '../js/reducers';
 import Index from '../js/index';
-import Home from '../js/containers/home/index';
-import About from '../js/containers/about/index';
 
 /**
  * @constant options
@@ -73,7 +71,7 @@ async function render(request, response) {
                 component && component.requiresAuth === true && !isAuthenticated(cookies) && response.redirect('/admin/login.html');
             
                 // Fetch any data the current container requires to function.
-                component && component.fetchData && await component.fetchData(params);
+                component && component.fetchData && await component.fetchData({ ...params, params: match.params });
 
                 // Yield any assets that the component wants to load.
                 return component.assets || null;

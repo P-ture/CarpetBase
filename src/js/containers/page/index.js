@@ -27,16 +27,16 @@ const mapDispatchToProps = dispatch => {
 };
 
 /**
- * @class Index
+ * @class Page
  * @extends {PureComponent}
  */
-export default connect(mapStateToProps, mapDispatchToProps)(class About extends PureComponent {
+export default connect(mapStateToProps, mapDispatchToProps)(class Page extends PureComponent {
 
     /**
      * @constant displayName
      * @type {String}
      */
-    static displayName = 'About/Index';
+    static displayName = 'Page/Index';
 
     /**
      * @constant propTypes
@@ -50,10 +50,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(class About extends 
      * @method fetchData
      * @param {Function} dispatch
      * @param {Object} instance
+     * @param {Object} params
      * @return {Promise}
      */
-    static fetchData = ({ dispatch, instance }) => {
-        return dispatch(actions.fetchPage('about', { instance }));
+    static fetchData = ({ dispatch, instance, params }) => {
+        return dispatch(actions.fetchPage(params.page || actions.HOME, { instance }));
     };
 
     /**
@@ -62,9 +63,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(class About extends 
      */
     render() {
 
+        const { page } = this.props;
+
         return (
-            <section className="about">
-                <h1>{this.props.page.title}</h1>
+            <section className={`page ${page.slug || actions.HOME}`}>
+                <h1>{page.title}</h1>
+                <p>{page.content}</p>
             </section>
         );
 

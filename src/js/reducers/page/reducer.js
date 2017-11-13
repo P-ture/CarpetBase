@@ -5,7 +5,8 @@ import * as type from './types';
  * @type {Object}
  */
 const INITIAL_STATE = {
-    content: null
+    content: null,
+    navigation: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -14,6 +15,9 @@ export default (state = INITIAL_STATE, action) => {
 
         case type.FETCH_PAGE:
             return { ...state, content: action.result };
+
+        case type.FETCH_NAVIGATION:
+            return { ...state, navigation: action.result };
 
     }
 
