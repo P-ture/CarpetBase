@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import DocumentTitle from 'react-document-title';
 import * as actions from '../../reducers/page/actions';
 
 /**
@@ -47,6 +48,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
     };
 
     /**
+     * @constant assets
+     * @type {Array}
+     */
+    static assets = ['/css/page.css'];
+
+    /**
      * @method fetchData
      * @param {Function} dispatch
      * @param {Object} instance
@@ -66,10 +73,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
         const { page } = this.props;
 
         return (
-            <section className={`page ${page.slug || actions.HOME}`}>
-                <h1>{page.title}</h1>
-                <p>{page.content}</p>
-            </section>
+            <DocumentTitle title={page.title}>
+                <section className={`page ${page.slug || actions.HOME}`}>
+                    <h1>{page.title}</h1>
+                    <p>{page.content}</p>
+                </section>
+            </DocumentTitle>
         );
 
     }

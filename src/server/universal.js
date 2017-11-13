@@ -3,6 +3,7 @@ import { readFile, readFileSync } from 'fs';
 import React from 'react';
 import { StaticRouter, withRouter, matchPath } from 'react-router-dom';
 import { renderToString } from 'react-dom/server';
+import DocumentTitle from 'react-document-title';
 import { create } from 'axios';
 import jwt from 'jsonwebtoken';
 import { compile } from 'handlebars';
@@ -115,7 +116,7 @@ export default function(request, response) {
         // Render the application to string, and parse the template HTML file.
         const { html, state, assets } = await render(request, response);
         const resources = { css: assets['.css'], js: assets['.js'] };
-        const template = compile(document)({ ...options, html, resources });
+        const template = compile(document)({ ...options, html, resources, title: DocumentTitle.rewind() });
 
         return !response.headersSent && response.send(template);
 

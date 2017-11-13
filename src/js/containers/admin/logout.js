@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { NavLink } from 'react-router-dom';
 import setCookie from 'set-cookie';
+import DocumentTitle from 'react-document-title';
 
 /**
  * @class Logout
@@ -30,9 +31,11 @@ export default class Logout extends PureComponent {
     render() {
 
         return (
-            <section className="dashboard">
-                <p>You have been signed out of your account &mdash; you can <NavLink to="/admin/login.html">sign into another account</NavLink>.</p>
-            </section>
+            <DocumentTitle title="Administrator: Logout">
+                <section className="dashboard">
+                    <p>You have been signed out of your account &mdash; you can <NavLink to="/admin/login.html">sign into another account</NavLink>.</p>
+                </section>
+            </DocumentTitle>
         );
 
     }

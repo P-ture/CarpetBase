@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import DocumentTitle from 'react-document-title';
 
 /**
  * @class Dashboard
@@ -31,9 +32,11 @@ export default class Dashboard extends PureComponent {
     render() {
 
         return (
-            <section className="dashboard">
-                <h1>Dashboard</h1>
-            </section>
+            <DocumentTitle title="Administrator: Dashboard">
+                <section className="dashboard">
+                    <h1>Dashboard</h1>
+                </section>
+            </DocumentTitle>
         );
 
     }
