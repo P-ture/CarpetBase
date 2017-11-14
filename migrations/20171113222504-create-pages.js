@@ -15,13 +15,16 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.insert('pages', ['layout_id', 'slug', 'title', 'content'], [1, null, 'Welcome', 'Welcome to CarpetBase!'], callback);
-  db.insert('pages', ['layout_id', 'slug', 'title', 'content'], [2, 'about', 'About Us', 'All about CarpetBase.'], callback);
+  db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [1, 1, null, 'Homepage', 'I am the homepage.'], callback);
+  db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [2, 1, 'about', 'About', 'I am the about page.'], callback);
+  db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [3, 1, 'services', 'Services', 'I am the services page.'], callback);
+  db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [4, 1, 'commercial', 'Commercial', 'I am the commercial page.'], callback);
+  db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [5, 1, 'projects', 'Projects', 'I am the projects page.'], callback);
+  db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [6, 1, 'gallery', 'Gallery', 'I am the gallery page.'], callback);
 };
 
 exports.down = function(db, callback) {
-  db.runSql('DELETE FROM pages WHERE ISNULL(slug) LIMIT 1');
-  db.runSql('DELETE FROM pages WHERE slug = "about" LIMIT 1');
+  db.runSql('DELETE FROM pages WHERE id IN (1, 2, 3, 4, 5, 6)');
   callback();
 };
 

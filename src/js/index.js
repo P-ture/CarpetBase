@@ -95,21 +95,24 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Layout extends
                 <nav className="navigation">
 
                     {[...this.props.navigation].sort(by('order')).map(model => {
-                        const slug = model.slug ? `/${model.slug}.html` : '/';
-                        return <NavLink key={hash(model)} to={slug}>{model.name}</NavLink>;
+                        return <NavLink key={hash(model)} to={model.href}>{model.name}</NavLink>;
                     })}
+
+                </nav>
+
+                <nav className="subnavigation">
+
+                    {user.authenticated && [
+                        <span key="username" className="username">
+                            You&apos;re signed in as <em>{user.username}</em>
+                        </span>,
+                        <NavLink key="dashboard" to="/admin/dashboard.html">Dashboard</NavLink>,
+                        <NavLink key="logout" to="/admin/logout.html">Sign Out</NavLink>
+                    ]}
 
                     {!user.authenticated && <NavLink to="/admin/login.html">Sign In</NavLink>}
 
                 </nav>
-
-                {user.authenticated && (
-                    <nav className="subnavigation">
-                        <span className="username">You&apos;re signed in as <em>{user.username}</em></span>
-                        <NavLink to="/admin/dashboard.html">Dashboard</NavLink>
-                        <NavLink to="/admin/logout.html">Sign Out</NavLink>
-                    </nav>
-                )}
 
                 <main>
                     <Switch>
