@@ -2,28 +2,24 @@ import { extname } from 'path';
 import { readFile, readFileSync } from 'fs';
 import React from 'react';
 import { StaticRouter, withRouter, matchPath } from 'react-router-dom';
-import { renderToString } from 'react-dom/server';
 import DocumentTitle from 'react-document-title';
-import { create } from 'axios';
+import { renderToString } from 'react-dom/server';
 import jwt from 'jsonwebtoken';
 import { compile } from 'handlebars';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { compose, flatten, identity, groupBy, filter } from 'ramda';
-import App, { Layout } from '../js/index';
-import routes from '../js/routes';
-import reducers from '../js/reducers';
-import Index from '../js/index';
+import routes from '../js/miscellaneous/routes';
+import Layout from '../js/miscellaneous/layout';
+import createServer from '../js/server';
+import createError from '../js/error';
 
 /**
  * @constant options
  * @type {Object}
  */
-const options = compose(
-    JSON.parse,
-    readFileSync
-)('package.json');
+const options = compose(JSON.parse, readFileSync)('package.json');
 
 /**
  * @method isAuthenticated
@@ -48,20 +44,17 @@ function isAuthenticated(cookies) {
  */
 async function render(request, response) {
 
-    const { url, headers, cookies } = request;
-    const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-    const store = createStoreWithMiddleware(reducers);
-    const LayoutWithRouter = withRouter(Index);
-    const transform = compose(groupBy(extname), filter(identity), flatten);
-    const instance = create({ baseURL: `http://${headers.host}/api/`, timeout: 1000, headers: request.headers });
-    const params = { dispatch: store.dispatch, instance, response };
+    const { url, headers, cookies, body } = request;
+    const { jsx, store } = createServer(request);
+
+    // Create the Axios instance, and setup the params for passing into each `fetchData` method.
+    const params = { dispatch: store.dispatch, response };
 
     try {
 
         // Await the population of the Redux store before rendering the application tree.
-        Index.fetchData && await Index.fetchData(params);
-
-        const assets = await Promise.all(routes.map(async route => {
+        Layout.fetchData && await Layout.fetchData(params);
+        const css = await Promise.all(routes.map(async route => {
 
             const match = matchPath(url, route);
             const { component } = route;
@@ -80,8 +73,8 @@ async function render(request, response) {
 
                 }
 
-                // Yield any assets that the component wants to load.
-                return component.assets || null;
+                // Yield any CSS documents that the component wants to load.
+                return component.cssDocuments || null;
             
             }
 
@@ -89,30 +82,11 @@ async function render(request, response) {
 
         }));
 
-        const html = renderToString((
-            <Provider store={store}>
-                <StaticRouter context={{}} location={url}>
-                    <LayoutWithRouter />
-                </StaticRouter>
-            </Provider>
-        ));
-
-        return { html, state: store.getState(), assets: transform(assets) };
+        return { html: renderToString(jsx), state: store.getState(), css: css.filter(identity) };
 
     } catch (err) {
 
-        console.log('Error: ', err);
-
-        const html = renderToString(
-            <DocumentTitle title="Error">
-                <section className="error">
-                    <h1>CarpetBase</h1>
-                    <p>We&apos;re currently experiencing difficulties. Please <a href="/">try again</a> later.</p>
-                </section>
-            </DocumentTitle>
-        );
-
-        return { html, state: store.getState(), assets: [] };
+        return { html: renderToString(createError()), state: store.getState(), css: [] };
 
     }
 
@@ -123,9 +97,9 @@ export default function(request, response) {
     return readFile('public/index.html', 'utf8', async (_, document) => {
 
         // Render the application to string, and parse the template HTML file.
-        const { html, state, assets } = await render(request, response);
-        const resources = { css: assets['.css'], js: assets['.js'] };
-        const template = compile(document)({ ...options, html, resources, title: DocumentTitle.rewind() });
+        const { html, state, css } = await render(request, response);
+        const title = DocumentTitle.rewind();
+        const template = compile(document)({ ...options, html, css, title, state: JSON.stringify(state) });
 
         return !response.headersSent && response.send(template);
 

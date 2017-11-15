@@ -2,12 +2,12 @@ import * as type from './types';
 
 /**
  * @method fetchUser
- * @param {Object} instance
  * @return {Function}
  */
-export function fetchUser({ instance }) {
+export function fetchUser() {
 
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const instance = getState().config.axiosInstance;
         const { data } = await instance.get('user.json');
         return dispatch(({ type: type.FETCH_USER, result: data }));
     };

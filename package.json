@@ -38,6 +38,7 @@
     "handlebars": "~4.0.11",
     "jsonwebtoken": "~8.1.0",
     "knex": "~0.14.0",
+    "mailgun-js": "~0.13.1",
     "mariasql": "~0.2.6",
     "object-hash": "~1.1.8",
     "pg-connection-string": "~2.0.0",

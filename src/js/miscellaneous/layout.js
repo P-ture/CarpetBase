@@ -5,8 +5,8 @@ import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import by from 'sort-by';
-import * as authActions from './reducers/auth/actions';
-import * as pageActions from './reducers/page/actions';
+import * as authActions from '../reducers/auth/actions';
+import * as pageActions from '../reducers/page/actions';
 import routes from './routes';
 
 /**

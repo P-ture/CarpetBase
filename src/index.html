@@ -6,21 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>CarpetBase - {{title}}</title>
-    
-    <link rel="stylesheet" type="text/css" href="/css/application.css?version={{version}}" />
 
-    {{#each resources.css}}
+    <script type="text/javascript">
+        window[Symbol.for('state')] = '{{{state}}}';
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="/css/application.css?version={{version}}" />
+    <script type="text/javascript" src="/js/application.js" async defer></script>
+
+    {{#each css}}
         <link rel="stylesheet" type="text/css" href="{{.}}?version={{../version}}" />
-    {{/each}}
-    
-    {{#each resources.js}}
-        <script type="text/javascript" src="{{.}}?version={{../version}}" async defer></script>
     {{/each}}
 
 </head>
 <body>
 
-    {{{html}}}
+    <section class="container">{{{html}}}</section>
 
 </body>
 </html>

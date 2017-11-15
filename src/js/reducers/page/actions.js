@@ -9,12 +9,12 @@ export const HOME = 'home';
 /**
  * @method fetchPage
  * @param {String} slug
- * @param {Object} instance
  * @return {Function}
  */
-export function fetchPage(slug, { instance }) {
+export function fetchPage(slug) {
 
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const instance = getState().config.axiosInstance;
         const { data } = await instance.get(`page/${slug}.json`);
         return dispatch(({ type: type.FETCH_PAGE, result: data }));
     };
@@ -23,12 +23,12 @@ export function fetchPage(slug, { instance }) {
 
 /**
  * @method fetchNavigation
- * @param {Object} instance
  * @return {Function}
  */
-export function fetchNavigation({ instance }) {
+export function fetchNavigation() {
 
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const instance = getState().config.axiosInstance;
         const { data } = await instance.get('navigation.json');
         return dispatch(({ type: type.FETCH_NAVIGATION, result: data }));
     };
