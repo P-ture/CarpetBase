@@ -1,5 +1,5 @@
-@import "./shared/reset";
-@import "./shared/config";
+@import './shared/reset';
+@import './shared/config';
 @import url('https://fonts.googleapis.com/css?family=Tinos');
 
 body {
@@ -13,44 +13,54 @@ body {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
-        > a.logo {
+
+        > a:first-of-type {
           width: 300px;
           height: 85px;
-          background: url("/images/static/logo.png") 50% no-repeat;
+          background: url('/images/logo.png') 50% no-repeat;
           background-size: cover;
+
           @media (max-width: $tablet-break) {
             width: 225px;
             height: 64px;
           }
+
           @media (max-width: $mobile-break) {
             width: 150px;
             height: 43px;
           }
-        
+
           > h1 {
             position: absolute;
             left: -999999px;
           }
         }
+
         > section.header-contact {
           display: flex;
+
           > section {
-              padding: 20px;
-              @media (max-width: $mobile-break) {
-                padding: 15px;
-              }
+            padding: 20px;
+
+            @media (max-width: $mobile-break) {
+              padding: 15px;
+            }
           }
+
           > section.email {
-            background: url("/images/static/email.svg") 50% no-repeat;
+            background: url('/images/email.svg') 50% no-repeat;
             background-size: 30px;
+
             @media (max-width: $mobile-break) {
               background-size: 23px;
             }
           }
+
           > section.phone {
-            background: url("/images/static/phone.svg") 50% no-repeat;
+            background: url('/images/phone.svg') 50% no-repeat;
             background-size: 28px;
             margin-right: 15px;
+
             @media (max-width: $mobile-break) {
               background-size: 21px;
               margin-right: 8px;
@@ -58,17 +68,21 @@ body {
           }
         }
       }
+
       > section.bottom {
         margin: 20px 0 0 30px;
         box-sizing: border-box;
+
         @media (max-width: $mobile-break) {
           margin: 10px 0 0 15px;
         }
+
         h4 {
           color: $headerFooterFont;
           font-size: 20px;
           font-family: 'Tinos', serif;
           font-weight: normal;
+
           @media (max-width: $mobile-break) {
             font-size: 16px;
           }
