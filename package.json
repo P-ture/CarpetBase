@@ -4,10 +4,10 @@
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "test": "ava",
+    "test": "npm run lint",
     "build": "taskfile build",
     "watch": "taskfile watch",
-    "lint": "xo src/js/*.js src/js/**/*.js src/js/**/**/*.js src/js/**/**/**/*.js",
+    "lint": "xo src/js/**/*.js src/server/**/*.js && stylelint src/sass/*.scss src/sass/**/*.scss",
     "assets": "mkdir -p public/assets && npm run sass",
     "sass": "node-sass src/sass/index.scss public/assets/css/application.css",
     "html": "ncp src/index.html public/index.html",
@@ -69,6 +69,9 @@
     "ncp": "~2.0.0",
     "node-sass": "~4.5.3",
     "nodemon": "~1.12.1",
+    "stylelint": "~7.11.1",
+    "stylelint-config-standard": "~16.0.0",
+    "stylelint-scss": "~1.4.4",
     "taskfile": "~0.5.11",
     "uglifyjs-webpack-plugin": "~0.4.6",
     "webpack": "~3.8.1",
@@ -86,6 +89,7 @@
     "rules": {
       "default-case": "off",
       "padded-blocks": "off",
+      "no-unused-expressions": "off",
       "object-curly-spacing": [
         2,
         "always"

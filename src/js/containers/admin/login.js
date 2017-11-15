@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
+import * as config from '../../miscellaneous/config';
 
 /**
  * @constant isInvalid
@@ -40,7 +41,7 @@ export default withRouter(class Login extends PureComponent {
         const isError = this.props.location.search === isInvalid;
 
         return (
-            <DocumentTitle title="Administrator: Login">
+            <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Login`}>
                 <section className="login">
                     <fieldset>
                         <legend>Login</legend>

@@ -14,13 +14,13 @@ export default async function fetchPage(request, response) {
     try {
 
         // Fetch the content from the database by the passed slug.
-        const slug = request.params.slug === 'home' ? null : request.params.slug;
+        const slug = request.params.slug === HOME ? null : request.params.slug;
         const [record] = await db.select().from('pages').where('slug', slug);
         return record ? response.send(record) : response.status(404).send({});
 
     } catch (err) {
         return response.send({});
-    }  finally {
+    } finally {
         db.destroy();
     }
 

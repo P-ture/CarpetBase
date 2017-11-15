@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { values, all } from 'ramda';
 import DocumentTitle from 'react-document-title';
+import * as config from '../../miscellaneous/config';
 
 /**
  * @class Contact
@@ -75,7 +76,7 @@ export default class Contact extends Component {
         const isSubmittable = all(value => value.length > 0)(values(form));
 
         return (
-            <DocumentTitle title="Contact">
+            <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Contact`}>
                 <section className="contact">
                     <h1>Contact</h1>
                     <form onSubmit={this.submit.bind(this)}>

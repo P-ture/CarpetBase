@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import DocumentTitle from 'react-document-title';
+import * as config from '../../miscellaneous/config';
 
 /**
  * @class NotFound
@@ -20,7 +21,7 @@ export default class NotFound extends PureComponent {
     render() {
 
         return (
-            <DocumentTitle title="Not Found">
+            <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Not Found`}>
                 <section className="error-not-found">
                     <h1>404 &mdash; Not Found</h1>
                 </section>

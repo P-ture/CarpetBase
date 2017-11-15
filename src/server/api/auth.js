@@ -20,7 +20,7 @@ export async function fetchUser(request, response) {
         const [{ id, username }] = await db.select().from('users').where('username', record.username);
 
         response.send({ id, username, authenticated: true });
-    
+
     } catch (err) {
 
         // Otherwise the user is unauthenticated.
@@ -30,13 +30,13 @@ export async function fetchUser(request, response) {
         db.destroy();
     }
 
-} 
+}
 
 /**
  * @method authenticate
  * @param {Object} request
  * @param {Object} response
- * @return {Promise} 
+ * @return {Promise}
  */
 export async function authenticate(request, response) {
 
@@ -46,7 +46,7 @@ export async function authenticate(request, response) {
 
         // Gather the password and associated hashing salt based on the supplied username.
         const [{ username, password, salt }] = await db.select().from('users').where('username', request.body.username);
-    
+
         // Verify their Argon2 ha   shed password with the salt, and sign the JWT.
         const isValid = await argon2.verify(password, `${salt}${request.body.password}`);
         const token = jwt.sign({ username }, process.env.CARPETBASE_SECRET, {
@@ -66,5 +66,5 @@ export async function authenticate(request, response) {
     } finally {
         db.destroy();
     }
-    
+
 }

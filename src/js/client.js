@@ -11,7 +11,6 @@ import * as config from './miscellaneous/config';
 import { setAxiosInstance } from './reducers/config/actions';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-console.log(window[Symbol.for('state')]);
 const store = createStoreWithMiddleware(reducers, JSON.parse(window[Symbol.for('state')]));
 const LayoutWithRouter = withRouter(Layout);
 

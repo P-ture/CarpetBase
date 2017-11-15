@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import DocumentTitle from 'react-document-title';
+import * as config from '../../miscellaneous/config';
 
 /**
  * @class Dashboard
@@ -32,7 +33,7 @@ export default class Dashboard extends PureComponent {
     render() {
 
         return (
-            <DocumentTitle title="Administrator: Dashboard">
+            <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Dashboard`}>
                 <section className="dashboard">
                     <h1>Dashboard</h1>
                 </section>

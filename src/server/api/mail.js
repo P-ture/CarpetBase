@@ -27,13 +27,12 @@ export default function sendMail(request, response) {
 
             You can hit "reply" to respond to ${firstName} directly, or you can use their e-mail address: ${email}.
 
-            With love,
+            Regards,
             CarpetBot.
         `
     };
 
-    mail.messages().send(data, (err, body) => {
-        return void (err ? response.redirect('/contact.html?error=failed') : response.send({ ok: true }));
-    });
+    // Send the e-mail, and respond with whether it succeeded or not.
+    mail.messages().send(data, err => response.send({ sent: Boolean(err) }));
 
 }

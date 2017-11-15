@@ -20,10 +20,10 @@ const server = http.createServer(app);
 
 app.get(/[/|.*\.html]$/, renderApplication);
 app.post('/admin/login.html', authenticate);
-app.post('/contact.html', composeP(renderApplication, sendMail));
 app.get('/api/user.json', fetchUser);
 app.get('/api/page/:slug.json', fetchPage);
 app.get('/api/navigation.json', fetchNavigation);
+app.post('/api/mail.json', sendMail);
 
 app.use(express.static('public/assets'));
 server.listen(process.env.PORT || 5000);
