@@ -3,6 +3,7 @@ import { readFile, readFileSync } from 'fs';
 import React from 'react';
 import { StaticRouter, withRouter, matchPath } from 'react-router-dom';
 import { renderToString } from 'react-dom/server';
+import DocumentTitle from 'react-document-title';
 import { create } from 'axios';
 import jwt from 'jsonwebtoken';
 import { compile } from 'handlebars';
@@ -14,8 +15,6 @@ import App, { Layout } from '../js/index';
 import routes from '../js/routes';
 import reducers from '../js/reducers';
 import Index from '../js/index';
-import Home from '../js/containers/home/index';
-import About from '../js/containers/about/index';
 
 /**
  * @constant options
@@ -72,8 +71,14 @@ async function render(request, response) {
                 // Determine if the user is authenticated, and if not redirect to the login page.
                 component && component.requiresAuth === true && !isAuthenticated(cookies) && response.redirect('/admin/login.html');
             
-                // Fetch any data the current container requires to function.
-                component && component.fetchData && await component.fetchData(params);
+                try {
+
+                    // Fetch any data the current container requires to function.
+                    component && component.fetchData && await component.fetchData({ ...params, params: match.params });
+                
+                } catch (err) {
+
+                }
 
                 // Yield any assets that the component wants to load.
                 return component.assets || null;
@@ -99,9 +104,12 @@ async function render(request, response) {
         console.log('Error: ', err);
 
         const html = renderToString(
-            <section className="error">
-                We&apos;re currently experiencing difficulties. Please <a href="/">try again</a> later.
-            </section>
+            <DocumentTitle title="Error">
+                <section className="error">
+                    <h1>CarpetBase</h1>
+                    <p>We&apos;re currently experiencing difficulties. Please <a href="/">try again</a> later.</p>
+                </section>
+            </DocumentTitle>
         );
 
         return { html, state: store.getState(), assets: [] };
@@ -117,7 +125,7 @@ export default function(request, response) {
         // Render the application to string, and parse the template HTML file.
         const { html, state, assets } = await render(request, response);
         const resources = { css: assets['.css'], js: assets['.js'] };
-        const template = compile(document)({ ...options, html, resources });
+        const template = compile(document)({ ...options, html, resources, title: DocumentTitle.rewind() });
 
         return !response.headersSent && response.send(template);
 

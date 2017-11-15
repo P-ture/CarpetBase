@@ -1,6 +1,3 @@
-const argon2 = require('argon2');
-const csprng = require('csprng');
-
 'use strict';
 
 var dbm;
@@ -17,14 +14,14 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = async function(db, callback) {
-  const salt = csprng(160, 36);
-  const password = await argon2.hash(`${salt}${process.env.CARPETBASE_PW}`);
-  db.insert('users', ['salt', 'username', 'password'], [salt, 'admin', password], callback);
+exports.up = function(db, callback) {
+  db.insert('navigation', ['page_id', 'name', 'order'], [1, 'Homepage', 1], callback);
+  db.insert('navigation', ['page_id', 'name', 'order'], [2, 'About', 2], callback);
 };
 
 exports.down = function(db, callback) {
-  db.runSql('DELETE FROM users WHERE username = "admin" LIMIT 1');
+  db.runSql('DELETE FROM navigation WHERE page_id = 1 LIMIT 1');
+  db.runSql('DELETE FROM navigation WHERE page_id = 2 LIMIT 1');
   callback();
 };
 

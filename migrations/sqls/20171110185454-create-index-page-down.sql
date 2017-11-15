@@ -1,1 +1,0 @@
-DELETE FROM `pages` WHERE ISNULL(slug)

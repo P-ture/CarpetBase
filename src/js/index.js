@@ -4,8 +4,16 @@ import { Route, Switch, NavLink } from 'react-router-dom';
 import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actions from './reducers/auth/actions';
+import by from 'sort-by';
+import * as authActions from './reducers/auth/actions';
+import * as pageActions from './reducers/page/actions';
 import routes from './routes';
+
+/**
+ * @constant actions
+ * @type {Object}
+ */
+const actions = { ...authActions, ...pageActions };
 
 /**
  * @method mapStateToProps
@@ -15,7 +23,8 @@ import routes from './routes';
 export const mapStateToProps = state => {
 
     return {
-        user: state.auth.user
+        user: state.auth.user,
+        navigation: state.page.navigation
     };
 
 };
@@ -43,7 +52,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Layout extends
         user: PropTypes.shape({
             authenticated: PropTypes.bool.isRequired,
             username: PropTypes.string
-        })
+        }),
+        navigation: PropTypes.array.isRequired
     };
 
     /**
@@ -61,7 +71,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Layout extends
      * @return {Promise}
      */
     static fetchData = ({ dispatch, instance }) => {
-        return dispatch(actions.fetchUser({ instance }));
+
+        return Promise.all([
+            dispatch(actions.fetchUser({ instance })),
+            dispatch(actions.fetchNavigation({ instance }))
+        ]);
+
     };
 
     /**
@@ -90,9 +105,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Layout extends
                 </header>
 
                 <nav className="navigation">
-                    <NavLink to="/">Home</NavLink>
-                    <NavLink to="/about.html">About</NavLink>
+
+                    {[...this.props.navigation].sort(by('order')).map(model => {
+                        const slug = model.slug ? `/${model.slug}.html` : '/';
+                        return <NavLink key={hash(model)} to={slug}>{model.name}</NavLink>;
+                    })}
+
                     {!user.authenticated && <NavLink to="/admin/login.html">Sign In</NavLink>}
+
                 </nav>
 
                 {user.authenticated && (
