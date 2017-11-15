@@ -12,8 +12,7 @@ export default async function fetchNavigation(request, response) {
 
     try {
 
-        const records = await db.select().from('navigation').innerJoin('pages', 'pages.id', 'navigation.page_id');
-
+        const records = await db.select().from('navigation');
         response.send(records);
     
     } catch (err) {

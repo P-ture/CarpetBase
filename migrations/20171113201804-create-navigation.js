@@ -15,13 +15,17 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.insert('navigation', ['page_id', 'name', 'order'], [1, 'Homepage', 1], callback);
-  db.insert('navigation', ['page_id', 'name', 'order'], [2, 'About', 2], callback);
+  db.insert('navigation', ['id', 'name', 'href', 'order'], [1, 'Home', '/', 1], callback);
+  db.insert('navigation', ['id', 'name', 'href', 'order'], [2, 'About', '/about.html', 2], callback);
+  db.insert('navigation', ['id', 'name', 'href', 'order'], [3, 'Services', '/services.html', 3], callback);
+  db.insert('navigation', ['id', 'name', 'href', 'order'], [4, 'Commercial', '/commercial.html', 4], callback);
+  db.insert('navigation', ['id', 'name', 'href', 'order'], [5, 'Projects', '/projects.html', 5], callback);
+  db.insert('navigation', ['id', 'name', 'href', 'order'], [6, 'Gallery', '/gallery.html', 6], callback);
+  db.insert('navigation', ['id', 'name', 'href', 'order'], [7, 'Contact', '/contact.html', 7], callback);
 };
 
 exports.down = function(db, callback) {
-  db.runSql('DELETE FROM navigation WHERE page_id = 1 LIMIT 1');
-  db.runSql('DELETE FROM navigation WHERE page_id = 2 LIMIT 1');
+  db.runSql('DELETE FROM navigation WHERE id IN (1, 2, 3, 4, 5, 6)');
   callback();
 };
 
