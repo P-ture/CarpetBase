@@ -1,13 +1,40 @@
 import React, { Component } from 'react';
-import { values, all } from 'ramda';
 import DocumentTitle from 'react-document-title';
+import PropTypes from 'prop-types';
+import { values, all } from 'ramda';
+import { connect } from 'react-redux';
+import NotFound from '../error/not-found';
 import * as config from '../../miscellaneous/config';
 
 /**
- * @class Contact
- * @extends {Component}
+ * @method mapStateToProps
+ * @param {Object} state
+ * @return {Object}
  */
-export default class Contact extends Component {
+export const mapStateToProps = state => {
+
+    return {
+        instance: state.config.axiosInstance
+    };
+
+};
+
+/**
+ * @constant statusTypes
+ * @type {Object}
+ */
+const statusTypes = {
+    DISABLED: 1,
+    SENDING: 2,
+    ERROR: 4,
+    SUCCESS: 8
+};
+
+/**
+ * @class Connect
+ * @extends {PureComponent}
+ */
+export default connect(mapStateToProps)(class Contact extends Component {
 
     /**
      * @constant displayName
@@ -26,8 +53,7 @@ export default class Contact extends Component {
      * @type {Object}
      */
     state = {
-        isDisabled: true,
-        error: null,
+        status: statusTypes.DISABLED,
         form: {
             firstName: '',
             lastName: '',
@@ -41,7 +67,7 @@ export default class Contact extends Component {
      * @return {void}
      */
     componentDidMount() {
-        this.setState({ isDisabled: false });
+        this.setState({ status: this.state.status ^ statusTypes.DISABLED });
     }
 
     /**
@@ -50,7 +76,18 @@ export default class Contact extends Component {
      * @return {Promise}
      */
     async submit(event) {
+
         event.preventDefault();
+
+        // Re-render the component to inform the user that we're sending the e-mail, and then revert
+        // the status after a response has been received.
+        this.setState({ status: ((this.state.status | statusTypes.SENDING) & ~statusTypes.SUCCESS) & ~statusTypes.ERROR });
+        const { data } = await this.props.instance.post('/mail.json', this.state.form);
+
+        // Determine what the response was so we can update the UI accordingly.
+        const status = data.sent ? statusTypes.SUCCESS : statusTypes.ERROR;
+        this.setState({ status: this.state.status & ~statusTypes.SENDING | status });
+
     }
 
     /**
@@ -72,14 +109,27 @@ export default class Contact extends Component {
      */
     render() {
 
-        const { isDisabled, form } = this.state;
+        const { form, status } = this.state;
         const isSubmittable = all(value => value.length > 0)(values(form));
+        const isDisabled = Boolean(status & statusTypes.DISABLED);
+        const isSending = Boolean(status & statusTypes.SENDING);
+        const isError = Boolean(status & statusTypes.ERROR);
+        const isSuccess = Boolean(status & statusTypes.SUCCESS);
 
         return (
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Contact`}>
                 <section className="contact">
                     <h1>Contact</h1>
                     <form onSubmit={this.submit.bind(this)}>
+
+                        {isSuccess && (
+                            <section className="error">Thank you! Your message has been successfully sent.</section>
+                        )}
+
+                        {isError && (
+                            <section className="error">Unable to send the e-mail at this moment in time.</section>
+                        )}
+
                         <div className="first-name">
                             <label htmlFor="firstName">First Name</label>
                             <input
@@ -90,6 +140,7 @@ export default class Contact extends Component {
                                 onChange={this.update('firstName')}
                                 />
                         </div>
+
                         <div className="last-name">
                             <label htmlFor="lastName">Last Name</label>
                             <input
@@ -100,6 +151,7 @@ export default class Contact extends Component {
                                 onChange={this.update('lastName')}
                                 />
                         </div>
+
                         <div className="email">
                             <label htmlFor="email">Email</label>
                             <input
@@ -110,6 +162,7 @@ export default class Contact extends Component {
                                 onChange={this.update('email')}
                                 />
                         </div>
+
                         <div className="message">
                             <label htmlFor="message">Message</label>
                             <textarea
@@ -119,7 +172,11 @@ export default class Contact extends Component {
                                 onChange={this.update('message')}
                                 />
                         </div>
-                        <button type="submit" disabled={isDisabled || !isSubmittable}>Submit</button>
+
+                        <button type="submit" disabled={isSending || isDisabled || !isSubmittable}>
+                            {isSending ? 'Sending...' : 'Send'}
+                        </button>
+
                     </form>
                 </section>
             </DocumentTitle>
@@ -127,4 +184,4 @@ export default class Contact extends Component {
 
     }
 
-}
+});
