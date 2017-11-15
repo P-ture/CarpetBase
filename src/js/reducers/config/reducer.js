@@ -5,7 +5,8 @@ import * as type from './types';
  * @type {Object}
  */
 const INITIAL_STATE = {
-    axiosInstance: null
+    axiosInstance: null,
+    meta: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -14,6 +15,9 @@ export default (state = INITIAL_STATE, action) => {
 
         case type.SET_AXIOS_INSTANCE:
             return { ...state, axiosInstance: action.result };
+
+        case type.FETCH_META:
+            return { ...state, meta: action.result };
 
     }
 

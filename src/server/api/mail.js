@@ -25,7 +25,7 @@ function gender(name) {
 export default function sendMail(request, response) {
 
     try {
-        
+
         const apiKey = process.env.CARPETBASE_SMTP_KEY;
         const mail = mailgun({ apiKey, domain: 'sandbox5c634282fac543aa8ab43c9558a6c3c6.mailgun.org' });
         const { firstName, lastName, email, message } = request.body;
@@ -50,9 +50,9 @@ export default function sendMail(request, response) {
                 CarpetBot.
             `
         };
-    
+
         // Send the e-mail, and respond with whether it succeeded or not.
-        mail.messages().send(data, err => response.send({ sent: !Boolean(err) }));
+        mail.messages().send(data, err => response.send({ sent: !err }));
 
     } catch (err) {
 

@@ -70,8 +70,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
      * @param {Object} params
      * @return {Promise}
      */
-    static fetchData = ({ dispatch, instance, params }) => {
-        return dispatch(actions.fetchPage(params.page || actions.HOME, { instance }));
+    static fetchData = ({ dispatch, params }) => {
+        return dispatch(actions.fetchPage(params.page || actions.HOME));
     };
 
     /**
