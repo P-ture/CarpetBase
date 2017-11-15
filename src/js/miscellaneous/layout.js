@@ -89,8 +89,20 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Layout extends
 
         return (
             <section className="carpetbase">
-
-                <header>CarpetBase</header>
+                <header>
+                    <section className="top"> 
+                        <NavLink className="logo" to="/">
+                            <h1>Carpet Base</h1>
+                        </NavLink>
+                        <section className="header-contact">
+                            <section className="phone"/>
+                            <section className="email"/>                    
+                        </section>
+                    </section>
+                    <section className="bottom">
+                        <h4>Slogan needs to come from the API</h4>
+                    </section>
+                </header>
 
                 <nav className="navigation">
 
