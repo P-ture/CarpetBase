@@ -74,7 +74,6 @@ export class Layout extends PureComponent {
     /**
      * @method fetchData
      * @param {Function} dispatch
-     * @param {Object} headers
      * @return {Promise}
      */
     static fetchData = ({ dispatch }) => {

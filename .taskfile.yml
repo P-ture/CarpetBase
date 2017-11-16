@@ -16,4 +16,9 @@
     - - npm run images
 
 - name: watch
-  task: npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack/development.server.js --watch' 'webpack --config webpack/development.application.js --watch' 'node-sass --watch src/sass/index.scss public/assets/css/application.css'
+  task: npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack/development.server.js --watch' 'webpack --config webpack/development.application.js --watch' 'taskfile sass --watch'
+
+- name: sass
+  tasks:
+    - node-sass src/sass/application.scss public/assets/css/application.css $1
+    - node-sass src/sass/contact.scss public/assets/css/contact.css $1

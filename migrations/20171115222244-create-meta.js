@@ -21,10 +21,12 @@ exports.up = function(db, callback) {
 * [Facebook](#)
 * [WhatsApp](#)
   `.trim()], callback);
+  db.insert('meta', ['id', 'key', 'value'], [3, 'latitude', '51.4492704'], callback);
+  db.insert('meta', ['id', 'key', 'value'], [4, 'longitude', '-0.1462397'], callback);
 };
 
 exports.down = function(db, callback) {
-  db.runSql('DELETE FROM pages WHERE id IN (1, 2)');
+  db.runSql('DELETE FROM pages WHERE id IN (1, 2, 3, 4)');
   callback();
 };
 
