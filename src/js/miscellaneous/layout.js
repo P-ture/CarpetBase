@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, NavLink } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -57,7 +58,8 @@ export class Layout extends PureComponent {
         }),
         navigation: PropTypes.array.isRequired,
         meta: PropTypes.shape({
-            slogan: PropTypes.string
+            slogan: PropTypes.string,
+            social: PropTypes.string
         }).isRequired
     };
 
@@ -105,9 +107,8 @@ export class Layout extends PureComponent {
                             <section className="email"/>
                         </section>
                     </section>
-                    <section className="bottom">
-                        <h4>{meta.slogan}</h4>
-                    </section>
+                    {meta.slogan && <section className="bottom"><h4>{meta.slogan}</h4></section>}
+                    {meta.social && <ReactMarkdown source={meta.social} />}
                 </header>
 
                 <nav className="navigation">

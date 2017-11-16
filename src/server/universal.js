@@ -1,6 +1,7 @@
 import { extname } from 'path';
 import { readFile, readFileSync } from 'fs';
 import React from 'react';
+import base64 from 'base-64';
 import { StaticRouter, withRouter, matchPath } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import { renderToString } from 'react-dom/server';
@@ -99,7 +100,7 @@ export default function(request, response) {
         // Render the application to string, and parse the template HTML file.
         const { html, state, css } = await render(request, response);
         const title = DocumentTitle.rewind();
-        const template = compile(document)({ ...options, html, css, title, state: JSON.stringify(state) });
+        const template = compile(document)({ ...options, html, css, title, state: base64.encode(JSON.stringify(state)) });
 
         return !response.headersSent && response.send(template);
 
