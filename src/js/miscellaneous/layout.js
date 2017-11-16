@@ -59,7 +59,10 @@ export class Layout extends PureComponent {
         navigation: PropTypes.array.isRequired,
         meta: PropTypes.shape({
             slogan: PropTypes.string,
-            social: PropTypes.string
+            social: PropTypes.string,
+            address: PropTypes.string,
+            email: PropTypes.string,
+            telephone: PropTypes.string
         }).isRequired
     };
 
@@ -140,7 +143,21 @@ export class Layout extends PureComponent {
                     </Switch>
                 </main>
 
-                <footer />
+                <footer>
+                    <ul>
+                        <li className="address">
+                            Address: {meta.address}
+                        </li>
+                        <li className="phone">
+                            Phone: <a href={`tel:${meta.telephone.replace(/\s/g, '')}`}>{meta.telephone}</a>
+                        </li>
+                        <li className="email">
+                            Email: <a href={`mailto:${meta.email}`}>{meta.email}</a>
+                        </li>
+                        <li>CarpetBase {new Date().getFullYear()}</li>
+                        <li>Structured by <a href="https://www.pture.com/">Pture</a></li>
+                    </ul>
+                </footer>
 
             </section>
         );
