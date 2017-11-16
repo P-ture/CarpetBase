@@ -4,9 +4,10 @@
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "test": "npm run lint",
+    "test": "npm run spec && npm run lint",
     "build": "taskfile build",
     "watch": "taskfile watch",
+    "spec": "ava",
     "lint": "xo src/js/**/*.js src/server/**/*.js && stylelint src/sass/*.scss src/sass/**/*.scss",
     "images": "mkdir -p public/assets/images && ncp src/images public/assets/images",
     "sass": "node-sass src/sass/index.scss public/assets/css/application.css",
@@ -57,14 +58,19 @@
   },
   "devDependencies": {
     "ava": "~0.23.0",
+    "axios-mock-adapter": "~1.9.0",
     "babel-cli": "~6.24.1",
     "babel-eslint": "~7.2.3",
     "babel-loader": "~7.0.0",
+    "babel-polyfill": "~6.23.0",
     "babel-preset-es2015": "~6.24.1",
     "babel-preset-react": "~6.24.1",
     "babel-preset-stage-2": "~6.24.1",
+    "babel-register": "~6.26.0",
+    "browser-env": "~3.2.1",
     "concurrently": "~3.5.0",
-    "enzyme": "~3.1.0",
+    "enzyme": "~3.1.1",
+    "enzyme-adapter-react-16": "~1.1.0",
     "eslint-config-xo-react": "~0.12.0",
     "eslint-plugin-react": "~7.1.0",
     "ncp": "~2.0.0",
@@ -77,6 +83,22 @@
     "uglifyjs-webpack-plugin": "~0.4.6",
     "webpack": "~3.8.1",
     "xo": "~0.18.2"
+  },
+  "ava": {
+    "concurrency": 3,
+    "failFast": true,
+    "files": [
+      "./tests/*.test.js",
+      "./tests/**/*.test.js"
+    ],
+    "babel": "inherit",
+    "require": [
+      "babel-polyfill",
+      "babel-register",
+      "./tests/helpers/browser-env.js",
+      "./tests/helpers/enzyme.js",
+      "./tests/helpers/mocks.js"
+    ]
   },
   "xo": {
     "space": 4,

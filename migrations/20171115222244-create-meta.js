@@ -16,10 +16,15 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db, callback) {
   db.insert('meta', ['id', 'key', 'value'], [1, 'slogan', 'Slogan is now coming from the API'], callback);
+  db.insert('meta', ['id', 'key', 'value'], [2, 'social', `
+* [Instagram](#)
+* [Facebook](#)
+* [WhatsApp](#)
+  `.trim()], callback);
 };
 
 exports.down = function(db, callback) {
-  db.runSql('DELETE FROM pages WHERE id IN (1)');
+  db.runSql('DELETE FROM pages WHERE id IN (1, 2)');
   callback();
 };
 

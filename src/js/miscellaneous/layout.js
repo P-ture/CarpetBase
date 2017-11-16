@@ -44,7 +44,7 @@ const mapDispatchToProps = dispatch => {
  * @class Layout
  * @extends {PureComponent}
  */
-export default connect(mapStateToProps, mapDispatchToProps)(class Layout extends PureComponent {
+export class Layout extends PureComponent {
 
     /**
      * @constant propTypes
@@ -147,4 +147,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Layout extends
 
     }
 
-});
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);
