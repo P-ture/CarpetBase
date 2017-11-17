@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { values, all } from 'ramda';
 import { connect } from 'react-redux';
 import GoogleMap from 'google-map-react';
-import NotFound from '../error/not-found';
 import * as config from '../../miscellaneous/config';
 import * as actions from '../../reducers/config/actions';
+import withStatuses from '../../behaviours/status';
 
 /**
  * @method mapStateToProps
@@ -20,17 +20,6 @@ export const mapStateToProps = state => {
         meta: state.config.meta
     };
 
-};
-
-/**
- * @constant statusTypes
- * @type {Object}
- */
-const statusTypes = {
-    DISABLED: 1,
-    SENDING: 2,
-    ERROR: 4,
-    SUCCESS: 8
 };
 
 /**
@@ -58,19 +47,38 @@ class Marker extends PureComponent {
     }
 
 }
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 /**
  * @class Connect
  * @extends {PureComponent}
  */
-export default connect(mapStateToProps)(class Contact extends Component {
+export default withStatuses(connect(mapStateToProps)(class Contact extends Component {
 
     /**
      * @constant displayName
      * @type {String}
      */
     static displayName = 'Contact/Index';
+
+    /**
+     * @constant propTypes
+     * @type {Object}
+     */
+    static propTypes = {
+        setSending: PropTypes.func.isRequired,
+        setSent: PropTypes.func.isRequired,
+        isDisabled: PropTypes.bool.isRequired,
+        isSending: PropTypes.bool.isRequired,
+        isError: PropTypes.bool.isRequired,
+        isSuccess: PropTypes.bool.isRequired,
+        meta: PropTypes.shape({
+            latitude: PropTypes.string.isRequired,
+            longitude: PropTypes.string.isRequired
+        }).isRequired,
+        instance: PropTypes.shape({
+            post: PropTypes.func.isRequired
+        }).isRequired
+    };
 
     /**
      * @constant cssDocuments
@@ -92,7 +100,6 @@ export default connect(mapStateToProps)(class Contact extends Component {
      * @type {Object}
      */
     state = {
-        status: statusTypes.DISABLED,
         form: {
             firstName: '',
             lastName: '',
@@ -102,30 +109,18 @@ export default connect(mapStateToProps)(class Contact extends Component {
     };
 
     /**
-     * @method componentDidMount
-     * @return {void}
-     */
-    componentDidMount() {
-        this.setState({ status: this.state.status ^ statusTypes.DISABLED });
-    }
-
-    /**
      * @method submit
      * @param {Object} event
      * @return {Promise}
      */
-    async submit(event) {
+    submit(event) {
 
         event.preventDefault();
 
-        // Re-render the component to inform the user that we're sending the e-mail, and then revert
-        // the status after a response has been received.
-        this.setState({ status: ((this.state.status | statusTypes.SENDING) & ~statusTypes.SUCCESS) & ~statusTypes.ERROR });
-        const { data } = await this.props.instance.post('/mail.json', this.state.form);
-
-        // Determine what the response was so we can update the UI accordingly.
-        const status = data.sent ? statusTypes.SUCCESS : statusTypes.ERROR;
-        this.setState({ status: this.state.status & ~statusTypes.SENDING | status });
+        this.props.setSending(true);
+        this.props.instance.post('/mail.json', this.state.form).then(response => {
+            this.props.setSent(response.data.sent);
+        });
 
     }
 
@@ -143,23 +138,28 @@ export default connect(mapStateToProps)(class Contact extends Component {
     }
 
     /**
+     * @method latLng
+     * @return {Array}
+     */
+    latLng() {
+        return [Number(this.props.meta.latitude), Number(this.props.meta.longitude)];
+    }
+
+    /**
      * @method render
      * @return {Object}
      */
     render() {
 
-        const { form, status } = this.state;
+        const { form } = this.state;
+        const { isDisabled, isSending, isError, isSuccess } = this.props;
         const isSubmittable = all(value => value.length > 0)(values(form));
-        const [lat, lng] = [Number(this.props.meta.latitude), Number(this.props.meta.longitude)];
-        const isDisabled = Boolean(status & statusTypes.DISABLED);
-        const isSending = Boolean(status & statusTypes.SENDING);
-        const isError = Boolean(status & statusTypes.ERROR);
-        const isSuccess = Boolean(status & statusTypes.SUCCESS);
+        const [lat, lng] = this.latLng();
 
         return (
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Contact`}>
                 <section className="contact">
-                    <section className="map" style={{ width: '500px', height: '500px' }}>
+                    <section className="map">
                         <GoogleMap center={{ lat, lng }} defaultZoom={14}>
                             <Marker lat={lat} lng={lng} text="CarpetBase" />
                         </GoogleMap>
@@ -229,4 +229,4 @@ export default connect(mapStateToProps)(class Contact extends Component {
 
     }
 
-});
+}));

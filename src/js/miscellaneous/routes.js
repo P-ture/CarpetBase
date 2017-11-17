@@ -8,6 +8,7 @@ export default [
     { path: '/admin/login.html', component: Admin.Login },
     { path: '/admin/logout.html', component: Admin.Logout },
     { path: '/admin/dashboard.html', component: Admin.Dashboard },
+    { path: '/admin/meta.html', component: Admin.Meta },
     { path: '/contact.html', component: Contact },
     { path: '/:page.html', component: Page },
     { path: '/', component: ErrorNotFound }

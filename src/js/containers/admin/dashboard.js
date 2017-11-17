@@ -12,7 +12,7 @@ export default class Dashboard extends PureComponent {
      * @constant displayName
      * @type {String}
      */
-    static displayName = 'Authenticate/Index/Dashboard';
+    static displayName = 'Admin/Dashboard';
 
     /**
      * @constant requiresAuth
@@ -21,10 +21,10 @@ export default class Dashboard extends PureComponent {
     static requiresAuth = true;
 
     /**
-     * @constant assets
+     * @constant cssDocuments
      * @type {Object}
      */
-    static assets = ['/css/dashboard.css', '/js/dashboard.js'];
+    static cssDocuments = ['/css/dashboard.css'];
 
     /**
      * @method render

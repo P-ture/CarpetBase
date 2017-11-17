@@ -20,7 +20,7 @@ export default withRouter(class Login extends PureComponent {
      * @constant displayName
      * @type {String}
      */
-    static displayName = 'Authenticate/Index/Login';
+    static displayName = 'Admin/Login';
 
     /**
      * @constant propTypes

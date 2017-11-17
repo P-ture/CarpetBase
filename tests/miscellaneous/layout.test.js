@@ -21,5 +21,5 @@ test.beforeEach(async t => {
 
 test('It should be able to render the layout with the dynamic parts;', t => {
     const wrapper = shallow(<Layout {...t.context.props} />);
-    t.is(wrapper.find('h4').text(), 'Slogan is now coming from the API');
+    t.is(wrapper.find('h4').text(), 'Carpet & Flooring Retailers & Contractors');
 });

@@ -128,6 +128,7 @@ export class Layout extends PureComponent {
                             You&apos;re signed in as <em>{user.username}</em>
                         </span>,
                         <NavLink key="dashboard" to="/admin/dashboard.html">Dashboard</NavLink>,
+                        <NavLink key="meta" to="/admin/meta.html">Meta</NavLink>,
                         <NavLink key="logout" to="/admin/logout.html">Sign Out</NavLink>
                     ]}
 

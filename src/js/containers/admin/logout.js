@@ -14,7 +14,7 @@ export default class Logout extends PureComponent {
      * @constant displayName
      * @type {String}
      */
-    static displayName = 'Authenticate/Index/Logout';
+    static displayName = 'Admin/Logout';
 
     /**
      * @method fetchData

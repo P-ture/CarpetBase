@@ -8,7 +8,7 @@
     "build": "taskfile build",
     "watch": "taskfile watch",
     "spec": "ava",
-    "lint": "xo src/js/**/*.js src/server/**/*.js && stylelint src/sass/*.scss src/sass/**/*.scss",
+    "lint": "taskfile lint",
     "images": "mkdir -p public/assets/images && ncp src/images public/assets/images",
     "sass": "taskfile sass",
     "html": "ncp src/index.html public/index.html",

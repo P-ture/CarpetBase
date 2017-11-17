@@ -22,3 +22,9 @@
   tasks:
     - node-sass src/sass/application.scss public/assets/css/application.css $1
     - node-sass src/sass/contact.scss public/assets/css/contact.css $1
+
+- name: lint
+  tasks:
+    - xo src/js/*.js src/js/**/*.js src/js/**/**/*.js src/js/**/**/**/*.js
+     - - xo server/js/*.js server/js/**/*.js server/js/**/**/*.js server/js/**/**/**/*.js
+    - - - stylelint src/sass/*.scss src/sass/**/*.scss
