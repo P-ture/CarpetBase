@@ -8,7 +8,7 @@ import renderApplication from './universal';
 import { login, fetchUser, authenticate } from './api/auth';
 import fetchPage from './api/page';
 import fetchNavigation from './api/navigation';
-import fetchMeta from './api/meta';
+import { fetchMeta, saveMeta } from './api/meta';
 import sendMail from './api/mail';
 
 const app = express();
@@ -25,6 +25,7 @@ app.get('/api/user.json', fetchUser);
 app.get('/api/page/:slug.json', fetchPage);
 app.get('/api/navigation.json', fetchNavigation);
 app.get('/api/meta.json', fetchMeta);
+app.post('/api/meta.json', saveMeta);
 app.post('/api/mail.json', sendMail);
 
 app.use(express.static('public/assets'));

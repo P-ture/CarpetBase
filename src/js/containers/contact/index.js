@@ -75,9 +75,7 @@ export default withStatuses(connect(mapStateToProps)(class Contact extends Compo
             latitude: PropTypes.string.isRequired,
             longitude: PropTypes.string.isRequired
         }).isRequired,
-        instance: PropTypes.shape({
-            post: PropTypes.func.isRequired
-        }).isRequired
+        instance: PropTypes.func.isRequired
     };
 
     /**
@@ -168,7 +166,7 @@ export default withStatuses(connect(mapStateToProps)(class Contact extends Compo
                     <form onSubmit={this.submit.bind(this)}>
 
                         {isSuccess && (
-                            <section className="error">Thank you! Your message has been successfully sent.</section>
+                            <section className="success">Thank you! Your message has been successfully sent.</section>
                         )}
 
                         {isError && (
