@@ -2,10 +2,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Markdown from 'react-markdown';
 import DocumentTitle from 'react-document-title';
 import * as actions from '../../reducers/page/actions';
-import NotFound from '../error/not-found';
 import * as config from '../../miscellaneous/config';
+import NotFound from '../error/not-found';
 
 /**
  * @method mapStateToProps
@@ -80,7 +81,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} ${page.title}`}>
                 <section className={`page ${page.slug || actions.HOME}`}>
                     <h1>{page.title}</h1>
-                    <p>{page.content}</p>
+                    <Markdown source={page.content} />
                 </section>
             </DocumentTitle>
         ) : <NotFound />;

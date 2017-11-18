@@ -61,7 +61,8 @@ export async function updatePage(request, response) {
 
     try {
 
-        return await db.table('pages').update(request.body).where('slug', '=', request.body.slug);
+        await db.table('pages').update(request.body).where('slug', '=', request.body.slug);
+        return response.send({ saved: true });
 
     } catch (err) {
         return response.send({});

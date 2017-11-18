@@ -40,7 +40,10 @@ export async function updateMeta(request, response) {
     const records = await Promise.all(toPairs(request.body).map(async ([key, value]) => {
 
         try {
-            return await db.table('meta').update({ value }).where('key', '=', key);
+
+            await db.table('meta').update({ value }).where('key', '=', key);
+            return response.send({ saved: true });
+
         } catch (err) {
             response.send({ saved: false, error: err });
         }

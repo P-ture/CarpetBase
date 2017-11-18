@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, NavLink } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
+import Markdown from 'react-markdown';
 import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -110,7 +110,7 @@ export class Layout extends PureComponent {
                         </section>
                     </section>
                     {meta.slogan && <section className="bottom"><h4>{meta.slogan}</h4></section>}
-                    {meta.social && <ReactMarkdown source={meta.social} />}
+                    {meta.social && <Markdown source={meta.social} />}
                 </header>
 
                 <nav className="navigation">

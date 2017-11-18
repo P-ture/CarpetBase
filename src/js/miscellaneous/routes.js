@@ -1,10 +1,11 @@
 import * as Page from '../containers/page/index';
 import * as Contact from '../containers/contact/index';
-import * as Dashboard from '../containers/admin/dashboard';
-import * as Meta from '../containers/admin/meta';
-import * as Pages from '../containers/admin/pages';
-import * as Login from '../containers/admin/login';
-import * as Logout from '../containers/admin/logout';
+import * as AdminDashboard from '../containers/admin/dashboard';
+import * as AdminMeta from '../containers/admin/meta';
+import * as AdminPages from '../containers/admin/pages';
+import * as AdminPage from '../containers/admin/page';
+import * as AdminLogin from '../containers/admin/login';
+import * as AdminLogout from '../containers/admin/logout';
 import * as ErrorNotFound from '../containers/error/not-found';
 
 export default [
@@ -17,31 +18,37 @@ export default [
     },
     {
         path: '/admin/login.html',
-        component: Login.default,
+        component: AdminLogin.default,
         auth: true
     },
     {
         path: '/admin/logout.html',
-        component: Logout.default,
+        component: AdminLogout.default,
         auth: true,
-        fetch: Logout.fetch
+        fetch: AdminLogout.fetch
     },
     {
         path: '/admin/dashboard.html',
-        component: Dashboard.default,
+        component: AdminDashboard.default,
         auth: true
     },
     {
         path: '/admin/meta.html',
-        component: Meta.default,
+        component: AdminMeta.default,
         auth: true,
-        fetch: Meta.fetch
+        fetch: AdminMeta.fetch
     },
     {
         path: '/admin/pages.html',
-        component: Pages.default,
+        component: AdminPages.default,
         auth: true,
-        fetch: Pages.fetch
+        fetch: AdminPages.fetch
+    },
+    {
+        path: '/admin/page/:page.html',
+        component: AdminPage.default,
+        auth: true,
+        fetch: AdminPage.fetch
     },
     {
         path: '/contact.html',
