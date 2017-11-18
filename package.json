@@ -14,6 +14,7 @@
     "html": "ncp src/index.html public/index.html",
     "migrate": "db-migrate up -e mysql",
     "teardown": "db-migrate reset -e mysql",
+    "remigrate": "npm run teardown && npm run migrate",
     "start": "node public/server.js"
   },
   "repository": {
