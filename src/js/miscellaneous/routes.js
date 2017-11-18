@@ -19,7 +19,7 @@ export default [
     {
         path: '/admin/login.html',
         component: AdminLogin.default,
-        auth: true
+        auth: false
     },
     {
         path: '/admin/logout.html',

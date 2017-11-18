@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [1, 1, null, 'Homepage', 'I am the homepage.'], callback);
+  db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [1, 1, 'home', 'Homepage', 'I am the homepage.'], callback);
   db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [2, 1, 'about', 'About', 'I am the about page.'], callback);
   db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [3, 1, 'services', 'Services', 'I am the services page.'], callback);
   db.insert('pages', ['id', 'layout_id', 'slug', 'title', 'content'], [4, 1, 'commercial', 'Commercial', 'I am the commercial page.'], callback);

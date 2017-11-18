@@ -99,8 +99,7 @@ export default withRouter(withStatuses(connect(mapStateToProps, mapDispatchToPro
                             <option>...</option>
 
                             {this.props.pages.map(page => {
-                                const slug = page.slug || actions.HOME;
-                                return <option key={hash(page)} value={slug}>{page.title}</option>;
+                                return <option key={hash(page)} value={page.slug}>{page.title}</option>;
                             })}
 
                         </select>

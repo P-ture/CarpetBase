@@ -12,8 +12,7 @@ export async function fetchPage(request, response) {
     const db = connect();
 
     // Fetch the content from the database by the passed slug.
-    const slug = request.params.slug === HOME ? null : request.params.slug;
-    const [record] = await db.select().from('pages').where('slug', slug);
+    const [record] = await db.select().from('pages').where('slug', request.params.slug);
     record ? response.send(record) : response.status(404).send({});
     db.destroy();
 

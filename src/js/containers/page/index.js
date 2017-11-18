@@ -79,7 +79,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
 
         return page ? (
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} ${page.title}`}>
-                <section className={`page ${page.slug || actions.HOME}`}>
+                <section className={`page ${page.slug}`}>
                     <h1>{page.title}</h1>
                     <Markdown source={page.content} />
                 </section>
