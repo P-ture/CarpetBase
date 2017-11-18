@@ -1,5 +1,4 @@
 import React from 'react';
-import { renderToString } from 'react-dom/server';
 import DocumentTitle from 'react-document-title';
 import * as config from './miscellaneous/config';
 
@@ -9,7 +8,7 @@ import * as config from './miscellaneous/config';
  */
 export default function createError() {
 
-    return renderToString(
+    return (
         <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Server Error`}>
             <section className="error">
                 <h1>CarpetBase</h1>

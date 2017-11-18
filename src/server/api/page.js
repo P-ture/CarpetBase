@@ -7,8 +7,8 @@ import { HOME } from '../../../src/js/reducers/page/actions';
  * @param {Object} response
  * @return {Promise}
  */
-export default async function fetchPage(request, response) {
-
+export async function fetchPage(request, response) {
+    
     const db = connect();
 
     try {
@@ -17,6 +17,29 @@ export default async function fetchPage(request, response) {
         const slug = request.params.slug === HOME ? null : request.params.slug;
         const [record] = await db.select().from('pages').where('slug', slug);
         return record ? response.send(record) : response.status(404).send({});
+
+    } catch (err) {
+        return response.send({});
+    } finally {
+        db.destroy();
+    }
+
+}
+
+/**
+ * @method fetchPages
+ * @param {Object} request
+ * @param {Object} response
+ * @return {Promise}
+ */
+export async function fetchPages(request, response) {
+
+    const db = connect();
+
+    try {
+
+        const records = await db.select('slug', 'title').from('pages');
+        return response.send(records);
 
     } catch (err) {
         return response.send({});

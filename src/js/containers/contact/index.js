@@ -49,6 +49,26 @@ class Marker extends PureComponent {
 }
 
 /**
+ * @method fetch
+ * @param {Function} dispatch
+ * @return {Promise}
+ */
+export const fetch = ({ dispatch }) => {
+    return dispatch(actions.fetchMeta());
+};
+
+/**
+ * @constant defaultForm
+ * @type {Object}
+ */
+const defaultForm = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    message: ''
+};
+
+/**
  * @class Connect
  * @extends {PureComponent}
  */
@@ -79,31 +99,11 @@ export default withStatuses(connect(mapStateToProps)(class Contact extends Compo
     };
 
     /**
-     * @constant cssDocuments
-     * @type {Array}
-     */
-    static cssDocuments = ['/css/contact.css'];
-
-    /**
-     * @method fetchData
-     * @param {Function} dispatch
-     * @return {Promise}
-     */
-    static fetchData = ({ dispatch }) => {
-        return dispatch(actions.fetchMeta());
-    };
-
-    /**
      * @constant state
      * @type {Object}
      */
     state = {
-        form: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            message: ''
-        }
+        form: defaultForm
     };
 
     /**
@@ -116,8 +116,14 @@ export default withStatuses(connect(mapStateToProps)(class Contact extends Compo
         event.preventDefault();
 
         this.props.setSending(true);
+
         this.props.instance.post('/mail.json', this.state.form).then(response => {
+
             this.props.setSent(response.data.sent);
+
+            // Reset the form if the e-mail has been sent successfully.
+            response.data.sent && this.setState({ form: defaultForm });
+
         });
 
     }

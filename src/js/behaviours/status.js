@@ -27,6 +27,12 @@ export default function withStatuses(WrappedComponent) {
         static displayName = WrappedComponent.displayName || WrappedComponent.name;
 
         /**
+         * @constant WrappedComponent
+         * @type {Object}
+         */
+        static WrappedComponent = WrappedComponent;
+
+        /**
          * @constant state
          * @type {Object}
          */

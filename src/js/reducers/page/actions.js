@@ -22,6 +22,20 @@ export function fetchPage(slug) {
 }
 
 /**
+ * @method fetchPages
+ * @return {Function}
+ */
+export function fetchPages() {
+
+    return async (dispatch, getState) => {
+        const instance = getState().config.axiosInstance;
+        const { data } = await instance.get('pages.json');
+        return dispatch(({ type: type.FETCH_PAGES, result: data }));
+    };
+
+}
+
+/**
  * @method fetchNavigation
  * @return {Function}
  */

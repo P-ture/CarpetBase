@@ -31,6 +31,15 @@ const mapDispatchToProps = dispatch => {
 };
 
 /**
+ * @method fetch
+ * @param {Function} dispatch
+ * @return {Promise}
+ */
+export const fetch = ({ dispatch }) => {
+    return dispatch(actions.fetchMeta());
+};
+
+/**
  * @class Meta
  * @extends {Component}
  */
@@ -59,27 +68,6 @@ export default withStatuses(connect(mapStateToProps, mapDispatchToProps)(class M
         }).isRequired,
         instance: PropTypes.func.isRequired
     };
-
-    /**
-     * @method fetchData
-     * @param {Function} dispatch
-     * @return {Promise}
-     */
-    static fetchData = ({ dispatch }) => {
-        return dispatch(actions.fetchMeta());
-    };
-
-    /**
-     * @constant assets
-     * @type {Array}
-     */
-    static cssDocuments = ['/css/meta.css'];
-
-    /**
-     * @constant requiresAuth
-     * @type {Boolean}
-     */
-    static requiresAuth = true;
 
     /**
      * @constant meta
@@ -129,7 +117,7 @@ export default withStatuses(connect(mapStateToProps, mapDispatchToProps)(class M
         const { isDisabled, isSending, isError, isSuccess } = this.props;
 
         return (
-            <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Dashboard`}>
+            <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Meta`}>
                 <section className="meta">
                     <h1>Meta</h1>
                     <form onSubmit={this.submit.bind(this)}>

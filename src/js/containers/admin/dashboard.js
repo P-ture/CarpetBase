@@ -15,18 +15,6 @@ export default class Dashboard extends PureComponent {
     static displayName = 'Admin/Dashboard';
 
     /**
-     * @constant requiresAuth
-     * @type {Boolean}
-     */
-    static requiresAuth = true;
-
-    /**
-     * @constant cssDocuments
-     * @type {Object}
-     */
-    static cssDocuments = ['/css/dashboard.css'];
-
-    /**
      * @method render
      * @return {Object}
      */

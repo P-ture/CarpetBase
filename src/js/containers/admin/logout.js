@@ -5,6 +5,15 @@ import DocumentTitle from 'react-document-title';
 import * as config from '../../miscellaneous/config';
 
 /**
+ * @method fetch
+ * @param {Object} response
+ * @return {Promise}
+ */
+export const fetch = ({ response }) => {
+    return setCookie('jwttoken', null, { res: response, path: '/', expires: new Date() });
+};
+
+/**
  * @class Logout
  * @extends {PureComponent}
  */
@@ -15,15 +24,6 @@ export default class Logout extends PureComponent {
      * @type {String}
      */
     static displayName = 'Admin/Logout';
-
-    /**
-     * @method fetchData
-     * @param {Object} response
-     * @return {Promise}
-     */
-    static fetchData = ({ response }) => {
-        return setCookie('jwttoken', null, { res: response, path: '/', expires: new Date() });
-    };
 
     /**
      * @method render

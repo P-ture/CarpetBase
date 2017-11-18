@@ -30,6 +30,17 @@ const mapDispatchToProps = dispatch => {
 };
 
 /**
+ * @method fetch
+ * @param {Function} dispatch
+ * @param {Object} instance
+ * @param {Object} params
+ * @return {Promise}
+ */
+export const fetch = ({ dispatch, params }) => {
+    return dispatch(actions.fetchPage(params.page || actions.HOME));
+};
+
+/**
  * @class Page
  * @extends {PureComponent}
  */
@@ -55,23 +66,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
      */
     static defaultProps = {
         page: null
-    };
-
-    /**
-     * @constant assets
-     * @type {Array}
-     */
-    static assets = ['/css/page.css'];
-
-    /**
-     * @method fetchData
-     * @param {Function} dispatch
-     * @param {Object} instance
-     * @param {Object} params
-     * @return {Promise}
-     */
-    static fetchData = ({ dispatch, params }) => {
-        return dispatch(actions.fetchPage(params.page || actions.HOME));
     };
 
     /**

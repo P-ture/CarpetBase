@@ -42,6 +42,21 @@ const mapDispatchToProps = dispatch => {
 };
 
 /**
+ * @method fetch
+ * @param {Function} dispatch
+ * @return {Promise}
+ */
+export const fetch = ({ dispatch }) => {
+
+    return Promise.all([
+        dispatch(actions.fetchUser()),
+        dispatch(actions.fetchNavigation()),
+        dispatch(actions.fetchMeta())
+    ]);
+
+};
+
+/**
  * @class Layout
  * @extends {PureComponent}
  */
@@ -72,21 +87,6 @@ export class Layout extends PureComponent {
      */
     static defaultProps = {
         user: {}
-    };
-
-    /**
-     * @method fetchData
-     * @param {Function} dispatch
-     * @return {Promise}
-     */
-    static fetchData = ({ dispatch }) => {
-
-        return Promise.all([
-            dispatch(actions.fetchUser()),
-            dispatch(actions.fetchNavigation()),
-            dispatch(actions.fetchMeta())
-        ]);
-
     };
 
     /**
@@ -129,6 +129,7 @@ export class Layout extends PureComponent {
                         </span>,
                         <NavLink key="dashboard" to="/admin/dashboard.html">Dashboard</NavLink>,
                         <NavLink key="meta" to="/admin/meta.html">Meta</NavLink>,
+                        <NavLink key="pages" to="/admin/pages.html">Pages</NavLink>,
                         <NavLink key="logout" to="/admin/logout.html">Sign Out</NavLink>
                     ]}
 

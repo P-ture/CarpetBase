@@ -5,6 +5,12 @@
 export const FETCH_PAGE = Symbol('fetch-page');
 
 /**
+* @constant FETCH_PAGES
+* @type {Symbol}
+*/
+export const FETCH_PAGES = Symbol('fetch-pages');
+
+/**
  * @constant FETCH_NAVIGATION
  * @type {Symbol}
  */
