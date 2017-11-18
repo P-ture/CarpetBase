@@ -4,6 +4,38 @@ import setCookie from 'set-cookie';
 import connect from '../database';
 
 /**
+ * @method isAuthenticated
+ * @param {Object} cookies
+ * @return {Boolean}
+ */
+export function isAuthenticated(cookies) {
+
+    try {
+        return Boolean(jwt.verify(cookies.jwttoken, process.env.CARPETBASE_SECRET));
+    } catch (err) {
+        return false;
+    }
+
+}
+
+/**
+ * @method authenticated
+ * @param {Function} action
+ * @return {void}
+ */
+export function authenticated(action) {
+
+    return (request, response) => {
+
+        // Only invoke the action if the user is authenticated, otherwise respond with a 403.
+        isAuthenticated(request.cookies) ? action(request, response) :
+                                           response.status(403).send({ authenticated: false });
+        
+    };
+
+}
+
+/**
  * @method fetchUser
  * @param {Object} request
  * @param {Object} response

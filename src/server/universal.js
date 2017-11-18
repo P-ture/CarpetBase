@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 import { compose, flatten, identity, groupBy, filter } from 'ramda';
 import routes from '../js/miscellaneous/routes';
 import * as Layout from '../js/miscellaneous/layout';
+import { isAuthenticated } from './api/auth';
 import createServer from '../js/server';
 import createError from '../js/error';
 
@@ -21,21 +22,6 @@ import createError from '../js/error';
  * @type {Object}
  */
 const options = compose(JSON.parse, readFileSync)('package.json');
-
-/**
- * @method isAuthenticated
- * @param {Object} cookies
- * @return {Boolean}
- */
-function isAuthenticated(cookies) {
-
-    try {
-        return Boolean(jwt.verify(cookies.jwttoken, process.env.CARPETBASE_SECRET));
-    } catch (err) {
-        return false;
-    }
-
-}
 
 /**
  * @method render

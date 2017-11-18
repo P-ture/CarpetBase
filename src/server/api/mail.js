@@ -30,7 +30,7 @@ export default function sendMail(request, response) {
         const mail = mailgun({ apiKey, domain: 'sandbox5c634282fac543aa8ab43c9558a6c3c6.mailgun.org' });
         const { firstName, lastName, email, message } = request.body;
         const fullName = `${firstName} ${lastName}`;
-        const data = {
+        const body = {
             from: email,
             to: process.env.CARPETBASE_EMAIL,
             replyTo: `${firstName} ${lastName} ${email}`,
@@ -52,11 +52,12 @@ export default function sendMail(request, response) {
         };
 
         // Send the e-mail, and respond with whether it succeeded or not.
-        mail.messages().send(data, err => response.send({ sent: !err }));
+        mail.messages().send(body, err => response.send({ sent: !err }));
 
     } catch (err) {
 
-        response.send({ sent: false });
+        // Unable to send the e-mail to an error, which we'll send in the response.
+        response.send({ sent: false, error: err });
 
     }
 

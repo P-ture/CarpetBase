@@ -7,20 +7,8 @@ import connect from '../database';
  * @return {Promise}
  */
 export default async function fetchNavigation(request, response) {
-
     const db = connect();
-
-    try {
-
-        const records = await db.select().from('navigation');
-        response.send(records);
-
-    } catch (err) {
-
-        response.send([]);
-
-    } finally {
-        db.destroy();
-    }
-
+    const records = await db.select().from('navigation');
+    response.send(records);
+    db.destroy();
 }

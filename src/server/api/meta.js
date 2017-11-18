@@ -10,21 +10,15 @@ import connect from '../database';
 export async function fetchMeta(request, response) {
 
     const db = connect();
+    const records = await db.select('key', 'value').from('meta');
 
-    try {
+    // Transform the array of records into a key value object.
+    const transformedRecords = records.reduce((model, record) => {
+        return { ...model, [record.key]: record.value };
+    }, {});
 
-        const records = await db.select('key', 'value').from('meta');
-        response.send(records.reduce((model, record) => {
-            return { ...model, [record.key]: record.value };
-        }, {}));
-
-    } catch (err) {
-
-        response.send([]);
-
-    } finally {
-        db.destroy();
-    }
+    response.send(transformedRecords);
+    db.destroy();
 
 }
 
@@ -41,15 +35,21 @@ export async function updateMeta(request, response) {
 
         try {
 
+            // Update the meta table using the passed key.
             await db.table('meta').update({ value }).where('key', '=', key);
-            return response.send({ saved: true });
+            return response.send({ saved: true, error: null });
 
         } catch (err) {
+
+            // Unable to save the page data due to an error, which we'll include in the response.
             response.send({ saved: false, error: err });
+            db.destroy();
+
         }
 
     }));
 
-    return response.send({ saved: true });
+    !response.headersSent && response.send({ saved: true });
+    db.destroy();
 
 }

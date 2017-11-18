@@ -8,21 +8,14 @@ import { HOME } from '../../../src/js/reducers/page/actions';
  * @return {Promise}
  */
 export async function fetchPage(request, response) {
-    
+
     const db = connect();
 
-    try {
-
-        // Fetch the content from the database by the passed slug.
-        const slug = request.params.slug === HOME ? null : request.params.slug;
-        const [record] = await db.select().from('pages').where('slug', slug);
-        return record ? response.send(record) : response.status(404).send({});
-
-    } catch (err) {
-        return response.send({});
-    } finally {
-        db.destroy();
-    }
+    // Fetch the content from the database by the passed slug.
+    const slug = request.params.slug === HOME ? null : request.params.slug;
+    const [record] = await db.select().from('pages').where('slug', slug);
+    record ? response.send(record) : response.status(404).send({});
+    db.destroy();
 
 }
 
@@ -33,20 +26,10 @@ export async function fetchPage(request, response) {
  * @return {Promise}
  */
 export async function fetchPages(request, response) {
-
     const db = connect();
-
-    try {
-
-        const records = await db.select('slug', 'title').from('pages');
-        return response.send(records);
-
-    } catch (err) {
-        return response.send({});
-    } finally {
-        db.destroy();
-    }
-
+    const records = await db.select('slug', 'title').from('pages');
+    response.send(records);
+    db.destroy();
 }
 
 /**
@@ -61,12 +44,15 @@ export async function updatePage(request, response) {
 
     try {
 
+        // Update the relevant page by the passed slug.
         await db.table('pages').update(request.body).where('slug', '=', request.body.slug);
-        return response.send({ saved: true });
+        return response.send({ saved: true, error: null });
 
     } catch (err) {
-        console.log(err);
+
+        // Unable to save the page due to an error, ehich we'll include in the response.
         return response.send({ saved: false, error: err });
+
     } finally {
         db.destroy();
     }
