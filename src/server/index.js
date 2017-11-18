@@ -6,9 +6,9 @@ import bodyParser from 'body-parser';
 import { composeP } from 'ramda';
 import renderApplication from './universal';
 import { login, fetchUser, authenticate } from './api/auth';
-import { fetchPage, fetchPages } from './api/page';
+import { fetchPage, fetchPages, updatePage } from './api/page';
 import fetchNavigation from './api/navigation';
-import { fetchMeta, saveMeta } from './api/meta';
+import { fetchMeta, updateMeta } from './api/meta';
 import sendMail from './api/mail';
 
 const app = express();
@@ -23,10 +23,11 @@ app.get(/[/|.*\.html]$/, renderApplication);
 app.post('/admin/login.html', authenticate);
 app.get('/api/user.json', fetchUser);
 app.get('/api/page/:slug.json', fetchPage);
+app.post('/api/page/:slug.json', updatePage);
 app.get('/api/pages.json', fetchPages);
 app.get('/api/navigation.json', fetchNavigation);
 app.get('/api/meta.json', fetchMeta);
-app.post('/api/meta.json', saveMeta);
+app.post('/api/meta.json', updateMeta);
 app.post('/api/mail.json', sendMail);
 
 app.use(express.static('public/assets'));

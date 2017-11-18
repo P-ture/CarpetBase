@@ -48,3 +48,25 @@ export async function fetchPages(request, response) {
     }
 
 }
+
+/**
+ * @method updatePage
+ * @param {Object} request
+ * @param {Object} response
+ * @return {Promise}
+ */
+export async function updatePage(request, response) {
+
+    const db = connect();
+
+    try {
+
+        return await db.table('pages').update(request.body).where('slug', '=', request.body.slug);
+
+    } catch (err) {
+        return response.send({});
+    } finally {
+        db.destroy();
+    }
+
+}

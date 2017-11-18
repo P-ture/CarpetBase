@@ -29,12 +29,12 @@ export async function fetchMeta(request, response) {
 }
 
 /**
- * @method saveMeta
+ * @method updateMeta
  * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export async function saveMeta(request, response) {
+export async function updateMeta(request, response) {
 
     const db = connect();
     const records = await Promise.all(toPairs(request.body).map(async ([key, value]) => {
