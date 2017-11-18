@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
+import hash from 'object-hash';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../../reducers/page/actions';
 import * as config from '../../miscellaneous/config';
@@ -17,7 +18,8 @@ export const mapStateToProps = state => {
 
     return {
         instance: state.config.axiosInstance,
-        page: state.page.content
+        page: state.page.content,
+        layouts: state.page.layouts
     };
 
 };
@@ -38,7 +40,12 @@ const mapDispatchToProps = dispatch => {
  * @return {Promise}
  */
 export const fetch = ({ dispatch, params }) => {
-    return dispatch(actions.fetchPage(params.page || actions.HOME));
+
+    return Promise.all([
+        dispatch(actions.fetchLayouts()),
+        dispatch(actions.fetchPage(params.page || actions.HOME))
+    ]);
+
 };
 
 /**
@@ -64,6 +71,7 @@ export default withRouter(withStatuses(connect(mapStateToProps, mapDispatchToPro
         isSending: PropTypes.bool.isRequired,
         isError: PropTypes.bool.isRequired,
         isSuccess: PropTypes.bool.isRequired,
+        layouts: PropTypes.array.isRequired,
         page: PropTypes.shape({
             title: PropTypes.string.isRequired,
             content: PropTypes.string.isRequired
@@ -109,7 +117,9 @@ export default withRouter(withStatuses(connect(mapStateToProps, mapDispatchToPro
     update(key) {
 
         return event => {
-            this.setState({ page: { ...this.state.page, [key]: event.target.value } });
+            const isNumber = /^[0-9]$/.test(event.target.value);
+            const value = isNumber ? Number(event.target.value) : event.target.value;
+            this.setState({ page: { ...this.state.page, [key]: value } });
         };
 
     }
@@ -121,7 +131,7 @@ export default withRouter(withStatuses(connect(mapStateToProps, mapDispatchToPro
     render() {
 
         const { page } = this.state;
-        const { isDisabled, isSending, isError, isSuccess } = this.props;
+        const { layouts, isDisabled, isSending, isError, isSuccess } = this.props;
 
         return (
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Page`}>
@@ -146,6 +156,29 @@ export default withRouter(withStatuses(connect(mapStateToProps, mapDispatchToPro
                             <label htmlFor="content">Content:</label>
                             <textarea name="content" value={page.content} onChange={this.update('content')} />
                         </div>
+
+                        <ul className="layout">
+
+                            {layouts.map((layout, index) => {
+
+                                const id = `layout-${index}`;
+
+                                return (
+                                    <li key={hash(layout)}>
+                                        <label htmlFor={id}>{layout.name}</label>
+                                        <input
+                                            type="radio"
+                                            name={id}
+                                            value={layout.id}
+                                            checked={layout.id === page.layoutId}
+                                            onChange={this.update('layoutId')}
+                                            />
+                                    </li>
+                                );
+
+                            })}
+
+                        </ul>
 
                         <button type="submit" disabled={isSending || isDisabled}>
                             {isSending ? 'Saving...' : 'Save'}

@@ -15,3 +15,9 @@ export const FETCH_PAGES = Symbol('fetch-pages');
  * @type {Symbol}
  */
 export const FETCH_NAVIGATION = Symbol('fetch-navigation');
+
+/**
+ * @constant FETCH_LAYOUTS
+ * @type {Symbol}
+ */
+export const FETCH_LAYOUTS = Symbol('fetch-layouts');

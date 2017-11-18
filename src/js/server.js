@@ -4,6 +4,7 @@ import { StaticRouter, withRouter } from 'react-router-dom';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { create } from 'axios';
+import { camelizeKeys, decamelizeKeys } from 'humps';
 import reducers from './miscellaneous/reducers';
 import Layout from './miscellaneous/layout';
 import * as config from './miscellaneous/config';
@@ -23,7 +24,9 @@ export default function createServer(request) {
     const instance = create({
         baseURL: `http://${request.headers.host}/api/`,
         timeout: config.REQUEST_TIMEOUT,
-        headers: request.headers
+        headers: { ...request.headers, 'Content-Type': 'application/json' },
+        transformRequest: [decamelizeKeys, JSON.stringify],
+        transformResponse: [JSON.parse, camelizeKeys]
     });
 
     // Setup the Axios instance and pass it into the Redux store.

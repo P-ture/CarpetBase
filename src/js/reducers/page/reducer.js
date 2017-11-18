@@ -7,7 +7,8 @@ import * as type from './types';
 const INITIAL_STATE = {
     list: [],
     content: null,
-    navigation: []
+    navigation: [],
+    layouts: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -22,6 +23,9 @@ export default (state = INITIAL_STATE, action) => {
 
         case type.FETCH_NAVIGATION:
             return { ...state, navigation: action.result };
+
+        case type.FETCH_LAYOUTS:
+            return { ...state, layouts: action.result };
 
     }
 

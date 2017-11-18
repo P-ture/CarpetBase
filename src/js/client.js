@@ -6,6 +6,7 @@ import base64 from 'base-64';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { create } from 'axios';
+import { camelizeKeys, decamelizeKeys } from 'humps';
 import reducers from './miscellaneous/reducers';
 import Layout from './miscellaneous/layout';
 import * as config from './miscellaneous/config';
@@ -17,7 +18,10 @@ const LayoutWithRouter = withRouter(Layout);
 
 const instance = create({
     baseURL: `/api/`,
-    timeout: config.REQUEST_TIMEOUT
+    timeout: config.REQUEST_TIMEOUT,
+    headers: { 'Content-Type': 'application/json' },
+    transformRequest: [decamelizeKeys, JSON.stringify],
+    transformResponse: [JSON.parse, camelizeKeys]
 });
 
 // Setup the Axios instance and pass it into the Redux store.

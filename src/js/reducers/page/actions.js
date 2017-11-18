@@ -48,3 +48,17 @@ export function fetchNavigation() {
     };
 
 }
+
+/**
+ * @method fetchLayouts
+ * @return {Function}
+ */
+export function fetchLayouts() {
+
+    return async (dispatch, getState) => {
+        const instance = getState().config.axiosInstance;
+        const { data } = await instance.get('layouts.json');
+        return dispatch(({ type: type.FETCH_LAYOUTS, result: data }));
+    };
+
+}

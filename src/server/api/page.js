@@ -65,9 +65,23 @@ export async function updatePage(request, response) {
         return response.send({ saved: true });
 
     } catch (err) {
-        return response.send({});
+        console.log(err);
+        return response.send({ saved: false, error: err });
     } finally {
         db.destroy();
     }
 
+}
+
+/**
+ * @method fetchLayouts
+ * @param {Object} request
+ * @param {Object} response
+ * @return {Promise}
+ */
+export async function fetchLayouts(request, response) {
+    const db = connect();
+    const records = await db.select().from('layouts');
+    response.send(records);
+    db.destroy();
 }

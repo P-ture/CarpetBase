@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import { composeP } from 'ramda';
 import renderApplication from './universal';
 import { login, fetchUser, authenticate } from './api/auth';
-import { fetchPage, fetchPages, updatePage } from './api/page';
+import { fetchPage, fetchPages, updatePage, fetchLayouts } from './api/page';
 import fetchNavigation from './api/navigation';
 import { fetchMeta, updateMeta } from './api/meta';
 import sendMail from './api/mail';
@@ -27,6 +27,7 @@ app.post('/api/page/:slug.json', updatePage);
 app.get('/api/pages.json', fetchPages);
 app.get('/api/navigation.json', fetchNavigation);
 app.get('/api/meta.json', fetchMeta);
+app.get('/api/layouts.json', fetchLayouts);
 app.post('/api/meta.json', updateMeta);
 app.post('/api/mail.json', sendMail);
 
