@@ -10,5 +10,4 @@ export default async function fetchNavigation(request, response) {
     const db = connect();
     const records = await db.select().from('navigation');
     response.send(records);
-    db.destroy();
 }

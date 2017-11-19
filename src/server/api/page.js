@@ -14,7 +14,6 @@ export async function fetchPage(request, response) {
     // Fetch the content from the database by the passed slug.
     const [record] = await db.select().from('pages').where('slug', request.params.slug);
     record ? response.send(record) : response.status(404).send({});
-    db.destroy();
 
 }
 
@@ -28,7 +27,6 @@ export async function fetchPages(request, response) {
     const db = connect();
     const records = await db.select('slug', 'title').from('pages');
     response.send(records);
-    db.destroy();
 }
 
 /**
@@ -52,8 +50,6 @@ export async function updatePage(request, response) {
         // Unable to save the page due to an error, ehich we'll include in the response.
         return response.send({ saved: false, error: err });
 
-    } finally {
-        db.destroy();
     }
 
 }
@@ -68,5 +64,4 @@ export async function fetchLayouts(request, response) {
     const db = connect();
     const records = await db.select().from('layouts');
     response.send(records);
-    db.destroy();
 }

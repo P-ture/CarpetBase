@@ -58,8 +58,6 @@ export async function fetchUser(request, response) {
         // Otherwise the user is unauthenticated.
         response.send({ authenticated: false });
 
-    } finally {
-        db.destroy();
     }
 
 }
@@ -93,10 +91,8 @@ export async function authenticate(request, response) {
     } catch (err) {
 
         // Otherwise the supplied username doesn't have a record in the database.
-        return response.redirect('/admin/login.html?error=invalid');
+        response.redirect('/admin/login.html?error=invalid');
 
-    } finally {
-        db.destroy();
     }
 
 }

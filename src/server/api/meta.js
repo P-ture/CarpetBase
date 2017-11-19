@@ -18,7 +18,6 @@ export async function fetchMeta(request, response) {
     }, {});
 
     response.send(transformedRecords);
-    db.destroy();
 
 }
 
@@ -43,13 +42,11 @@ export async function updateMeta(request, response) {
 
             // Unable to save the page data due to an error, which we'll include in the response.
             response.send({ saved: false, error: err });
-            db.destroy();
 
         }
 
     }));
 
     !response.headersSent && response.send({ saved: true });
-    db.destroy();
 
 }
