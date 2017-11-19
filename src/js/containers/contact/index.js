@@ -1,8 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import DocumentTitle from 'react-document-title';
-import { compose } from 'ramda';
 import PropTypes from 'prop-types';
-import { values, all } from 'ramda';
+import { values, all, compose } from 'ramda';
 import { connect } from 'react-redux';
 import GoogleMap from 'google-map-react';
 import * as config from '../../miscellaneous/config';
