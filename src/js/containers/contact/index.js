@@ -1,5 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import DocumentTitle from 'react-document-title';
+import { compose } from 'ramda';
 import PropTypes from 'prop-types';
 import { values, all } from 'ramda';
 import { connect } from 'react-redux';
@@ -69,10 +70,16 @@ const defaultForm = {
 };
 
 /**
+ * @method enhance
+ * @return {Object}
+ */
+const enhance = compose(withStatuses, connect(mapStateToProps));
+
+/**
  * @class Connect
  * @extends {PureComponent}
  */
-export default withStatuses(connect(mapStateToProps)(class Contact extends Component {
+export default enhance(class Contact extends Component {
 
     /**
      * @constant displayName
@@ -233,4 +240,4 @@ export default withStatuses(connect(mapStateToProps)(class Contact extends Compo
 
     }
 
-}));
+});

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
+import { compose } from 'ramda';
 import * as actions from '../../reducers/config/actions';
 import * as config from '../../miscellaneous/config';
 import withStatuses from '../../behaviours/status';
@@ -40,10 +41,16 @@ export const fetch = ({ dispatch }) => {
 };
 
 /**
+ * @method enhance
+ * @return {Object}
+ */
+const enhance = compose(withStatuses, connect(mapStateToProps, mapDispatchToProps));
+
+/**
  * @class Meta
  * @extends {Component}
  */
-export default withStatuses(connect(mapStateToProps, mapDispatchToProps)(class Meta extends Component {
+export default enhance(class Meta extends Component {
 
     /**
      * @constant displayName
@@ -157,4 +164,4 @@ export default withStatuses(connect(mapStateToProps, mapDispatchToProps)(class M
 
     }
 
-}));
+});

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
+import { compose } from 'ramda';
 import hash from 'object-hash';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../../reducers/page/actions';
@@ -49,10 +50,16 @@ export const fetch = ({ dispatch, params }) => {
 };
 
 /**
+ * @method enhance
+ * @return {Object}
+ */
+const enhance = compose(withStatuses, connect(mapStateToProps, mapDispatchToProps), withRouter);
+
+/**
  * @class Page
  * @extends {Component}
  */
-export default withRouter(withStatuses(connect(mapStateToProps, mapDispatchToProps)(class Page extends Component {
+export default enhance(class Page extends Component {
 
     /**
      * @constant displayName
@@ -191,4 +198,4 @@ export default withRouter(withStatuses(connect(mapStateToProps, mapDispatchToPro
 
     }
 
-})));
+});
