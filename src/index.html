@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{{title}}</title>
 
-    <script type="text/javascript">
+    <script type="text/javascript" charset="UTF-8">
         window[Symbol.for('state')] = '{{{state}}}';
     </script>
 
     <link rel="stylesheet" type="text/css" href="/css/application.css?version={{version}}" />
-    <script type="text/javascript" src="/js/application.js" async defer></script>
+    <script type="text/javascript" src="/js/application.js" charset="UTF-8" async defer></script>
 
     {{#each css}}
         <link rel="stylesheet" type="text/css" href="{{.}}?version={{../version}}" />
