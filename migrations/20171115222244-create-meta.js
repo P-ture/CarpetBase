@@ -17,9 +17,9 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db, callback) {
   db.insert('meta', ['id', 'key', 'value'], [1, 'slogan', 'Carpet & Flooring Retailers & Contractors'], callback);
   db.insert('meta', ['id', 'key', 'value'], [2, 'social', `
-* [Instagram](#)
 * [Facebook](#)
-* [WhatsApp](#)
+* [Twitter](#)
+* [LinkedIn](#)
   `.trim()], callback);
   db.insert('meta', ['id', 'key', 'value'], [3, 'latitude', '51.4492704'], callback);
   db.insert('meta', ['id', 'key', 'value'], [4, 'longitude', '-0.1462397'], callback);
