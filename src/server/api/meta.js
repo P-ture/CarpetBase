@@ -36,7 +36,6 @@ export async function updateMeta(request, response) {
 
             // Update the meta table using the passed key.
             await db.table('meta').update({ value }).where('key', '=', key);
-            return response.send({ saved: true, error: null });
 
         } catch (err) {
 
@@ -47,6 +46,6 @@ export async function updateMeta(request, response) {
 
     }));
 
-    !response.headersSent && response.send({ saved: true });
+    !response.headersSent && response.send({ saved: true, error: null });
 
 }
