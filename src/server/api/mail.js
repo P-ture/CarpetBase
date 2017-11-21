@@ -17,12 +17,12 @@ function gender(name) {
 }
 
 /**
- * @method sendMail
+ * @method send
  * @param {Object} request
  * @param {Object} response
  * @return {void}
  */
-export default function sendMail(request, response) {
+export function send(request, response) {
 
     try {
 

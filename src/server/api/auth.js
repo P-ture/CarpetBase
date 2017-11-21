@@ -28,8 +28,7 @@ export function authenticated(action) {
     return (request, response) => {
 
         // Only invoke the action if the user is authenticated, otherwise respond with a 403.
-        isAuthenticated(request.cookies) ? action(request, response) :
-                                           response.status(403).send({});
+        return isAuthenticated(request.cookies) ? action(request, response) : response.status(403).send({});
         
     };
 

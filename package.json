@@ -58,6 +58,8 @@
     "redux": "~3.7.2",
     "redux-thunk": "~2.2.0",
     "set-cookie": "0.0.4",
+    "shortid": "~2.2.8",
+    "slug": "~0.9.1",
     "sort-by": "~1.2.0"
   },
   "devDependencies": {

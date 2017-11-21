@@ -174,6 +174,7 @@ export class Layout extends Component {
                         <NavLink key="dashboard" to="/admin/dashboard.html">Dashboard</NavLink>,
                         <NavLink key="meta" to="/admin/meta.html">Meta</NavLink>,
                         <NavLink key="pages" to="/admin/pages.html">Pages</NavLink>,
+                        <NavLink key="galleries" to="/admin/galleries.html">Galleries</NavLink>,
                         <NavLink key="logout" to="/admin/logout.html">Sign Out</NavLink>
                     ]}
 

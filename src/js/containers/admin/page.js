@@ -110,7 +110,7 @@ export default enhance(class Page extends Component {
 
         this.props.setSending(true);
 
-        this.props.instance.post(`/page/${this.props.match.params.page}.json`, this.state.page).then(response => {
+        this.props.instance.put(`/page/${this.props.match.params.page}.json`, this.state.page).then(response => {
             this.props.setSent(response.data.saved);
         });
 

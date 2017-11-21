@@ -2,12 +2,12 @@ import { toPairs } from 'ramda';
 import connect from '../database';
 
 /**
- * @method fetchMeta
+ * @method get
  * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export async function fetchMeta(request, response) {
+export async function get(request, response) {
 
     const db = connect();
     const records = await db.select('key', 'value').from('meta');
@@ -22,12 +22,12 @@ export async function fetchMeta(request, response) {
 }
 
 /**
- * @method updateMeta
+ * @method update
  * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export async function updateMeta(request, response) {
+export async function update(request, response) {
 
     const db = connect();
     const records = await Promise.all(toPairs(request.body).map(async ([key, value]) => {

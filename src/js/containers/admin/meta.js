@@ -95,7 +95,7 @@ export default enhance(class Meta extends Component {
 
         this.props.setSending(true);
 
-        this.props.instance.post('/meta.json', this.state.meta).then(response => {
+        this.props.instance.put('/meta.json', this.state.meta).then(response => {
             this.props.setSent(response.data.saved);
         });
 

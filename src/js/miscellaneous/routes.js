@@ -4,6 +4,8 @@ import * as AdminDashboard from '../containers/admin/dashboard';
 import * as AdminMeta from '../containers/admin/meta';
 import * as AdminPages from '../containers/admin/pages';
 import * as AdminPage from '../containers/admin/page';
+import * as AdminGalleries from '../containers/admin/galleries';
+import * as AdminGallery from '../containers/admin/gallery';
 import * as AdminLogin from '../containers/admin/login';
 import * as AdminLogout from '../containers/admin/logout';
 import * as ErrorNotFound from '../containers/error/not-found';
@@ -49,6 +51,18 @@ export default [
         component: AdminPage.default,
         auth: true,
         fetch: AdminPage.fetch
+    },
+    {
+        path: '/admin/galleries.html',
+        component: AdminGalleries.default,
+        auth: true,
+        fetch: AdminGalleries.fetch
+    },
+    {
+        path: '/admin/gallery/:slug.html',
+        component: AdminGallery.default,
+        auth: true,
+        fetch: AdminGallery.fetch
     },
     {
         path: '/contact.html',
