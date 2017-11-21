@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, NavLink } from 'react-router-dom';
 import Markdown from 'react-markdown';
@@ -10,6 +10,9 @@ import * as authActions from '../reducers/auth/actions';
 import * as pageActions from '../reducers/page/actions';
 import * as configActions from '../reducers/config/actions';
 import routes from './routes';
+
+/** Components */
+import Modal from '../containers/components/modal/index';
 
 /**
  * @constant actions
@@ -60,7 +63,7 @@ export const fetch = ({ dispatch }) => {
  * @class Layout
  * @extends {PureComponent}
  */
-export class Layout extends PureComponent {
+export class Layout extends Component {
 
     /**
      * @constant propTypes
@@ -90,13 +93,24 @@ export class Layout extends PureComponent {
     };
 
     /**
+     * @constant state
+     * @type {Object}
+     */
+    state = {
+        user: {},
+        telephoneModal: false,
+        emailModal: false
+    };
+
+    /**
      * @method render
      * @return {JSX.Element}
      */
     render() {
 
         const { user, meta, navigation } = this.props;
-
+        const { telephoneModal, emailModal } = this.state;
+        
         return (
             <section className="carpetbase">
                 <header>
@@ -105,20 +119,50 @@ export class Layout extends PureComponent {
                             <h1>Carpet Base</h1>
                         </NavLink>
                         <section className="header-contact">
-                            <section className="phone"/>
-                            <section className="email"/>
+                            <Modal
+                                className="telephone-modal"
+                                title="Telephone"
+                                btnClass="telephone"
+                                Open={telephoneModal === true}
+                                onOpen={() => this.setState({ telephoneModal: true })}
+                                onClose={() => this.setState({ telephoneModal: false })}
+                                >
+                                <p>{meta.telephone}</p>
+                            </Modal>
+
+                            <Modal
+                                className="email-modal"
+                                title="Email"
+                                btnClass="email"
+                                Open={emailModal === true}
+                                onOpen={() => this.setState({ emailModal: true })}
+                                onClose={() => this.setState({ emailModal: false })}
+                                >
+                                <a href={`mailto:${meta.email}?subject=Carpet Base Enquiry`}>{meta.email}</a>
+                            </Modal>
                         </section>
                     </section>
                     {meta.slogan && <section className="bottom"><h4>{meta.slogan}</h4></section>}
-                    {meta.social && <Markdown source={meta.social} />}
+                    
                 </header>
 
                 <nav className="navigation">
+                    <ul>
+                        {[...navigation].sort(by('order')).map((model, index) => {
 
-                    {[...navigation].sort(by('order')).map(model => {
-                        return <NavLink key={hash(model)} to={model.href}>{model.name}</NavLink>;
-                    })}
-
+                            return (
+                                <li>
+                                    <NavLink 
+                                        key={hash(model)} 
+                                        to={model.href}
+                                        >
+                                        {model.name}
+                                    </NavLink>
+                                    {index === 0 || index === navigation.length -1 ? '' : <span key={hash(index)}>-</span>}
+                                </li>
+                            );
+                        })}
+                    </ul>
                 </nav>
 
                 <nav className="subnavigation">
@@ -154,11 +198,13 @@ export class Layout extends PureComponent {
                             Phone: <a href={`tel:${meta.telephone.replace(/\s/g, '')}`}>{meta.telephone}</a>
                         </li>
                         <li className="email">
-                            Email: <a href={`mailto:${meta.email}`}>{meta.email}</a>
+                            Email: <a href={`mailto:${meta.email}?subject=Carpet Base Enquiry`}>{meta.email}</a>
                         </li>
                         <li>CarpetBase {new Date().getFullYear()}</li>
                         <li>Structured by <a href="https://www.pture.com/">Pture</a></li>
                     </ul>
+
+                    {meta.social && <Markdown source={meta.social} />}
                 </footer>
 
             </section>

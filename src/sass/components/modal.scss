@@ -1,0 +1,84 @@
+@import '../shared/config';
+@import '../shared/mixin';
+
+div {
+  > span {
+    padding: 20px;
+    cursor: pointer;
+
+    @media (max-width: $mobile-break) {
+      padding: 15px;
+    }
+  }
+
+  > section.modal-wrapper {
+    background-color: rgba(0, 0, 0, 0.75);
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.4s;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+
+    &.open {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    > section.modal {
+      min-width: 300px;
+      background: white;
+
+      > section.content {
+        > header {
+          padding: 20px;
+          box-sizing: border-box;
+          background: $brandColour;
+          color: white;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          > h5 {
+            font-size: 23px;
+          }
+
+          > a {
+            padding: 15px;
+            background: url("/images/close.svg") no-repeat 50%;
+            background-size: 20px;
+            cursor: pointer;
+            transition: all 0.4s;
+
+            &:hover {
+              opacity: 0.8;
+            }
+          }
+        }
+
+        > div.children {
+          padding: 15px 20px;
+          box-sizing: border-box;
+
+          > a {
+            color: $brandColour;
+            text-decoration: none;
+            transition: all 0.4s;
+
+            &:hover {
+              color: darken($brandColour, 5);
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+}

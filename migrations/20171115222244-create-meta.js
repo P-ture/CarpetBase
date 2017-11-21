@@ -25,7 +25,7 @@ exports.up = function(db, callback) {
   db.insert('meta', ['id', 'key', 'value'], [4, 'longitude', '-0.1462397'], callback);
   db.insert('meta', ['id', 'key', 'value'], [5, 'address', '190 Cavendish Rd, London, SW12 0BZ'], callback);
   db.insert('meta', ['id', 'key', 'value'], [6, 'telephone', '020 8675 2232'], callback);
-  db.insert('meta', ['id', 'key', 'value'], [7, 'email', 'info@carpetbase.com'], callback);
+  db.insert('meta', ['id', 'key', 'value'], [7, 'email', 'info@carpetbase.co.uk'], callback);
 };
 
 exports.down = function(db, callback) {
