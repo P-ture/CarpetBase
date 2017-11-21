@@ -17,6 +17,7 @@ export default class Modal extends PureComponent {
         btnClass: PropTypes.string,
         children: PropTypes.node.isRequired,
         title: PropTypes.string,
+        btnTxt: PropTypes.string,
         Open: PropTypes.bool.isRequired,
         onOpen: PropTypes.func.isRequired,
         onClose: PropTypes.func.isRequired
@@ -27,11 +28,14 @@ export default class Modal extends PureComponent {
      * @type {Object}
      */
     static defaultProps = {
+        className: '',
+        btnClass: '',
+        title: '',
+        btnTxt: '',
         Open: false,
         onOpen: () => {},
-        onClose: () => {},
+        onClose: () => {}
     };
-    
 
     /**
      * @method render
@@ -43,19 +47,19 @@ export default class Modal extends PureComponent {
 
         return (
             <div>
-                <span 
-                    className={btnClass ? btnClass : ''} 
+                <span
+                    className={btnClass ? btnClass : ''}
                     onClick={() => onOpen()}
                     >
                     {btnTxt ? btnTxt : ''}
                 </span>
-                <section className={`modal-wrapper ${Open ? 'open' : '' } ${className ? className : ''}`}>
+                <section className={`modal-wrapper ${Open ? 'open' : ''} ${className ? className : ''}`}>
                     <section className="modal">
                         <section className="content">
 
                             <header>
                                 <h5>{title}</h5>
-                                <a 
+                                <a
                                     className="close"
                                     onClick={() => onClose()}
                                     />

@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import { compose } from 'ramda';
-import { generate } from 'shortid';
 import * as actions from '../../reducers/gallery/actions';
 import * as config from '../../miscellaneous/config';
 import withStatuses from '../../behaviours/status';
@@ -58,6 +57,16 @@ export default enhance(class Galleries extends Component {
      * @type {String}
      */
     static displayName = 'Admin/Gallery';
+
+    /**
+     * @constant propTypes
+     * @type {Object}
+     */
+    static propTypes = {
+        gallery: PropTypes.shape({
+            name: PropTypes.string.isRequired
+        }).isRequired
+    };
 
     /**
      * @method render

@@ -9,10 +9,8 @@ import by from 'sort-by';
 import * as authActions from '../reducers/auth/actions';
 import * as pageActions from '../reducers/page/actions';
 import * as configActions from '../reducers/config/actions';
-import routes from './routes';
-
-/** Components */
 import Modal from '../containers/components/modal/index';
+import routes from './routes';
 
 /**
  * @constant actions
@@ -110,7 +108,7 @@ export class Layout extends Component {
 
         const { user, meta, navigation } = this.props;
         const { telephoneModal, emailModal } = this.state;
-        
+
         return (
             <section className="carpetbase">
                 <header>
@@ -142,8 +140,9 @@ export class Layout extends Component {
                             </Modal>
                         </section>
                     </section>
+
                     {meta.slogan && <section className="bottom"><h4>{meta.slogan}</h4></section>}
-                    
+
                 </header>
 
                 <nav className="navigation">
@@ -151,14 +150,13 @@ export class Layout extends Component {
                         {[...navigation].sort(by('order')).map((model, index) => {
 
                             return (
-                                <li>
-                                    <NavLink 
-                                        key={hash(model)} 
+                                <li key={hash(model)}>
+                                    <NavLink
                                         to={model.href}
                                         >
                                         {model.name}
                                     </NavLink>
-                                    {index === 0 || index === navigation.length -1 ? '' : <span key={hash(index)}>-</span>}
+                                    {index === 0 || index === navigation.length - 1 ? '' : <span key={hash(index)}>-</span>}
                                 </li>
                             );
                         })}

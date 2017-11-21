@@ -61,6 +61,16 @@ export default enhance(class Galleries extends Component {
     static displayName = 'Admin/Galleries';
 
     /**
+     * @constant propTypes
+     * @type {Object}
+     */
+    static propTypes = {
+        history: PropTypes.shape({
+            post: PropTypes.func.isRequired
+        }).isRequired
+    };
+
+    /**
      * @method create
      * @param {String} name
      * @return {Promise}
