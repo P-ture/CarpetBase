@@ -14,6 +14,7 @@
     - - webpack --config webpack/development.server.js
     - - webpack --config webpack/production.application.js
     - - npm run images
+    - - npm run sass
 
 - name: watch
   task: npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack/development.server.js --watch' 'webpack --config webpack/development.application.js --watch' 'taskfile sass --watch'
