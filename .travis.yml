@@ -13,5 +13,6 @@ deploy:
   app: carpetbase
   run:
     - "npm run migrate"
+    - "NODE_ENV=production npm run build"
   on:
     repo: Pture/CarpetBase

@@ -5,6 +5,7 @@
     - - webpack --config webpack/development.server.js
     - - webpack --config webpack/development.application.js
     - - npm run images
+    - - npm run sass
 
 - name: build
   env: production
