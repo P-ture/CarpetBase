@@ -14,10 +14,14 @@ export async function getOne(request, response) {
     const db = connect();
 
     // Fetch the content from the database by the passed slug.
-    const [record] = await db.select().from('pages').where('slug', request.params.id).orWhere('id', request.params.id);
+    const [record] = await db.select().from('pages')
+                             .where('slug', request.params.id || HOME).orWhere('id', request.params.id);
+
+    // Fetch any galleries that ae associated with the page.
     const galleries = await db.select().from('page_galleries').where('page_id', '=', record.id)
                               .innerJoin('galleries', 'galleries.id', 'page_galleries.gallery_id')
                               .orderBy('order', 'ASC');
+
     record ? response.send({ ...record, galleries }) : response.status(404).send({});
 
 }

@@ -4,7 +4,7 @@ import * as type from './types';
  * @constant HOME
  * @type {String}
  */
-export const HOME = 'home';
+export const HOME = 'homepage';
 
 /**
  * @method fetchPage
