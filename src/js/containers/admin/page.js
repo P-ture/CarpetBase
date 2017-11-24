@@ -3,12 +3,21 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
-import { compose } from 'ramda';
+import { compose, append, reject, contains } from 'ramda';
 import hash from 'object-hash';
+import slug from 'slug';
 import { withRouter } from 'react-router-dom';
-import * as actions from '../../reducers/page/actions';
+import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import * as pageActions from '../../reducers/page/actions';
+import * as galleryActions from '../../reducers/gallery/actions';
 import * as config from '../../miscellaneous/config';
 import withStatuses from '../../behaviours/status';
+
+/**
+ * @constant actions
+ * @type {Object}
+ */
+const actions = { ...pageActions, ...galleryActions };
 
 /**
  * @method mapStateToProps
@@ -20,7 +29,8 @@ export const mapStateToProps = state => {
     return {
         instance: state.config.axiosInstance,
         page: state.page.content,
-        layouts: state.page.layouts
+        layouts: state.page.layouts,
+        galleries: state.gallery.list
     };
 
 };
@@ -35,6 +45,37 @@ const mapDispatchToProps = dispatch => {
 };
 
 /**
+ * @class SortableItem
+ * @extends {Component}
+ */
+const SortableItem = SortableElement(({ model }) => {
+
+    return (
+        <li>
+            {model.name}
+            <a href={`/admin/gallery/${model.id}.html`}>Edit</a>
+        </li>
+    );
+
+});
+
+/**
+ * @class SortableList
+ * @extends {Component}
+ */
+const SortableList = SortableContainer(({ items }) => {
+
+    return (
+        <ul>
+            {items.map((model, index) => {
+                return <SortableItem key={hash(model)} index={index} model={model} />;
+            })}
+        </ul>
+    );
+
+});
+
+/**
  * @method fetch
  * @param {Function} dispatch
  * @param {Object} params
@@ -44,7 +85,8 @@ export const fetch = ({ dispatch, params }) => {
 
     return Promise.all([
         dispatch(actions.fetchLayouts()),
-        dispatch(actions.fetchPage(params.page || actions.HOME))
+        dispatch(actions.fetchPage(params.id)),
+        dispatch(actions.fetchGalleries())
     ]);
 
 };
@@ -79,13 +121,14 @@ export default enhance(class Page extends Component {
         isError: PropTypes.bool.isRequired,
         isSuccess: PropTypes.bool.isRequired,
         layouts: PropTypes.array.isRequired,
+        galleries: PropTypes.array.isRequired,
         page: PropTypes.shape({
             title: PropTypes.string.isRequired,
             content: PropTypes.string.isRequired
         }).isRequired,
         match: PropTypes.shape({
             params: PropTypes.shape({
-                page: PropTypes.string.isRequired
+                id: PropTypes.string.isRequired
             }).isRequired
         }).isRequired,
         instance: PropTypes.func.isRequired
@@ -96,7 +139,8 @@ export default enhance(class Page extends Component {
      * @type {Object}
      */
     state = {
-        page: this.props.page
+        page: this.props.page,
+        error: null
     };
 
     /**
@@ -110,8 +154,28 @@ export default enhance(class Page extends Component {
 
         this.props.setSending(true);
 
-        this.props.instance.put(`/page/${this.props.match.params.page}.json`, this.state.page).then(response => {
+        const model = { ...this.state.page, slug: slug(this.state.page.title, { lower: true }) };
+
+        this.props.instance.put(`/page/${this.props.match.params.id}.json`, model).then(response => {
+            this.setState({ error: response.data.error });
             this.props.setSent(response.data.saved);
+        });
+
+    }
+
+    /**
+     * @method reorder
+     * @param {Number} oldIndex
+     * @param {Number} newIndex
+     * @return {void}
+     */
+    reorder({ oldIndex, newIndex }) {
+
+        // Reorder the galleries according to the new and old indices.
+        const galleries = arrayMove(this.state.page.galleries, oldIndex, newIndex);
+
+        this.setState({
+            page: { ...this.state.page, galleries }
         });
 
     }
@@ -132,13 +196,32 @@ export default enhance(class Page extends Component {
     }
 
     /**
+     * @method toggle
+     * @param {Object} event
+     * @return {void}
+     */
+    toggle(event) {
+
+        const gallery = this.props.galleries.find(model => model.id === Number(event.target.value));
+
+        // Either append to the gallery list or remove.
+        const galleries = event.target.checked ? append(gallery)(this.state.page.galleries) :
+                          reject(model => model.id === Number(event.target.value))(this.state.page.galleries);
+
+        // Update the list of galleries associated to the current page.
+        this.setState({ page: { ...this.state.page, galleries } });
+
+    }
+
+    /**
      * @method render
      * @return {Object}
      */
     render() {
 
         const { page } = this.state;
-        const { layouts, isDisabled, isSending, isError, isSuccess } = this.props;
+        const { layouts, galleries, isDisabled, isSending, isError, isSuccess } = this.props;
+        const selectedGalleryIds = page.galleries.map(model => model.id);
 
         return (
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Page`}>
@@ -151,7 +234,7 @@ export default enhance(class Page extends Component {
                         )}
 
                         {isError && (
-                            <section className="error">There was a problem saving the page.</section>
+                            <section className="error">There was a problem saving the page: {this.state.error}.</section>
                         )}
 
                         <div className="title">
@@ -175,7 +258,7 @@ export default enhance(class Page extends Component {
                                         <label htmlFor={id}>{layout.name}</label>
                                         <input
                                             type="radio"
-                                            name={id}
+                                            id={id}
                                             value={layout.id}
                                             checked={layout.id === page.layoutId}
                                             onChange={this.update('layoutId')}
@@ -186,6 +269,45 @@ export default enhance(class Page extends Component {
                             })}
 
                         </ul>
+
+                        {galleries.length > 0 && (
+
+                            <section className="galleries">
+
+                                <h2>Galleries ({page.galleries.length} of {galleries.length} selected)</h2>
+
+                                <ul className="selected-galleries">
+                                    <SortableList
+                                        pressDelay={200}
+                                        items={page.galleries}
+                                        onSortEnd={this.reorder.bind(this)}
+                                        />
+                                </ul>
+
+                                <ul className="available-galleries">
+
+                                    {galleries.map(model => {
+
+                                        return (
+                                            <li key={hash(model)}>
+                                                <input
+                                                    type="checkbox"
+                                                    id={model.slug}
+                                                    value={model.id}
+                                                    checked={contains(model.id)(selectedGalleryIds)}
+                                                    onChange={this.toggle.bind(this)}
+                                                    />
+                                                <label htmlFor={model.slug}>{model.name}</label>
+                                            </li>
+                                        );
+
+                                    })}
+
+                                </ul>
+
+                            </section>
+
+                        )}
 
                         <button type="submit" disabled={isSending || isDisabled}>
                             {isSending ? 'Saving...' : 'Save'}

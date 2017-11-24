@@ -44,12 +44,13 @@ async function render(request, response) {
 
         // Iterate over each route to fetch data, check authentication, and optionally yield a list of
         // page-related CSS documents to append to the served HTML.
-        const css = await Promise.all(routes.map(async route => {
+        const { css } = await routes.reduce(async (previousP, route) => {
 
+            const previous = await previousP;
             const match = matchPath(url, route);
             const { component, fetch, auth, css } = route;
 
-            if (match) {
+            if (match && !previous.matched) {
 
                 // Determine if the user is authenticated, and if not redirect to the login page.
                 component && auth === true && !isAuthenticated(cookies) && response.redirect('/admin/login.html');
@@ -64,18 +65,19 @@ async function render(request, response) {
                 }
 
                 // Yield any CSS documents that the component wants to load.
-                return css || null;
+                return { ...previous, matched: true, css: [].concat(css) };
             
             }
 
-            return null;
+            return previous;
 
-        }));
+        }, { matched: false, css: [] });
 
         return { html: renderToString(jsx), state: store.getState(), css: css.filter(identity) };
 
     } catch (err) {
 
+        // Unable to render the application due to an error, so we'll render the error page instead.
         return { html: renderToString(createError()), state: store.getState(), css: [] };
 
     }

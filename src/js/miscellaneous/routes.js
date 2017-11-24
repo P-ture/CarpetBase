@@ -47,7 +47,7 @@ export default [
         fetch: AdminPages.fetch
     },
     {
-        path: '/admin/page/:page.html',
+        path: '/admin/page/:id.html',
         component: AdminPage.default,
         auth: true,
         fetch: AdminPage.fetch
@@ -59,16 +59,16 @@ export default [
         fetch: AdminGalleries.fetch
     },
     {
-        path: '/admin/gallery/:slug.html',
+        path: '/admin/gallery/:id.html',
         component: AdminGallery.default,
         auth: true,
-        fetch: AdminGallery.fetch
+        fetch: AdminGallery.fetch,
+        css: ['/css/admin-gallery.css']
     },
     {
         path: '/contact.html',
         component: Contact.default,
         auth: false,
-        fetch: Contact.fetch,
         css: ['/css/contact.css']
     },
     {

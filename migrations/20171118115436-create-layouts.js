@@ -15,8 +15,8 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  db.insert('layouts', ['id', 'name'], [1, 'Gallery'], callback);
-  db.insert('layouts', ['id', 'name'], [2, 'Links'], callback);
+  db.insert('layouts', ['id', 'name'], [1, 'Links'], callback);
+  db.insert('layouts', ['id', 'name'], [2, 'Galleries'], callback);
 };
 
 exports.down = function(db, callback) {

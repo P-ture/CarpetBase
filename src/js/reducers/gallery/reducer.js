@@ -5,7 +5,9 @@ import * as type from './types';
  * @type {Object}
  */
 const INITIAL_STATE = {
-    content: null
+    model: null,
+    list: [],
+    media: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -13,7 +15,13 @@ export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
 
         case type.FETCH_GALLERY:
-            return { ...state, content: action.result };
+            return { ...state, model: action.result };
+
+        case type.FETCH_GALLERIES:
+            return { ...state, list: action.result };
+
+        case type.FETCH_MEDIA:
+            return { ...state, media: { ...state.media, [action.result.galleryId]: action.result.data } };
 
     }
 

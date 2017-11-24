@@ -24,6 +24,7 @@
   tasks:
     - node-sass src/sass/application.scss public/assets/css/application.css --output-style compressed $1
     - node-sass src/sass/contact.scss public/assets/css/contact.css --output-style compressed $1
+    - node-sass src/sass/admin-gallery.scss public/assets/css/admin-gallery.css --output-style compressed $1
 
 - name: lint
   tasks:

@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'ramda';
+import { generate } from 'shortid';
+import slug from 'slug';
 import hash from 'object-hash';
 import * as actions from '../../reducers/page/actions';
 import * as config from '../../miscellaneous/config';
-import withStatuses from '../../behaviours/status';
 
 /**
  * @method mapStateToProps
@@ -46,7 +45,7 @@ export const fetch = ({ dispatch }) => {
  * @method enhance
  * @return {Object}
  */
-const enhance = compose(withStatuses, connect(mapStateToProps, mapDispatchToProps), withRouter);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 /**
  * @class Pages
@@ -65,26 +64,31 @@ export default enhance(class Pages extends Component {
      * @type {Object}
      */
     static propTypes = {
-        pages: PropTypes.array.isRequired,
-        isDisabled: PropTypes.bool.isRequired
+        history: PropTypes.shape({
+            push: PropTypes.func.isRequired
+        }).isRequired,
+        pages: PropTypes.array.isRequired
     };
 
     /**
-     * @constant meta
-     * @type {Object}
-     */
-    state = {
-        page: null
-    };
-
-    /**
-     * @method redirect
-     * @param {Object} event
+     * @method create
+     * @param {String} title
      * @return {Promise}
      */
-    redirect(event) {
-        event.preventDefault();
-        window.location.href = `/admin/page/${event.target.value}.html`;
+    async create(title) {
+
+        try {
+
+            const model = { title, slug: slug(title, { lower: true }) };
+            const { data: response } = await this.props.instance.post('/page.json', model);
+
+            // If it succeeds then we'll forward the user to that page.
+            this.props.history.push(`/admin/page/${response.id}.html`);
+
+        } catch (err) {
+
+        }
+
     }
 
     /**
@@ -93,23 +97,29 @@ export default enhance(class Pages extends Component {
      */
     render() {
 
-        const { isDisabled } = this.props;
-
         return (
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Pages`}>
                 <section className="pages">
                     <h1>Pages</h1>
+
+                    <button className="create" onClick={() => this.create(generate())}>
+                        Create Page
+                    </button>
+
                     <form>
-                        <p>Choose the page to edit:</p>
-                        <select disabled={isDisabled} onChange={this.redirect.bind(this)}>
 
-                            <option>...</option>
+                        {this.props.pages.map(model => {
 
-                            {this.props.pages.map(page => {
-                                return <option key={hash(page)} value={page.slug}>{page.title}</option>;
-                            })}
+                            return (
+                                <li key={hash(model)}>
+                                    {model.title}
+                                    <a href={`/admin/page/${model.id}.html`}>Edit</a>
+                                    <a href={`/${model.slug}.html`}>View</a>
+                                </li>
+                            );
 
-                        </select>
+                        })}
+
                     </form>
                 </section>
             </DocumentTitle>

@@ -1,53 +1,46 @@
+import { decamelizeKeys } from 'humps';
+import { dissoc } from 'ramda';
 import connect from '../database';
 import { HOME } from '../../../src/js/reducers/page/actions';
 
 /**
- * @method fetchPage
+ * @method getOne
  * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export async function fetchPage(request, response) {
+export async function getOne(request, response) {
 
     const db = connect();
 
     // Fetch the content from the database by the passed slug.
-    const [record] = await db.select().from('pages').where('slug', request.params.slug);
-    record ? response.send(record) : response.status(404).send({});
+    const [record] = await db.select().from('pages').where('slug', request.params.id).orWhere('id', request.params.id);
+    const galleries = await db.select().from('page_galleries').where('page_id', '=', record.id)
+                              .innerJoin('galleries', 'galleries.id', 'page_galleries.gallery_id')
+                              .orderBy('order', 'ASC');
+    record ? response.send({ ...record, galleries }) : response.status(404).send({});
 
 }
 
 /**
- * @method fetchPages
+ * @method create
  * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export async function fetchPages(request, response) {
-    const db = connect();
-    const records = await db.select('slug', 'title').from('pages');
-    response.send(records);
-}
-
-/**
- * @method updatePage
- * @param {Object} request
- * @param {Object} response
- * @return {Promise}
- */
-export async function updatePage(request, response) {
-
+export async function create(request, response) {
+    
     const db = connect();
 
     try {
 
-        // Update the relevant page by the passed slug.
-        await db.table('pages').update(request.body).where('slug', '=', request.body.slug);
-        return response.send({ saved: true, error: null });
+        // Create the page by the passed name, and ensure it's unique.
+        const [id] = await db.table('pages').insert(request.body);
+        return response.send({ id: Number(id), saved: true, error: null });
 
     } catch (err) {
 
-        // Unable to save the page due to an error, ehich we'll include in the response.
+        // Likely it failed to create because the name already exists.
         return response.send({ saved: false, error: err });
 
     }
@@ -55,13 +48,51 @@ export async function updatePage(request, response) {
 }
 
 /**
- * @method fetchLayouts
+ * @method getAll
  * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export async function fetchLayouts(request, response) {
+export async function getAll(request, response) {
     const db = connect();
-    const records = await db.select().from('layouts');
+    const records = await db.select().from('pages');
     response.send(records);
+}
+
+/**
+ * @method update
+ * @param {Object} request
+ * @param {Object} response
+ * @return {Promise}
+ */
+export async function update(request, response) {
+
+    const db = connect();
+
+    try {
+
+        // Update the relevant page by the passed id.
+        await db.table('pages')
+                .update(dissoc('galleries')(request.body))
+                .where('id', '=', request.body.id);
+
+        // Update the ordering of the associated gallery items.
+        await db.table('page_galleries').where('page_id', '=', request.body.id).delete();
+        await Promise.all(request.body.galleries.map(async ({ id }, order) => {
+
+            // Insert the record with the required ordering.
+            const model = { pageId: request.body.id, galleryId: id, order };
+            return await db.table('page_galleries').insert(decamelizeKeys(model));
+
+        }));
+
+        return response.send({ saved: true, error: null });
+
+    } catch (err) {
+
+        // Unable to save the page due to an error, ehich we'll include in the response.
+        return response.send({ saved: false, error: err.code === 1062 ? 'Page name already exists' : err });
+
+    }
+
 }

@@ -2,13 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import hash from 'object-hash';
 import DocumentTitle from 'react-document-title';
 import { compose } from 'ramda';
 import { generate } from 'shortid';
-import slug from 'slug';
-import * as actions from '../../reducers/config/actions';
+import * as configActions from '../../reducers/config/actions';
+import * as galleryActions from '../../reducers/gallery/actions';
 import * as config from '../../miscellaneous/config';
 import withStatuses from '../../behaviours/status';
+
+/**
+ * @constant actions
+ * @type {Object}
+ */
+const actions = { ...configActions, ...galleryActions };
 
 /**
  * @method mapStateToProps
@@ -19,7 +26,7 @@ export const mapStateToProps = state => {
 
     return {
         instance: state.config.axiosInstance,
-        meta: state.config.meta
+        galleries: state.gallery.list
     };
 
 };
@@ -39,7 +46,7 @@ const mapDispatchToProps = dispatch => {
  * @return {Promise}
  */
 export const fetch = ({ dispatch }) => {
-    return dispatch(actions.fetchMeta());
+    return dispatch(actions.fetchGalleries());
 };
 
 /**
@@ -66,8 +73,9 @@ export default enhance(class Galleries extends Component {
      */
     static propTypes = {
         history: PropTypes.shape({
-            post: PropTypes.func.isRequired
-        }).isRequired
+            push: PropTypes.func.isRequired
+        }).isRequired,
+        galleries: PropTypes.array.isRequired
     };
 
     /**
@@ -78,13 +86,16 @@ export default enhance(class Galleries extends Component {
     async create(name) {
 
         try {
-            await this.props.instance.post('/gallery.json', { name, slug: slug(name) });
+
+            // Attempt to create the gallery with the random name.
+            const { data: response } = await this.props.instance.post('/gallery.json', { name });
+
+            // If it succeeds then we'll forward the user to that page.
+            this.props.history.push(`/admin/gallery/${response.id}.html`);
+
         } catch (err) {
 
         }
-
-        // If it succeeds then we'll forward the user to that page.
-        this.props.history.push(`/admin/gallery/${slug(name)}.html`);
 
     }
 
@@ -98,9 +109,22 @@ export default enhance(class Galleries extends Component {
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Galleries`}>
                 <section className="galleries">
                     <h1>Galleries</h1>
+
                     <button className="create" onClick={() => this.create(generate())}>
                         Create Gallery
                     </button>
+
+                    {this.props.galleries.map(model => {
+
+                        return (
+                            <li key={hash(model)}>
+                                {model.name}
+                                <a href={`/admin/gallery/${model.id}.html`}>Edit</a>
+                            </li>
+                        );
+
+                    })}
+
                 </section>
             </DocumentTitle>
         );

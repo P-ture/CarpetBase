@@ -2,12 +2,12 @@ import { toPairs } from 'ramda';
 import connect from '../database';
 
 /**
- * @method get
+ * @method getAll
  * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export async function get(request, response) {
+export async function getAll(request, response) {
 
     const db = connect();
     const records = await db.select('key', 'value').from('meta');

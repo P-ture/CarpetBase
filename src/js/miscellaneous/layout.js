@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Switch, NavLink } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
@@ -113,9 +113,9 @@ export class Layout extends Component {
             <section className="carpetbase">
                 <header>
                     <section className="top">
-                        <NavLink to="/">
+                        <a href="/">
                             <h1>Carpet Base</h1>
-                        </NavLink>
+                        </a>
                         <section className="header-contact">
                             <Modal
                                 className="telephone-modal"
@@ -151,11 +151,9 @@ export class Layout extends Component {
 
                             return (
                                 <li key={hash(model)}>
-                                    <NavLink
-                                        to={model.href}
-                                        >
+                                    <a href={model.href}>
                                         {model.name}
-                                    </NavLink>
+                                    </a>
                                     {index === 0 || index === navigation.length - 1 ? '' : <span key={hash(index)}>-</span>}
                                 </li>
                             );
@@ -169,14 +167,14 @@ export class Layout extends Component {
                         <span key="username" className="username">
                             You&apos;re signed in as <em>{user.username}</em>
                         </span>,
-                        <NavLink key="dashboard" to="/admin/dashboard.html">Dashboard</NavLink>,
-                        <NavLink key="meta" to="/admin/meta.html">Meta</NavLink>,
-                        <NavLink key="pages" to="/admin/pages.html">Pages</NavLink>,
-                        <NavLink key="galleries" to="/admin/galleries.html">Galleries</NavLink>,
-                        <NavLink key="logout" to="/admin/logout.html">Sign Out</NavLink>
+                        <a key="dashboard" href="/admin/dashboard.html">Dashboard</a>,
+                        <a key="meta" href="/admin/meta.html">Meta</a>,
+                        <a key="pages" href="/admin/pages.html">Pages</a>,
+                        <a key="galleries" href="/admin/galleries.html">Galleries</a>,
+                        <a key="logout" href="/admin/logout.html">Sign Out</a>
                     ]}
 
-                    {!user.authenticated && <NavLink to="/admin/login.html">Sign In</NavLink>}
+                    {!user.authenticated && <a href="/admin/login.html">Sign In</a>}
 
                 </nav>
 

@@ -1,4 +1,14 @@
+import cloudinary from 'cloudinary';
+import { camelizeKeys } from 'humps';
+import { dissoc } from 'ramda';
 import connect from '../database';
+
+// Configure Cloundinary with the API keys.
+cloudinary.config({
+    cloud_name: process.env.CARPETBASE_CL_NAME, 
+    api_key: process.env.CARPETBASE_CL_KEY, 
+    api_secret: process.env.CARPETBASE_CL_SECRET
+});
 
 /**
  * @method create
@@ -13,8 +23,8 @@ export async function create(request, response) {
     try {
 
         // Create the page by the passed name, and ensure it's unique.
-        await db.table('galleries').insert(request.body);
-        return response.send({ saved: true, error: null });
+        const [id] = await db.table('galleries').insert(request.body);
+        return response.send({ id: Number(id), saved: true, error: null });
 
     } catch (err) {
 
@@ -26,13 +36,89 @@ export async function create(request, response) {
 }
 
 /**
- * @method get
+ * @method getOne
  * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export async function get(request, response) {
+export async function getOne(request, response) {
+
     const db = connect();
-    const [record] = await db.select().from('galleries').where('slug', '=', request.params.slug);
-    return record ? response.send(record) : response.status(404).send({});
+    const [record] = await db.select().from('galleries').where('id', '=', Number(request.params.id));
+
+    return record ? (async () => {
+
+        // Attempt to find the associated media if we have a record.
+        const media = await db.select().from('media').where('gallery_id', '=', record.id).orderBy('order', 'ASC');
+        response.send({ ...record, media });
+
+    })() : response.status(404).send({});
+
+}
+
+/**
+ * @method getAll
+ * @param {Object} request
+ * @param {Object} response
+ * @return {Promise}
+ */
+export async function getAll(request, response) {
+    const db = connect();
+    const records = await db.select().from('galleries');
+    return response.send(records);
+}
+
+export async function upload(request, response) {
+    
+    try {
+        
+        const db = connect();
+        const [record] = await db.select('id AS gallery_id').from('galleries').where('id', '=', request.params.id);
+        
+        cloudinary.uploader.upload(request.file.path, async result => { 
+
+            const media = camelizeKeys(result);
+            const [id] = await db.table('media').insert({ ...record, url: media.url });
+            const [image] = await db.select().from('media').where('id', '=', Number(id));
+            response.send({ image, uploaded: true, error: null });
+    
+        });
+
+    } catch (err) {
+
+        // Include the reason for the failure in the response.
+        response.send({ uploaded: false, error: err });
+
+    }
+
+}
+
+/**
+ * @method update
+ * @param {Object} request
+ * @param {Object} response
+ * @return {Promise}
+ */
+export async function update(request, response) {
+
+    const db = connect();
+
+    try {
+
+        // Update the relevant gallery by the passed id.
+        await db.table('galleries').update(dissoc('media')(request.body)).where('id', '=', request.body.id);
+
+        // Update the ordering of the associated media items.
+        const order = request.body.media.map(model => model.id);
+        await Promise.all(order.map((id, order) => db.table('media').update({ order }).where('id', '=', id)));
+
+        return response.send({ saved: true, error: null });
+
+    } catch (err) {
+
+        // Unable to save the gallery due to an error, which we'll include in the response.
+        return response.send({ saved: false, error: err });
+
+    }
+
 }

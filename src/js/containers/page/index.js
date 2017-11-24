@@ -1,12 +1,21 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { dissoc } from 'ramda';
+import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Markdown from 'react-markdown';
 import DocumentTitle from 'react-document-title';
-import * as actions from '../../reducers/page/actions';
+import * as pageActions from '../../reducers/page/actions';
+import * as galleryActions from '../../reducers/gallery/actions';
 import * as config from '../../miscellaneous/config';
 import NotFound from '../error/not-found';
+
+/**
+ * @constant actions
+ * @type {Object}
+ */
+const actions = { ...pageActions, ...galleryActions };
 
 /**
  * @method mapStateToProps
@@ -16,7 +25,10 @@ import NotFound from '../error/not-found';
 export const mapStateToProps = state => {
 
     return {
-        page: state.page.content
+        page: dissoc('galleries')(state.page.content),
+        galleries: state.page.content.galleries.map(model => {
+            return state.gallery.media[model.id];
+        }).filter(model => model.media.length > 0)
     };
 
 };
@@ -37,8 +49,15 @@ const mapDispatchToProps = dispatch => {
  * @param {Object} params
  * @return {Promise}
  */
-export const fetch = ({ dispatch, params }) => {
-    return dispatch(actions.fetchPage(params.page || actions.HOME));
+export const fetch = async ({ dispatch, params }) => {
+
+    const { result } = await dispatch(actions.fetchPage(params.page || actions.HOME));
+
+    // Populate the store with all of the associated media for the current page.
+    return Promise.all(result.galleries.map(async model => {
+        return dispatch(actions.fetchMedia(model.galleryId));
+    }));
+
 };
 
 /**
@@ -58,7 +77,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
      * @type {Object}
      */
     static propTypes = {
-        page: PropTypes.object
+        page: PropTypes.object.isRequired,
+        galleries: PropTypes.array.isRequired
     };
 
     /**
@@ -70,18 +90,67 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
     };
 
     /**
+     * @method thumbnail
+     * @param {String} path
+     * @param {Number} size
+     * @return {void}
+     */
+    thumbnail(path, size) {
+        return path.replace(/^((.*)[\\/]upload)(.*)/, `$1/w_${size},c_scale$3`);
+    }
+
+    /**
      * @method render
      * @return {Object}
      */
     render() {
 
-        const { page } = this.props;
+        const { page, galleries } = this.props;
 
         return page ? (
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} ${page.title}`}>
                 <section className={`page ${page.slug}`}>
                     <h1>{page.title}</h1>
                     <Markdown source={page.content} />
+
+                    {galleries.length > 0 && (
+                        <section className="galleries">
+                            <h2>Galleries ({galleries.length})</h2>
+
+                            <ul>
+
+                                {galleries.map(model => {
+
+                                    return (
+                                        <li key={hash(model)}>
+
+                                            <figure>
+
+                                                <picture>
+                                                    <source
+                                                        srcSet={`${this.thumbnail(model.media[0].url, 200)},
+                                                                ${this.thumbnail(model.media[0].url, 400)} 2x`}
+                                                        />
+                                                    <img src={this.thumbnail(model.media[0].url, 200)} alt="Photograph" />
+                                                </picture>
+
+                                                <figcaption>
+                                                    <header>{model.name} ({model.media.length} pictures in gallery)</header>
+                                                    {model.description && <p>{model.description}</p>}
+                                                </figcaption>
+
+                                            </figure>
+
+                                        </li>
+                                    );
+
+                                })}
+
+                            </ul>
+
+                        </section>
+                    )}
+
                 </section>
             </DocumentTitle>
         ) : <NotFound />;
