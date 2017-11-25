@@ -151,7 +151,6 @@ export default enhance(class Page extends Component {
     submit(event) {
 
         event.preventDefault();
-
         this.props.setSending(true);
 
         const model = { ...this.state.page, slug: slug(this.state.page.title, { lower: true }) };

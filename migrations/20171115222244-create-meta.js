@@ -26,6 +26,15 @@ exports.up = function(db, callback) {
   db.insert('meta', ['id', 'key', 'value'], [5, 'address', '190 Cavendish Rd, London, SW12 0BZ'], callback);
   db.insert('meta', ['id', 'key', 'value'], [6, 'telephone', '020 8675 2232'], callback);
   db.insert('meta', ['id', 'key', 'value'], [7, 'email', 'info@carpetbase.co.uk'], callback);
+  db.insert('meta', ['id', 'key', 'value'], [8, 'navigation', `
+  * [Home](/)
+  * [About](/about.html)
+  * [Services](/services.html)
+  * [Commercial](/commercial.html)
+  * [Projects](/projects.html)
+  * [Gallery](/gallery.html)
+  * [Contact](/contact.html)
+    `.trim()], callback);
 };
 
 exports.down = function(db, callback) {

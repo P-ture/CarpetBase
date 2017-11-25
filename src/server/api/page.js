@@ -18,9 +18,9 @@ export async function getOne(request, response) {
                              .where('slug', request.params.id || HOME).orWhere('id', request.params.id);
 
     // Fetch any galleries that ae associated with the page.
-    const galleries = await db.select().from('page_galleries').where('page_id', '=', record.id)
+    const galleries = record ? await db.select().from('page_galleries').where('page_id', '=', record.id)
                               .innerJoin('galleries', 'galleries.id', 'page_galleries.gallery_id')
-                              .orderBy('order', 'ASC');
+                              .orderBy('order', 'ASC') : [];
 
     record ? response.send({ ...record, galleries }) : response.status(404).send({});
 
@@ -76,8 +76,15 @@ export async function update(request, response) {
     try {
 
         // Update the relevant page by the passed id.
+        const model = dissoc('galleries')(request.body);
+    
+        // Determine if the current page is the homepage, in which case we'll not update its slug.
+        const [{ slug }] = await db.select().from('pages').where('id', '=', request.params.id);
+        const isHomepage = slug === HOME;
+
+        // Update the page record.
         await db.table('pages')
-                .update(dissoc('galleries')(request.body))
+                .update(isHomepage ? dissoc('slug')(model) : model)
                 .where('id', '=', request.body.id);
 
         // Update the ordering of the associated gallery items.

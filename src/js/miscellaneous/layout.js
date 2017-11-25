@@ -7,7 +7,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import by from 'sort-by';
 import * as authActions from '../reducers/auth/actions';
-import * as pageActions from '../reducers/page/actions';
 import * as configActions from '../reducers/config/actions';
 import Modal from '../containers/components/modal/index';
 import routes from './routes';
@@ -16,7 +15,7 @@ import routes from './routes';
  * @constant actions
  * @type {Object}
  */
-const actions = { ...authActions, ...pageActions, ...configActions };
+const actions = { ...authActions, ...configActions };
 
 /**
  * @method mapStateToProps
@@ -27,7 +26,6 @@ export const mapStateToProps = state => {
 
     return {
         user: state.auth.user,
-        navigation: state.page.navigation,
         meta: state.config.meta
     };
 
@@ -51,7 +49,6 @@ export const fetch = ({ dispatch }) => {
 
     return Promise.all([
         dispatch(actions.fetchUser()),
-        dispatch(actions.fetchNavigation()),
         dispatch(actions.fetchMeta())
     ]);
 
@@ -72,13 +69,13 @@ export class Layout extends Component {
             authenticated: PropTypes.bool.isRequired,
             username: PropTypes.string
         }),
-        navigation: PropTypes.array.isRequired,
         meta: PropTypes.shape({
-            slogan: PropTypes.string,
-            social: PropTypes.string,
-            address: PropTypes.string,
-            email: PropTypes.string,
-            telephone: PropTypes.string
+            slogan: PropTypes.string.isRequired,
+            social: PropTypes.string.isRequired,
+            address: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            telephone: PropTypes.string.isRequired,
+            navigation: PropTypes.string.isRequired
         }).isRequired
     };
 
@@ -146,19 +143,7 @@ export class Layout extends Component {
                 </header>
 
                 <nav className="navigation">
-                    <ul>
-                        {[...navigation].sort(by('order')).map((model, index) => {
-
-                            return (
-                                <li key={hash(model)}>
-                                    <a href={model.href}>
-                                        {model.name}
-                                    </a>
-                                    {index === 0 || index === navigation.length - 1 ? '' : <span key={hash(index)}>-</span>}
-                                </li>
-                            );
-                        })}
-                    </ul>
+                    <Markdown source={meta.navigation} />
                 </nav>
 
                 <nav className="subnavigation">

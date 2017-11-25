@@ -36,20 +36,6 @@ export function fetchPages() {
 }
 
 /**
- * @method fetchNavigation
- * @return {Function}
- */
-export function fetchNavigation() {
-
-    return async (dispatch, getState) => {
-        const instance = getState().config.axiosInstance;
-        const { data } = await instance.get('navigation.json');
-        return dispatch(({ type: type.FETCH_NAVIGATION, result: data }));
-    };
-
-}
-
-/**
  * @method fetchLayouts
  * @return {Function}
  */

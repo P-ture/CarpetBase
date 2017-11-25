@@ -10,7 +10,6 @@ import renderApplication from './universal';
 import { login, fetchUser, authenticate, authenticated } from './api/auth';
 import * as layouts from './api/layouts';
 import * as page from './api/page';
-import * as navigation from './api/navigation';
 import * as meta from './api/meta';
 import * as mail from './api/mail';
 import * as gallery from './api/gallery';
@@ -26,6 +25,7 @@ const upload = multer({ dest: tmpdir() });
 
 app.get(/[/|.*\.html]$/, renderApplication);
 app.post('/admin/login.html', authenticate);
+app.post('/api/mail.json', mail.send);
 
 app.get('/api/page/:id.json', page.getOne);
 app.get('/api/pages.json', page.getAll);
@@ -36,9 +36,6 @@ app.get('/api/user.json', fetchUser);
 app.get('/api/layouts.json', authenticated(layouts.getAll));
 app.get('/api/meta.json', meta.getAll);
 app.put('/api/meta.json', authenticated(meta.update));
-
-app.get('/api/navigation.json', navigation.get);
-app.post('/api/mail.json', mail.send);
 
 app.get('/api/gallery/:id.json', gallery.getOne);
 app.patch('/api/gallery/:id.json', upload.single('image'), authenticated(gallery.upload));
