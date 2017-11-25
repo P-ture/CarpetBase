@@ -92,6 +92,20 @@ export default enhance(class Pages extends Component {
     }
 
     /**
+     * @method delete
+     * @param {Object} model
+     * @return {Promise}
+     */
+    async delete(model) {
+        
+        if (window.confirm(`Are you sure you want to delete the ${model.title.toLowerCase()} page?`)) {
+            await this.props.instance.delete(`/page/${model.id}.json`);
+            window.location.reload();
+        }
+        
+    }
+
+    /**
      * @method render
      * @return {Object}
      */
@@ -115,6 +129,7 @@ export default enhance(class Pages extends Component {
                                     {model.title}
                                     <a href={`/admin/page/${model.id}.html`}>Edit</a>
                                     <a href={`/${model.slug}.html`}>View</a>
+                                    <a onClick={() => this.delete(model)}>Delete</a>
                                 </li>
                             );
 

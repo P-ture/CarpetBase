@@ -107,3 +107,16 @@ export async function update(request, response) {
     }
 
 }
+
+/**
+ * @method del
+ * @param {Object} request
+ * @param {Object} response
+ * @return {Promise}
+ */
+export async function del(request, response) {
+    const db = connect();
+    await db.table('pages').where('id', '=', request.params.id).delete();
+    await db.table('page_galleries').where('page_id', '=', request.params.id).delete();
+    response.send({ deleted: true });
+}

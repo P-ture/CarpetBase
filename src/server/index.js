@@ -31,6 +31,7 @@ app.get('/api/page/:id.json', page.getOne);
 app.get('/api/pages.json', page.getAll);
 app.put('/api/page/:id.json', authenticated(page.update));
 app.post('/api/page.json', authenticated(page.create));
+app.delete('/api/page/:id.json', authenticated(page.del));
 
 app.get('/api/user.json', fetchUser);
 app.get('/api/layouts.json', authenticated(layouts.getAll));
