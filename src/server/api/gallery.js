@@ -1,5 +1,5 @@
 import cloudinary from 'cloudinary';
-import { camelizeKeys } from 'humps';
+import { camelizeKeys, decamelizeKeys } from 'humps';
 import { dissoc } from 'ramda';
 import connect from '../database';
 
@@ -78,7 +78,7 @@ export async function upload(request, response) {
         cloudinary.uploader.upload(request.file.path, async result => { 
 
             const media = camelizeKeys(result);
-            const [id] = await db.table('media').insert({ ...record, url: media.url });
+            const [id] = await db.table('media').insert(decamelizeKeys({ ...record, url: media.url, publicId: media.publicId }));
             const [image] = await db.select().from('media').where('id', '=', Number(id));
             response.send({ image, uploaded: true, error: null });
     
@@ -124,14 +124,48 @@ export async function update(request, response) {
 }
 
 /**
- * @method del
+ * @method delAll
  * @param {Object} request
  * @param {Object} response
  * @return {Promise}
  */
-export async function del(request, response) {
+export async function delAll(request, response) {
+
     const db = connect();
-    await db.table('galleries').where('id', '=', request.params.id).delete();
-    await db.table('page_galleries').where('gallery_id', '=', request.params.id).delete();
+
+    const records = await db.select().from('media').where('gallery_id', '=', Number(request.params.id));
+    const models = camelizeKeys(records);
+
+    // Delete all of the media items associated to the gallery.
+    await models.map(async model => {
+        cloudinary.uploader.destroy(model.publicId);
+        await db.table('media').where('id', '=', Number(model.id)).delete();
+    });
+
+    await db.table('galleries').where('id', '=', Number(request.params.id)).delete();
+    await db.table('page_galleries').where('gallery_id', '=', Number(request.params.id)).delete();
     response.send({ deleted: true });
+
+}
+
+/**
+ * @method delOne
+ * @param {Object} request
+ * @param {Object} response
+ * @return {Promise}
+ */
+export async function delOne(request, response) {
+
+    const db = connect();
+    const [record] = await db.select().from('media').where('id', '=', Number(request.params.id));
+    const model = camelizeKeys(record);
+
+    // Remove the media item from the database.
+    await db.table('media').where('id', '=', Number(request.params.id)).delete();
+
+    // Finally attempt to delete the media item from the Cloundinary service.
+    cloudinary.uploader.destroy(model.publicId, ({ result }) => {
+        response.send({ deleted: result === 'ok' });
+    });
+
 }

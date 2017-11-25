@@ -43,7 +43,8 @@ app.patch('/api/gallery/:id.json', upload.single('image'), authenticated(gallery
 app.put('/api/gallery/:id.json', authenticated(gallery.update));
 app.get('/api/galleries.json', authenticated(gallery.getAll));
 app.post('/api/gallery.json', authenticated(gallery.create));
-app.delete('/api/gallery/:id.json', authenticated(gallery.del));
+app.delete('/api/gallery/:id.json', authenticated(gallery.delAll));
+app.delete('/api/gallery/media/:id.json', authenticated(gallery.delOne));
 
 app.use(express.static('public/assets'));
 server.listen(process.env.PORT || 5000);

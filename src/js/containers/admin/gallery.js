@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
@@ -6,7 +6,7 @@ import { request } from 'axios';
 import { connect } from 'react-redux';
 import { camelizeKeys } from 'humps';
 import DocumentTitle from 'react-document-title';
-import { compose, update } from 'ramda';
+import { compose, update, reject } from 'ramda';
 import Dropzone from 'react-dropzone';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 import * as actions from '../../reducers/gallery/actions';
@@ -40,16 +40,50 @@ const mapDispatchToProps = dispatch => {
  * @class SortableItem
  * @extends {Component}
  */
-const SortableItem = SortableElement(({ model }) => {
+const SortableItem = SortableElement(class extends PureComponent {
 
-    const isPreview = model.preview;
+    /**
+     * @constant propTypes
+     * @type {Object}
+     */
+    static propTypes = {
+        model: PropTypes.object.isRequired,
+        instance: PropTypes.func.isRequired,
+        onRemove: PropTypes.func.isRequired
+    };
 
-    return (
-        <li>
-            <img src={isPreview ? model.preview : model.url} />
-            {isPreview && <span>Uploading...</span>}
-        </li>
-    );
+    /**
+     * @method del
+     * @param {Object} model
+     * @return {void}
+     */
+    del(model) {
+
+        if (window.confirm(`Are you sure you want to delete this image?`)) {
+            this.props.instance.delete(`/gallery/media/${model.id}.json`);
+            this.props.onRemove(model);
+        }
+
+    }
+
+    /**
+     * @method render
+     * @return {Object}
+     */
+    render() {
+
+        const { model } = this.props;
+        const isPreview = model.preview;
+
+        return (
+            <li>
+                <img src={isPreview ? model.preview : model.url} />
+                {isPreview && <span>Uploading...</span>}
+                {!isPreview && <a onClick={() => this.del(model)}>Delete</a>}
+            </li>
+        );
+
+    }
 
 });
 
@@ -57,13 +91,13 @@ const SortableItem = SortableElement(({ model }) => {
  * @class SortableList
  * @extends {Component}
  */
-const SortableList = SortableContainer(({ items }) => {
+const SortableList = SortableContainer(props => {
 
     return (
         <ul>
-            {items.map((model, index) => {
+            {props.items.map((model, index) => {
                 const key = model.preview ? model.preview : hash(model);
-                return <SortableItem key={key} index={index} model={model} />;
+                return <SortableItem key={key} {...props} index={index} model={model} />;
             })}
         </ul>
     );
@@ -208,6 +242,16 @@ export default enhance(class Galleries extends Component {
     }
 
     /**
+     * @method remove
+     * @param {Object} model
+     * @return {void}
+     */
+    remove(model) {
+        const media = reject(x => x === model)(this.state.gallery.media);
+        this.setState({ gallery: { ...this.state.gallery, media } });
+    }
+
+    /**
      * @method render
      * @return {Object}
      */
@@ -254,7 +298,13 @@ export default enhance(class Galleries extends Component {
                         <div className="media">
                             <h2>Associated Media ({gallery.media.length})</h2>
                             <Dropzone onDrop={this.upload.bind(this)} />
-                            <SortableList items={gallery.media} onSortEnd={this.reorder.bind(this)} />
+                            <SortableList
+                                {...this.props}
+                                pressDelay={200}
+                                items={gallery.media}
+                                onRemove={this.remove.bind(this)}
+                                onSortEnd={this.reorder.bind(this)}
+                                />
                         </div>
 
                         <button type="submit" disabled={isSending || isDisabled || isUploading}>
