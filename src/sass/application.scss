@@ -88,9 +88,9 @@ body {
     > nav.navigation {
       background: $brandColour;
 
-      > ul {
+      > div > ul {
         display: flex;
-        justify-content: space-between;
+        // justify-content: space-between;
         align-items: center;
         width: 600px;
         margin-left: 50px;
@@ -99,19 +99,31 @@ body {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          position: relative;
+          padding: 0 5px;
 
-          &:first-of-type {
-            a {
-              text-indent: -999999px;
-              background: url('/images/home.svg') 50% no-repeat;
-              background-size: contain;
-              padding: 12px;
-              transition: all 0.4s;
+          &:not(:first-of-type):not(:last-of-type):after {
+            $size: 20px;
 
-              &:hover {
-                text-decoration: none;
-                opacity: 0.8;
-              }
+            content: "-";
+            text-align: center;
+            color: white;
+            margin-right: -($size / 2);
+            position: absolute;
+            width: $size;
+            right: 0;
+          }
+
+          &:first-of-type > a {
+            text-indent: -999999px;
+            background: url('/images/home.svg') 50% no-repeat;
+            background-size: contain;
+            padding: 12px;
+            transition: all 0.4s;
+
+            &:hover {
+              text-decoration: none;
+              opacity: 0.8;
             }
           }
 
