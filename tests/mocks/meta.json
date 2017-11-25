@@ -1,9 +1,10 @@
 {
     "slogan": "Carpet & Flooring Retailers & Contractors",
-    "social": "* [Instagram](#)\n* [Facebook](#)\n* [WhatsApp](#)",
+    "social": "* [Facebook](#)\n* [Twitter](#)\n* [LinkedIn](#)",
     "latitude": "51.4492704",
     "longitude": "-0.1462397",
     "address": "190 Cavendish Rd, London, SW12 0BZ",
     "telephone": "020 8675 2232",
-    "email": "info@carpetbase.com"
+    "email": "info@carpetbase.co.uk",
+    "navigation": "* [Home](/)\n  * [About](/about.html)\n  * [Services](/services.html)\n  * [Commercial](/commercial.html)\n  * [Projects](/projects.html)\n  * [Gallery](/gallery.html)\n  * [Contact](/contact.html)"
 }

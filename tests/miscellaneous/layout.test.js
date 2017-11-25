@@ -5,17 +5,15 @@ import { Layout } from '../../src/js/miscellaneous/layout';
 import { setupMocks } from '../helpers/mocks';
 import * as authActions from '../../src/js/reducers/auth/actions';
 import * as configActions from '../../src/js/reducers/config/actions';
-import * as pageActions from '../../src/js/reducers/page/actions';
 
 test.beforeEach(async t => {
 
     const { dispatch, getState } = setupMocks();
 
     const user = await authActions.fetchUser()(dispatch, getState);
-    const navigation = await pageActions.fetchNavigation()(dispatch, getState);
     const meta = await configActions.fetchMeta()(dispatch, getState);
 
-    t.context.props = { user, navigation, meta };
+    t.context.props = { user, meta };
 
 });
 

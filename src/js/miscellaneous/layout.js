@@ -5,7 +5,6 @@ import Markdown from 'react-markdown';
 import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import by from 'sort-by';
 import * as authActions from '../reducers/auth/actions';
 import * as configActions from '../reducers/config/actions';
 import Modal from '../containers/components/modal/index';
@@ -103,7 +102,7 @@ export class Layout extends Component {
      */
     render() {
 
-        const { user, meta, navigation } = this.props;
+        const { user, meta } = this.props;
         const { telephoneModal, emailModal } = this.state;
 
         return (

@@ -67,7 +67,8 @@ export default enhance(class Pages extends Component {
         history: PropTypes.shape({
             push: PropTypes.func.isRequired
         }).isRequired,
-        pages: PropTypes.array.isRequired
+        pages: PropTypes.array.isRequired,
+        instance: PropTypes.func.isRequired
     };
 
     /**
@@ -97,12 +98,12 @@ export default enhance(class Pages extends Component {
      * @return {Promise}
      */
     async delete(model) {
-        
+
         if (window.confirm(`Are you sure you want to delete the ${model.title.toLowerCase()} page?`)) {
             await this.props.instance.delete(`/page/${model.id}.json`);
             window.location.reload();
         }
-        
+
     }
 
     /**

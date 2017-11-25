@@ -75,7 +75,8 @@ export default enhance(class Galleries extends Component {
         history: PropTypes.shape({
             push: PropTypes.func.isRequired
         }).isRequired,
-        galleries: PropTypes.array.isRequired
+        galleries: PropTypes.array.isRequired,
+        instance: PropTypes.func.isRequired
     };
 
     /**
@@ -105,12 +106,12 @@ export default enhance(class Galleries extends Component {
      * @return {Promise}
      */
     async delete(model) {
-        
+
         if (window.confirm(`Are you sure you want to delete the ${model.name.toLowerCase()} gallery?`)) {
             await this.props.instance.delete(`/gallery/${model.id}.json`);
             window.location.reload();
         }
-        
+
     }
 
     /**
