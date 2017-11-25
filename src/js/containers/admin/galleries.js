@@ -100,6 +100,20 @@ export default enhance(class Galleries extends Component {
     }
 
     /**
+     * @method delete
+     * @param {Object} model
+     * @return {Promise}
+     */
+    async delete(model) {
+        
+        if (window.confirm(`Are you sure you want to delete the ${model.name.toLowerCase()} gallery?`)) {
+            await this.props.instance.delete(`/gallery/${model.id}.json`);
+            window.location.reload();
+        }
+        
+    }
+
+    /**
      * @method render
      * @return {Object}
      */
@@ -120,6 +134,7 @@ export default enhance(class Galleries extends Component {
                             <li key={hash(model)}>
                                 {model.name}
                                 <a href={`/admin/gallery/${model.id}.html`}>Edit</a>
+                                <a onClick={() => this.delete(model)}>Delete</a>
                             </li>
                         );
 
