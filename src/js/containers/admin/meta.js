@@ -153,6 +153,11 @@ export default enhance(class Meta extends Component {
                             <textarea name="social" value={meta.social} onChange={this.update('social')} />
                         </div>
 
+                        <div className="navigation">
+                            <label htmlFor="navigation"><a href="https://guides.github.com/features/mastering-markdown/">Markdown</a> for the main navigation links.</label>
+                            <textarea name="navigation" value={meta.navigation} onChange={this.update('navigation')} />
+                        </div>
+
                         <button type="submit" disabled={isSending || isDisabled}>
                             {isSending ? 'Saving...' : 'Save'}
                         </button>

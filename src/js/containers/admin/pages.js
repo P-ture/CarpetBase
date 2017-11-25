@@ -129,7 +129,7 @@ export default enhance(class Pages extends Component {
                                 <li key={hash(model)}>
                                     {model.title}
                                     <a href={`/admin/page/${model.id}.html`}>Edit</a>
-                                    <a href={`/${model.slug}.html`}>View</a>
+                                    <a href={model.slug === actions.HOME ? '/' : `/${model.slug}.html`}>View</a>
                                     <a onClick={() => this.delete(model)}>Delete</a>
                                 </li>
                             );
