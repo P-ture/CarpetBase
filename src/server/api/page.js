@@ -1,6 +1,7 @@
-import { decamelizeKeys } from 'humps';
+import { decamelizeKeys, camelizeKeys } from 'humps';
 import { dissoc } from 'ramda';
 import connect from '../database';
+import cloudinary from '../cdn';
 import { HOME } from '../../../src/js/reducers/page/actions';
 
 /**
@@ -15,14 +16,18 @@ export async function getOne(request, response) {
 
     // Fetch the content from the database by the passed slug.
     const [record] = await db.select().from('pages')
-                             .where('slug', request.params.id || HOME).orWhere('id', request.params.id);
+                             .where('slug', request.params.id || HOME).orWhere('pages.id', request.params.id);
 
     // Fetch any galleries that ae associated with the page.
     const galleries = record ? await db.select().from('page_galleries').where('page_id', '=', record.id)
-                              .innerJoin('galleries', 'galleries.id', 'page_galleries.gallery_id')
-                              .orderBy('order', 'ASC') : [];
+                                       .innerJoin('galleries', 'galleries.id', 'page_galleries.gallery_id')
+                                       .orderBy('order', 'ASC') : [];
 
-    record ? response.send({ ...record, galleries }) : response.status(404).send({});
+    // Find the hero image if it has been set.
+    const model = camelizeKeys(record);
+    const [hero] = model.mediaId ? await db.select().from('media').where('id', model.mediaId) : [null];
+
+    record ? response.send({ ...record, hero, galleries }) : response.status(404).send({});
 
 }
 
@@ -119,4 +124,42 @@ export async function del(request, response) {
     await db.table('pages').where('id', '=', request.params.id).delete();
     await db.table('page_galleries').where('page_id', '=', request.params.id).delete();
     response.send({ deleted: true });
+}
+
+/**
+ * @method upload
+ * @param {Object} request 
+ * @param {Object} response 
+ * @return {Promise}
+ */
+export async function upload(request, response) {
+
+    const db = connect();
+    
+    try {
+
+        cloudinary.uploader.upload(request.file.path, async result => { 
+
+            // Delete any existing media associated with the page.
+            const [record] = await db.select('media_id AS mediaId', 'public_id as publicId')
+                                     .from('pages').innerJoin('media', 'media.id', 'pages.media_id')
+                                     .where('pages.id', '=', Number(request.params.id));
+            record && cloudinary.uploader.destroy(record.publicId);
+            record && !Number.isNaN(record.mediaId) && await db.select().from('media').where('id', '=', record.mediaId).del();
+
+            const media = camelizeKeys(result);
+            const [id] = await db.table('media').insert(decamelizeKeys({ url: media.url, publicId: media.publicId }));
+            const [image] = await db.select().from('media').where('id', '=', Number(id));
+            await db.table('pages').update(decamelizeKeys({ mediaId: image.id })).where('id', '=', Number(request.params.id));
+            response.send({ image, uploaded: true, error: null });
+    
+        });
+
+    } catch (err) {
+
+        // Include the reason for the failure in the response.
+        response.send({ uploaded: false, error: err });
+
+    }
+
 }

@@ -50,7 +50,8 @@ export default [
         path: '/admin/page/:id.html',
         component: AdminPage.default,
         auth: true,
-        fetch: AdminPage.fetch
+        fetch: AdminPage.fetch,
+        css: ['/css/admin-page.css']
     },
     {
         path: '/admin/galleries.html',

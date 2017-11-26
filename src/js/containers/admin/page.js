@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { request } from 'axios';
 import DocumentTitle from 'react-document-title';
-import { compose, append, reject, contains } from 'ramda';
+import { compose, append, reject, contains, dissoc } from 'ramda';
 import hash from 'object-hash';
+import { camelizeKeys } from 'humps';
+import Dropzone from 'react-dropzone';
 import slug from 'slug';
 import { withRouter } from 'react-router-dom';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
@@ -153,7 +156,8 @@ export default enhance(class Page extends Component {
         event.preventDefault();
         this.props.setSending(true);
 
-        const model = { ...this.state.page, slug: slug(this.state.page.title, { lower: true }) };
+        const strip = compose(dissoc('hero'), dissoc('mediaId'));
+        const model = strip({ ...this.state.page, slug: slug(this.state.page.title, { lower: true }) });
 
         this.props.instance.put(`/page/${this.props.match.params.id}.json`, model).then(response => {
             this.setState({ error: response.data.error });
@@ -213,6 +217,44 @@ export default enhance(class Page extends Component {
     }
 
     /**
+     * @method upload
+     * @param {Object} file
+     * @return {Promise}
+     */
+    async upload([file]) {
+
+        this.setState({ page: { ...this.state.page, hero: file } });
+
+        const formData = new window.FormData();
+        formData.append('image', file);
+
+        const { data: response } = await request({
+            url: `/api/page/${this.props.match.params.id}/media.json`,
+            method: 'patch',
+            data: formData,
+            headers: { 'Content-Type': 'multipart/form-data' },
+            transformResponse: [JSON.parse, camelizeKeys]
+        });
+
+        this.setState({ page: { ...this.state.page, hero: response.image } });
+
+    }
+
+    /**
+     * @method del
+     * @param {Object} model
+     * @return {void}
+     */
+    del(model) {
+
+        if (window.confirm(`Are you sure you want to delete this image?`)) {
+            this.props.instance.delete(`/gallery/media/${model.id}.json`);
+            this.setState({ page: { ...this.state.page, hero: null } });
+        }
+
+    }
+
+    /**
      * @method render
      * @return {Object}
      */
@@ -239,6 +281,19 @@ export default enhance(class Page extends Component {
                         <div className="title">
                             <label htmlFor="title">Title:</label>
                             <input type="text" name="title" value={page.title} onChange={this.update('title')} />
+                        </div>
+
+                        <div className="hero">
+                            <label>Hero Banner:</label>
+                            <Dropzone onDrop={this.upload.bind(this)}>
+                                {page.hero && <img src={page.hero.preview ? page.hero.preview : page.hero.url} />}
+                            </Dropzone>
+                            {page.hero && (
+                                <div>
+                                    {page.hero.preview && <span>Uploading...</span>}
+                                    {!page.hero.preview && <a onClick={() => this.del(page.hero)}>Delete</a>}
+                                </div>
+                            )}
                         </div>
 
                         <div className="content">

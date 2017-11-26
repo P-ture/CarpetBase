@@ -32,6 +32,7 @@ app.get('/api/pages.json', page.getAll);
 app.put('/api/page/:id.json', authenticated(page.update));
 app.post('/api/page.json', authenticated(page.create));
 app.delete('/api/page/:id.json', authenticated(page.del));
+app.patch('/api/page/:id/media.json', upload.single('image'), authenticated(page.upload));
 
 app.get('/api/user.json', fetchUser);
 app.get('/api/layouts.json', authenticated(layouts.getAll));

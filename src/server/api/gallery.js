@@ -1,14 +1,7 @@
-import cloudinary from 'cloudinary';
 import { camelizeKeys, decamelizeKeys } from 'humps';
 import { dissoc } from 'ramda';
+import cloudinary from '../cdn';
 import connect from '../database';
-
-// Configure Cloundinary with the API keys.
-cloudinary.config({
-    cloud_name: process.env.CARPETBASE_CL_NAME, 
-    api_key: process.env.CARPETBASE_CL_KEY, 
-    api_secret: process.env.CARPETBASE_CL_SECRET
-});
 
 /**
  * @method create
@@ -68,6 +61,12 @@ export async function getAll(request, response) {
     return response.send(records);
 }
 
+/**
+ * @method upload
+ * @param {Object} request 
+ * @param {Object} response 
+ * @return {Promise}
+ */
 export async function upload(request, response) {
     
     try {
@@ -162,6 +161,7 @@ export async function delOne(request, response) {
 
     // Remove the media item from the database.
     await db.table('media').where('id', '=', Number(request.params.id)).delete();
+    await db.table('pages').update(decamelizeKeys({ mediaId: null })).where('media_id', '=', Number(request.params.id));
 
     // Finally attempt to delete the media item from the Cloundinary service.
     cloudinary.uploader.destroy(model.publicId, ({ result }) => {
