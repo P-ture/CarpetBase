@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { dissoc } from 'ramda';
+import { dissoc, isEmpty } from 'ramda';
 import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -26,9 +26,9 @@ export const mapStateToProps = state => {
 
     return {
         page: dissoc('galleries')(state.page.content),
-        galleries: state.page.content.galleries.map(model => {
+        galleries: state.page.content ? state.page.content.galleries.map(model => {
             return state.gallery.media[model.id];
-        }).filter(model => model.media.length > 0)
+        }).filter(model => model.media.length > 0) : []
     };
 
 };
@@ -107,7 +107,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
 
         const { page, galleries } = this.props;
 
-        return page ? (
+        return isEmpty(page) ? <NotFound /> : (
+
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} ${page.title}`}>
                 <section className={`page ${page.slug}`}>
                     <h1>{page.title}</h1>
@@ -153,7 +154,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
 
                 </section>
             </DocumentTitle>
-        ) : <NotFound />;
+
+        );
 
     }
 
