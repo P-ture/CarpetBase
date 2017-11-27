@@ -332,7 +332,7 @@ export default enhance(class Page extends Component {
 
                                 <ul className="selected-galleries">
                                     <SortableList
-                                        pressDelay={200}
+                                        pressDelay={100}
                                         items={page.galleries}
                                         onSortEnd={this.reorder.bind(this)}
                                         />

@@ -300,7 +300,7 @@ export default enhance(class Galleries extends Component {
                             <Dropzone onDrop={this.upload.bind(this)} />
                             <SortableList
                                 {...this.props}
-                                pressDelay={200}
+                                pressDelay={100}
                                 items={gallery.media}
                                 onRemove={this.remove.bind(this)}
                                 onSortEnd={this.reorder.bind(this)}

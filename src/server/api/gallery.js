@@ -42,7 +42,9 @@ export async function getOne(request, response) {
     return record ? (async () => {
 
         // Attempt to find the associated media if we have a record.
-        const media = await db.select().from('media').where('gallery_id', '=', record.id).orderBy('order', 'ASC');
+        const media = await db.select().from('galleries_media')
+                              .innerJoin('media', 'galleries_media.media_id', 'media.id')
+                              .where('galleries_media.gallery_id', '=', record.id).orderBy('galleries_media.order', 'ASC');
         response.send({ ...record, media });
 
     })() : response.status(404).send({});
@@ -72,13 +74,18 @@ export async function upload(request, response) {
     try {
         
         const db = connect();
-        const [record] = await db.select('id AS gallery_id').from('galleries').where('id', '=', request.params.id);
         
         cloudinary.uploader.upload(request.file.path, async result => { 
 
             const media = camelizeKeys(result);
-            const [id] = await db.table('media').insert(decamelizeKeys({ ...record, url: media.url, publicId: media.publicId }));
+
+            // Insert into the media table and the joining table that links them to the relevant gallery.
+            const [id] = await db.table('media').insert(decamelizeKeys({ url: media.url, publicId: media.publicId }));
+            await db.table('galleries_media').insert(decamelizeKeys({ mediaId: Number(id), galleryId: request.params.id }));
+
+            // Find the image model that was just uploaded.
             const [image] = await db.select().from('media').where('id', '=', Number(id));
+
             response.send({ image, uploaded: true, error: null });
     
         });
@@ -109,7 +116,7 @@ export async function update(request, response) {
 
         // Update the ordering of the associated media items.
         const order = request.body.media.map(model => model.id);
-        await Promise.all(order.map((id, order) => db.table('media').update({ order }).where('id', '=', id)));
+        await Promise.all(order.map((id, order) => db.table('galleries_media').update({ order }).where('media_id', '=', id)));
 
         return response.send({ saved: true, error: null });
 
@@ -139,6 +146,7 @@ export async function delAll(request, response) {
     await models.map(async model => {
         cloudinary.uploader.destroy(model.publicId);
         await db.table('media').where('id', '=', Number(model.id)).delete();
+        await db.table('galleries_media').where('media_id', '=', Number(model.id)).delete();
     });
 
     await db.table('galleries').where('id', '=', Number(request.params.id)).delete();
@@ -161,11 +169,10 @@ export async function delOne(request, response) {
 
     // Remove the media item from the database.
     await db.table('media').where('id', '=', Number(request.params.id)).delete();
+    await db.table('galleries_media').where('media_id', '=', Number(request.params.id)).delete();
     await db.table('pages').update(decamelizeKeys({ mediaId: null })).where('media_id', '=', Number(request.params.id));
 
     // Finally attempt to delete the media item from the Cloundinary service.
-    cloudinary.uploader.destroy(model.publicId, ({ result }) => {
-        response.send({ deleted: result === 'ok' });
-    });
+    cloudinary.uploader.destroy(model.publicId, ({ result }) => response.send({ deleted: result === 'ok' }));
 
 }
