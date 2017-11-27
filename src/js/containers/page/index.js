@@ -10,6 +10,8 @@ import * as pageActions from '../../reducers/page/actions';
 import * as galleryActions from '../../reducers/gallery/actions';
 import * as config from '../../miscellaneous/config';
 import NotFound from '../error/not-found';
+import Gallery from './components/gallery';
+import Link from './components/link';
 
 /**
  * @constant actions
@@ -90,22 +92,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
     };
 
     /**
-     * @method thumbnail
-     * @param {String} path
-     * @param {Number} size
-     * @return {void}
-     */
-    thumbnail(path, size) {
-        return path.replace(/^((.*)[\\/]upload)(.*)/, `$1/w_${size},c_scale$3`);
-    }
-
-    /**
      * @method render
      * @return {Object}
      */
     render() {
 
         const { page, galleries } = this.props;
+        const isGallery = page.layoutId === 2;
 
         return isEmpty(page) ? <NotFound /> : (
 
@@ -123,30 +116,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
                             <ul>
 
                                 {galleries.map(model => {
-
-                                    return (
-                                        <li key={hash(model)}>
-
-                                            <figure>
-
-                                                <picture>
-                                                    <source
-                                                        srcSet={`${this.thumbnail(model.media[0].url, 200)},
-                                                                ${this.thumbnail(model.media[0].url, 400)} 2x`}
-                                                        />
-                                                    <img src={this.thumbnail(model.media[0].url, 200)} alt="Photograph" />
-                                                </picture>
-
-                                                <figcaption>
-                                                    <header>{model.name} ({model.media.length} pictures in gallery)</header>
-                                                    {model.description && <p>{model.description}</p>}
-                                                </figcaption>
-
-                                            </figure>
-
-                                        </li>
-                                    );
-
+                                    return isGallery ? <Gallery key={hash(model)} model={model} /> :
+                                                       <Link key={hash(model)} model={model} />
                                 })}
 
                             </ul>
