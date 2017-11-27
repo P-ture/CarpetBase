@@ -138,6 +138,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
                                     />
                                 <img src={createThumbnail(featuredGallery.media[0].url, 200)} alt="Photograph" />
                             </picture>
+                            <h3>{featuredGallery.name}</h3>
                         </section>
                     )}
 
