@@ -192,7 +192,7 @@ export default enhance(class Page extends Component {
 
         return event => {
             const isNumber = /^[0-9]$/.test(event.target.value);
-            const value = isNumber ? Number(event.target.value) : event.target.value;
+            const value = isNumber ? Number(event.target.value) : (event.target.value === '' ? null : event.target.value);
             this.setState({ page: { ...this.state.page, [key]: value } });
         };
 
@@ -285,7 +285,7 @@ export default enhance(class Page extends Component {
                                     <label htmlFor="title">Title:</label>
                                     <input type="text" name="title" value={page.title} onChange={this.update('title')} />
                                 </div>
-                                
+
                                 <div className="content">
                                     <label htmlFor="content">Content:</label>
                                     <textarea name="content" value={page.content} onChange={this.update('content')} />
@@ -313,7 +313,7 @@ export default enhance(class Page extends Component {
                             <summary>Layout</summary>
                             <main>
                                 <ul>
-                                
+
                                     {layouts.map((layout, index) => {
 
                                         const id = `layout-${index}`;
@@ -371,6 +371,29 @@ export default enhance(class Page extends Component {
                                         })}
 
                                     </ul>
+
+                                    {galleries.length > 0 && (
+
+                                        <div className="featured">
+                                            <label htmlFor="featured-gallery">Featured gallery:</label>
+                                            <select
+                                                onChange={this.update('featuredGalleryId')}
+                                                value={page.featuredGalleryId ? page.featuredGalleryId : ''}
+                                                >
+                                                <option value="">None</option>
+                                                <optgroup label="Galleries">
+                                                    {galleries.map(model => {
+                                                        return (
+                                                            <option key={hash(model)} value={model.id}>
+                                                                {model.name}
+                                                            </option>
+                                                        );
+                                                    })}
+                                                </optgroup>
+                                            </select>
+                                        </div>
+
+                                    )}
 
                                 </main>
                             </details>

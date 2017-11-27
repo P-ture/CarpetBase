@@ -151,6 +151,8 @@ export async function delAll(request, response) {
 
     await db.table('galleries').where('id', '=', Number(request.params.id)).delete();
     await db.table('page_galleries').where('gallery_id', '=', Number(request.params.id)).delete();
+    await db.table('pages').update(decamelizeKeys({ featuredGalleryId: null }))
+                           .where(decamelizeKeys({ featuredGalleryId: request.params.id }));
     response.send({ deleted: true });
 
 }
@@ -171,6 +173,8 @@ export async function delOne(request, response) {
     await db.table('media').where('id', '=', Number(request.params.id)).delete();
     await db.table('galleries_media').where('media_id', '=', Number(request.params.id)).delete();
     await db.table('pages').update(decamelizeKeys({ mediaId: null })).where('media_id', '=', Number(request.params.id));
+    await db.table('pages').update(decamelizeKeys({ featuredGalleryId: null }))
+                           .where(decamelizeKeys({ featuredGalleryId: request.params.id }));
 
     // Finally attempt to delete the media item from the Cloundinary service.
     cloudinary.uploader.destroy(model.publicId, ({ result }) => response.send({ deleted: result === 'ok' }));
