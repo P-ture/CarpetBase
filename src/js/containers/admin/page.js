@@ -278,88 +278,102 @@ export default enhance(class Page extends Component {
                             <section className="error">There was a problem saving the page: {this.state.error}.</section>
                         )}
 
-                        <div className="title">
-                            <label htmlFor="title">Title:</label>
-                            <input type="text" name="title" value={page.title} onChange={this.update('title')} />
-                        </div>
-
-                        <div className="hero">
-                            <label>Hero Banner:</label>
-                            <Dropzone onDrop={this.upload.bind(this)}>
-                                {page.hero && <img src={page.hero.preview ? page.hero.preview : page.hero.url} />}
-                            </Dropzone>
-                            {page.hero && (
-                                <div>
-                                    {page.hero.preview && <span>Uploading...</span>}
-                                    {!page.hero.preview && <a onClick={() => this.del(page.hero)}>Delete</a>}
+                        <details className="general" open>
+                            <summary>General</summary>
+                            <main>
+                                <div className="title">
+                                    <label htmlFor="title">Title:</label>
+                                    <input type="text" name="title" value={page.title} onChange={this.update('title')} />
                                 </div>
-                            )}
-                        </div>
+                                
+                                <div className="content">
+                                    <label htmlFor="content">Content:</label>
+                                    <textarea name="content" value={page.content} onChange={this.update('content')} />
+                                </div>
+                            </main>
+                        </details>
 
-                        <div className="content">
-                            <label htmlFor="content">Content:</label>
-                            <textarea name="content" value={page.content} onChange={this.update('content')} />
-                        </div>
+                        <details className="hero">
+                            <summary>Hero</summary>
+                            <main>
+                                <label>Hero Banner:</label>
+                                <Dropzone onDrop={this.upload.bind(this)}>
+                                    {page.hero && <img src={page.hero.preview ? page.hero.preview : page.hero.url} />}
+                                </Dropzone>
+                                {page.hero && (
+                                    <div>
+                                        {page.hero.preview && <span>Uploading...</span>}
+                                        {!page.hero.preview && <a onClick={() => this.del(page.hero)}>Delete</a>}
+                                    </div>
+                                )}
+                            </main>
+                        </details>
 
-                        <ul className="layout">
+                        <details className="layout">
+                            <summary>Layout</summary>
+                            <main>
+                                <ul>
+                                
+                                    {layouts.map((layout, index) => {
 
-                            {layouts.map((layout, index) => {
-
-                                const id = `layout-${index}`;
-
-                                return (
-                                    <li key={hash(layout)}>
-                                        <label htmlFor={id}>{layout.name}</label>
-                                        <input
-                                            type="radio"
-                                            id={id}
-                                            value={layout.id}
-                                            checked={layout.id === page.layoutId}
-                                            onChange={this.update('layoutId')}
-                                            />
-                                    </li>
-                                );
-
-                            })}
-
-                        </ul>
-
-                        {galleries.length > 0 && (
-
-                            <section className="galleries">
-
-                                <h2>Galleries ({page.galleries.length} of {galleries.length} selected)</h2>
-
-                                <ul className="selected-galleries">
-                                    <SortableList
-                                        pressDelay={100}
-                                        items={page.galleries}
-                                        onSortEnd={this.reorder.bind(this)}
-                                        />
-                                </ul>
-
-                                <ul className="available-galleries">
-
-                                    {galleries.map(model => {
+                                        const id = `layout-${index}`;
 
                                         return (
-                                            <li key={hash(model)}>
+                                            <li key={hash(layout)}>
+                                                <label htmlFor={id}>{layout.name}</label>
                                                 <input
-                                                    type="checkbox"
-                                                    id={model.slug}
-                                                    value={model.id}
-                                                    checked={contains(model.id)(selectedGalleryIds)}
-                                                    onChange={this.toggle.bind(this)}
+                                                    type="radio"
+                                                    id={id}
+                                                    value={layout.id}
+                                                    checked={layout.id === page.layoutId}
+                                                    onChange={this.update('layoutId')}
                                                     />
-                                                <label htmlFor={model.slug}>{model.name}</label>
                                             </li>
                                         );
 
                                     })}
 
                                 </ul>
+                            </main>
+                        </details>
 
-                            </section>
+                        {galleries.length > 0 && (
+
+                            <details className="galleries">
+                                <summary>Galleries ({page.galleries.length}/{galleries.length})</summary>
+                                <main>
+
+                                    <ul className="selected-galleries">
+                                        <SortableList
+                                            pressDelay={100}
+                                            items={page.galleries}
+                                            onSortEnd={this.reorder.bind(this)}
+                                            />
+                                    </ul>
+
+                                    <ul className="available-galleries">
+
+                                        {galleries.map(model => {
+
+                                            return (
+                                                <li key={hash(model)}>
+                                                    <input
+                                                        type="checkbox"
+                                                        id={model.slug}
+                                                        value={model.id}
+                                                        checked={contains(model.id)(selectedGalleryIds)}
+                                                        onChange={this.toggle.bind(this)}
+                                                        />
+                                                    <label htmlFor={model.slug}>{model.name}</label>
+                                                </li>
+                                            );
+
+                                        })}
+
+                                    </ul>
+
+                                </main>
+                            </details>
 
                         )}
 

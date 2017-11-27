@@ -276,36 +276,43 @@ export default enhance(class Galleries extends Component {
                             <section className="error">There was a problem saving the gallery.</section>
                         )}
 
-                        <div className="name">
-                            <label htmlFor="name">Name:</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={gallery.name}
-                                onChange={this.update('name')}
-                                />
-                        </div>
+                        <details open>
+                            <summary>General</summary>
+                            <main>
+                                <div className="name">
+                                    <label htmlFor="name">Name:</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={gallery.name}
+                                        onChange={this.update('name')}
+                                        />
+                                </div>
 
-                        <div className="description">
-                            <label htmlFor="description">Description:</label>
-                            <textarea
-                                name="description"
-                                value={gallery.description}
-                                onChange={this.update('description')}
-                                />
-                        </div>
+                                <div className="description">
+                                    <label htmlFor="description">Description:</label>
+                                    <textarea
+                                        name="description"
+                                        value={gallery.description}
+                                        onChange={this.update('description')}
+                                        />
+                                </div>
+                            </main>
+                        </details>
 
-                        <div className="media">
-                            <h2>Associated Media ({gallery.media.length})</h2>
-                            <Dropzone onDrop={this.upload.bind(this)} />
-                            <SortableList
-                                {...this.props}
-                                pressDelay={100}
-                                items={gallery.media}
-                                onRemove={this.remove.bind(this)}
-                                onSortEnd={this.reorder.bind(this)}
-                                />
-                        </div>
+                        <details>
+                            <summary>Media ({gallery.media.length})</summary>
+                            <main>
+                                <Dropzone onDrop={this.upload.bind(this)} />
+                                <SortableList
+                                    {...this.props}
+                                    pressDelay={100}
+                                    items={gallery.media}
+                                    onRemove={this.remove.bind(this)}
+                                    onSortEnd={this.reorder.bind(this)}
+                                    />
+                            </main>
+                        </details>
 
                         <button type="submit" disabled={isSending || isDisabled || isUploading}>
                             {isSending ? 'Saving...' : (isUploading ? 'Uploading' : 'Save')}
