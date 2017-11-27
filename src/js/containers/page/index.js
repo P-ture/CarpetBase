@@ -116,8 +116,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
                             <ul>
 
                                 {galleries.map(model => {
-                                    return isGallery ? <Gallery key={hash(model)} model={model} /> :
-                                                       <Link key={hash(model)} model={model} />
+                                    return isGallery ? <Gallery key={hash(model)} model={model} /> : <Link key={hash(model)} model={model} />;
                                 })}
 
                             </ul>

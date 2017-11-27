@@ -9,6 +9,14 @@ import { createThumbnail } from '../helpers/thumbnail';
 export default class Gallery extends PureComponent {
 
     /**
+     * @constant propTypes
+     * @type {Object}
+     */
+    static propTypes = {
+        model: PropTypes.object.isRequired
+    };
+
+    /**
      * @method render
      * @return {Object}
      */

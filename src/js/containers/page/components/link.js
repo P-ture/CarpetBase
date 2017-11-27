@@ -8,12 +8,18 @@ import PropTypes from 'prop-types';
 export default class Link extends PureComponent {
 
     /**
+     * @constant propTypes
+     * @type {Object}
+     */
+    static propTypes = {
+        model: PropTypes.object.isRequired
+    };
+
+    /**
      * @method render
      * @return {Object}
      */
     render() {
-
-        const { model } = this.props;
 
         return (
             <li>

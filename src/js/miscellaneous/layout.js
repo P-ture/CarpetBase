@@ -187,7 +187,7 @@ export class Layout extends Component {
                         </li>
                     </ul>
                     <ul className="right">
-                        <li>Follow Us</li>                      
+                        <li>Follow Us</li>
                         <li>{meta.social && <Markdown source={meta.social} />}</li>
                     </ul>
                 </footer>
