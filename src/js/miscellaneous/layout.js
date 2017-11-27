@@ -171,7 +171,7 @@ export class Layout extends Component {
                 </main>
 
                 <footer>
-                    <ul>
+                    <ul className="left">
                         <li className="address">
                             Address: {meta.address}
                         </li>
@@ -181,11 +181,15 @@ export class Layout extends Component {
                         <li className="email">
                             Email: <a href={`mailto:${meta.email}?subject=Carpet Base Enquiry`}>{meta.email}</a>
                         </li>
-                        <li>CarpetBase {new Date().getFullYear()}</li>
-                        <li>Structured by <a href="https://www.pture.com/">Pture</a></li>
+                        <li>
+                            <p>CarpetBase {new Date().getFullYear()}</p>
+                            <p>Structured by <a href="https://www.pture.com/">Pture</a></p>
+                        </li>
                     </ul>
-
-                    {meta.social && <Markdown source={meta.social} />}
+                    <ul className="right">
+                        <li>Follow Us</li>                      
+                        <li>{meta.social && <Markdown source={meta.social} />}</li>
+                    </ul>
                 </footer>
 
             </section>
