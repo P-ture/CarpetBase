@@ -12,6 +12,7 @@ import * as config from '../../miscellaneous/config';
 import NotFound from '../error/not-found';
 import Gallery from './components/gallery';
 import Link from './components/link';
+import { createThumbnail } from './helpers/thumbnail';
 
 /**
  * @constant actions
@@ -26,11 +27,14 @@ const actions = { ...pageActions, ...galleryActions };
  */
 export const mapStateToProps = state => {
 
+    const { featuredGalleryId } = state.page.content;
+
     return {
         page: dissoc('galleries')(state.page.content),
         galleries: state.page.content ? state.page.content.galleries.map(model => {
             return state.gallery.media[model.id];
-        }).filter(model => model.media.length > 0) : []
+        }).filter(model => model.media.length > 0) : [],
+        featuredGallery: featuredGalleryId ? state.gallery.media[featuredGalleryId] : null
     };
 
 };
@@ -56,9 +60,14 @@ export const fetch = async ({ dispatch, params }) => {
     const { result } = await dispatch(actions.fetchPage(params.page || actions.HOME));
 
     // Populate the store with all of the associated media for the current page.
-    return Promise.all(result.galleries.map(async model => {
+    const galleries = result.galleries.map(async model => {
         return dispatch(actions.fetchMedia(model.galleryId));
-    }));
+    });
+
+    // Fetch the featured gallery if we have one set.
+    const featuredGallery = result.featuredGalleryId ? dispatch(actions.fetchMedia(result.featuredGalleryId)) : Promise.resolve();
+
+    return Promise.all([...galleries, featuredGallery]);
 
 };
 
@@ -80,7 +89,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
      */
     static propTypes = {
         page: PropTypes.object.isRequired,
-        galleries: PropTypes.array.isRequired
+        galleries: PropTypes.array.isRequired,
+        featuredGallery: PropTypes.object
     };
 
     /**
@@ -88,7 +98,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
      * @type {Object}
      */
     static defaultProps = {
-        page: null
+        page: null,
+        featuredGallery: null
     };
 
     /**
@@ -97,7 +108,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
      */
     render() {
 
-        const { page, galleries } = this.props;
+        const { page, galleries, featuredGallery } = this.props;
         const isGallery = page.layoutId === 2;
 
         return isEmpty(page) ? <NotFound /> : (
@@ -107,20 +118,38 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
                     <h1>{page.title}</h1>
                     <Markdown source={page.content} />
 
-                    {page.hero && <img src={page.hero.url} />}
+                    {page.hero && (
+                        <picture>
+                            <source
+                                srcSet={`${createThumbnail(page.hero.url, 200)},
+                                        ${createThumbnail(page.hero.url, 400)} 2x`}
+                                />
+                            <img src={createThumbnail(page.hero.url, 200)} alt="Photograph" />
+                        </picture>
+                    )}
+
+                    {featuredGallery && (
+                        <section className="featured-gallery">
+                            <h2>Featured Gallery</h2>
+                            <picture>
+                                <source
+                                    srcSet={`${createThumbnail(featuredGallery.media[0].url, 200)},
+                                            ${createThumbnail(featuredGallery.media[0].url, 400)} 2x`}
+                                    />
+                                <img src={createThumbnail(featuredGallery.media[0].url, 200)} alt="Photograph" />
+                            </picture>
+                            <h3>{featuredGallery.name}</h3>
+                        </section>
+                    )}
 
                     {galleries.length > 0 && (
                         <section className="galleries">
                             <h2>Galleries ({galleries.length})</h2>
-
                             <ul>
-
                                 {galleries.map(model => {
                                     return isGallery ? <Gallery key={hash(model)} model={model} /> : <Link key={hash(model)} model={model} />;
                                 })}
-
                             </ul>
-
                         </section>
                     )}
 
