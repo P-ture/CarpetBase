@@ -5,6 +5,7 @@ import Markdown from 'react-markdown';
 import hash from 'object-hash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import MediaQuery from 'react-responsive';
 import * as authActions from '../reducers/auth/actions';
 import * as configActions from '../reducers/config/actions';
 import Modal from '../containers/components/modal/index';
@@ -93,7 +94,8 @@ export class Layout extends Component {
     state = {
         user: {},
         telephoneModal: false,
-        emailModal: false
+        emailModal: false,
+        responsiveNav: false
     };
 
     /**
@@ -103,47 +105,54 @@ export class Layout extends Component {
     render() {
 
         const { user, meta } = this.props;
-        const { telephoneModal, emailModal } = this.state;
-
+        const { telephoneModal, emailModal, responsiveNav } = this.state;
         return (
             <section className="carpetbase">
                 <header>
-                    <section className="top">
-                        <a href="/">
-                            <h1>Carpet Base</h1>
-                        </a>
-                        <section className="header-contact">
-                            <Modal
-                                className="telephone-modal"
-                                title="Telephone"
-                                btnClass="telephone"
-                                Open={telephoneModal === true}
-                                onOpen={() => this.setState({ telephoneModal: true })}
-                                onClose={() => this.setState({ telephoneModal: false })}
-                                >
-                                <p>{meta.telephone}</p>
-                            </Modal>
+                    <div className="wrapper">
+                        <section className="top">
+                            <a href="/">
+                                <h1>Carpet Base</h1>
+                            </a>
+                            <MediaQuery minWidth={767}>
+                                <section className="header-contact">
+                                    <Modal
+                                        className="telephone-modal"
+                                        title="Telephone"
+                                        btnClass="telephone"
+                                        Open={telephoneModal === true}
+                                        onOpen={() => this.setState({ telephoneModal: true })}
+                                        onClose={() => this.setState({ telephoneModal: false })}
+                                        >
+                                        <p>{meta.telephone}</p>
+                                    </Modal>
 
-                            <Modal
-                                className="email-modal"
-                                title="Email"
-                                btnClass="email"
-                                Open={emailModal === true}
-                                onOpen={() => this.setState({ emailModal: true })}
-                                onClose={() => this.setState({ emailModal: false })}
-                                >
-                                <a href={`mailto:${meta.email}?subject=Carpet Base Enquiry`}>{meta.email}</a>
-                            </Modal>
+                                    <Modal
+                                        className="email-modal"
+                                        title="Email"
+                                        btnClass="email"
+                                        Open={emailModal === true}
+                                        onOpen={() => this.setState({ emailModal: true })}
+                                        onClose={() => this.setState({ emailModal: false })}
+                                        >
+                                        <a href={`mailto:${meta.email}?subject=Carpet Base Enquiry`}>{meta.email}</a>
+                                    </Modal>
+                                </section>
+                            </MediaQuery>
                         </section>
-                    </section>
-
-                    {meta.slogan && <section className="bottom"><h4>{meta.slogan}</h4></section>}
-
+                        {meta.slogan && <section className="bottom"><h4>{meta.slogan}</h4></section>}
+                    </div>
+                    <nav className={`navigation ${responsiveNav ? 'active' : ''}`}>
+                        <div onClick={() => this.setState({responsiveNav: !responsiveNav})} className={`trigger ${responsiveNav ? 'active' : ''}`}>
+                            <span />
+                            <span />
+                            <span />
+                        </div>
+                        <section className={`nav-wrap ${responsiveNav ? 'active' : ''}`}>
+                            <Markdown source={meta.navigation} />
+                        </section>
+                    </nav>
                 </header>
-
-                <nav className="navigation">
-                    <Markdown source={meta.navigation} />
-                </nav>
 
                 <nav className="subnavigation">
 

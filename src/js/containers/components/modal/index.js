@@ -46,7 +46,7 @@ export default class Modal extends PureComponent {
         const { Open, className, onOpen, onClose, btnTxt, btnClass, title } = this.props;
 
         return (
-            <div>
+            <div className="modal-container">
                 <span
                     className={btnClass ? btnClass : ''}
                     onClick={() => onOpen()}
