@@ -1,13 +1,29 @@
 language: node_js
 node_js: stable
 script:
-- npm install
-- npm run build
+  - npm install
+  - npm run build
+
 deploy:
-  provider: heroku
-  skip_cleanup: true
-  api_key:
-    secure: LiuIc4V/Ms0ciW7kcHzyyS92Wn6CqlUjzvN6WGR9VLM24PFQhRS1dELexqFY8xb7WqLuS8yYsqnaXP/frTP7KRUY6HbnmC0bmULYNytH91mZIoCwXxdRllCauvTNWAzCwrHd7L6w/KNMlbaNkOosMphCWWnY6EPtVjyQvyfw+d3ZUeBo7h31n8GQuBUDHlHZy6URIwid4M4OS3JND5gvraZb0yYUgXq0AbAiMEmBp3KLAxuOf1yCRRntNTI0/0UAv5pOUm0H9g+sKmHdihMcbWL1ha6ikVn4rGZjHObdeckUFTrM6B16LHnUk9vm4zCwizYzq51LZqwHE8jSgLGah1ZtbQU/vcg5Z3rzbsO414+LkFY0VID6FwyYzyvLBvHKniraKxFBR0SeACRxdcQbeUJiQ/QIBdkqif3hR0ykjtFFYwIMhC6eP9v1J6ptJUIIv0B19aNj7t3mnFTxoJ/OuhguWUokRmZTzv9ZiBip2i/QpBJF1oCE3mxo3tp2d59aYVvV+eudnrjIlG9Dk9vOjbLvYEoxk/lHpuVKdWqM2jwXPPHig7g8ybMd8/sYawMUfqLoQriY58x7fgJEBLPcYXhElcAwjpLvH9Ju2PSLldboEhtmEg/NVBS0ttTk+Uam77//3+8G/ewRHpDrKOLUiKCIkQDusp+OdUXleCBShzI=
-  app: carpet-base
-  on:
-    repo: Pture/CarpetBase
+
+  - provider: heroku
+    app: carpetbase
+    skip_cleanup: true
+    run:
+      - "npm run migrate"
+      - "NODE_ENV=production npm run build"
+    api_key:
+      secure: BPsvPgLK7qMzzcwGSPO8//siuOiqX3VColDGyJq3FZCJRFYbA7ilrZNEZiCTX3Ep3xxCVb3aWFFs8K2/GhuSnAE8Cund2H9dOLLN2WRkNQa+ds3iuobe405PwrpxpwYa4AS8HJ7EuxA3xPBn6+GD/K47cJnZVPVi6uP6rufOq75EU/AybpbKmAnaXFSfoMMRiqik6kPrcPt1OQfeLF28rTghWBP5hSt1f4tqj5sNCY4H2s0XfGzt6M0eJ41DuCFaZQn68OEOcp86+FeF2zwtYblNPI6xzUXn5bqCRMLg/MLwp3f/WfuCbW1BKAd74lqeqCHSWvBDqPwnNWSg0rXu10tbtS/EaBOFbhuvdZGB9UIHeQGACpk5EbzzHHoeEAvYL5CxyWKq0WGhwzFsp61++vp1O+KSfic5+6wykNAOvHD/Nivmr0vZt9JC46fVZwxvBN9yByx1Y4MuXOvBhQUvnItCUp/ZR963ElnTzLS82GQFMxKE5CoO8ljA6ZLYF21yTU6UBdzMI/0BTTtniTAa3fvndEgYWZQGE4rcI7F4BnTLaSsDG/Ds57LJVu+Iz/oNQeq0q7k+xOFJEs2yeCUpuY8GcRbSmZ9LefPhhbVGXTM/mYCA9iXaBbhTLSA+jvx+AhGs2H+dLCzVsl+ehsGaFPv0lCDx29uedq7NyBGkmy4=
+    on:
+      repo: Pture/CarpetBase
+
+  - provider: heroku
+    app: carpet-base
+    skip_cleanup: true
+    run:
+      - "npm run migrate"
+      - "NODE_ENV=production npm run build"
+    api_key:
+      secure: LiuIc4V/Ms0ciW7kcHzyyS92Wn6CqlUjzvN6WGR9VLM24PFQhRS1dELexqFY8xb7WqLuS8yYsqnaXP/frTP7KRUY6HbnmC0bmULYNytH91mZIoCwXxdRllCauvTNWAzCwrHd7L6w/KNMlbaNkOosMphCWWnY6EPtVjyQvyfw+d3ZUeBo7h31n8GQuBUDHlHZy6URIwid4M4OS3JND5gvraZb0yYUgXq0AbAiMEmBp3KLAxuOf1yCRRntNTI0/0UAv5pOUm0H9g+sKmHdihMcbWL1ha6ikVn4rGZjHObdeckUFTrM6B16LHnUk9vm4zCwizYzq51LZqwHE8jSgLGah1ZtbQU/vcg5Z3rzbsO414+LkFY0VID6FwyYzyvLBvHKniraKxFBR0SeACRxdcQbeUJiQ/QIBdkqif3hR0ykjtFFYwIMhC6eP9v1J6ptJUIIv0B19aNj7t3mnFTxoJ/OuhguWUokRmZTzv9ZiBip2i/QpBJF1oCE3mxo3tp2d59aYVvV+eudnrjIlG9Dk9vOjbLvYEoxk/lHpuVKdWqM2jwXPPHig7g8ybMd8/sYawMUfqLoQriY58x7fgJEBLPcYXhElcAwjpLvH9Ju2PSLldboEhtmEg/NVBS0ttTk+Uam77//3+8G/ewRHpDrKOLUiKCIkQDusp+OdUXleCBShzI=
+    on:
+      repo: Pture/CarpetBase
