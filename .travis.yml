@@ -1,18 +1,12 @@
 language: node_js
 node_js: stable
-
 script:
-  - npm install
-  - npm run build
-
+- npm install
+- npm run build
 deploy:
   provider: heroku
-  skip_cleanup: true
   api_key:
-    secure: iZFzJo2gxk31zEnPbjE1eycx6cbdPt0WLCcggUdAcMOY3aH1V0GQ70PNJVqFMQeuxhmzx0jQ2BfgdSJMY5Fk7wXTDeY2zawZzsO7soCOPK9PSiS70pKCBy1zcDaPuyHO/t/gxKT6N2fupD6NwANOlRo1CMLsRHNfW1HHMwJ0Y8EsdrUIJLqogIg4B0bf7ShtQqDESNibKg4HvMRmshVz0FVpOZ6lZX5Lbs9oxWxNLG0o7lyoHRBtdDpKxpu3Fmf/qtP9MFzswdzqJDIU4dOxADH9KJTUBndF70g+H+uaucHB2Vrslzn7gi1FsJ9r04lNipD/Fk3E8sm5+SeRxeIlIfiVM022q4CoNs3eMSojKJFzKYtZ0qaepgqMcy2NNxN4SrVCZEz/yhPC7je9yTfM1lOb6lCQ15Ex8rw87oMQD1u2Y8XN4wNX1GA1jy4yDfGaCu5HVxMHPy/uZMkfbQ0W4RvQYkRVs42H31agLvdJBnGMtc2J+op5f/S0Wfj4CQkSj6eNoDal48ZJjUA8ZyqJJtGhWflp5l69K9ZtyV9blNza78gjt5kM/3A2SOYucDbR5oC/el3cvjb1xBEF6D8zq4iYHsleVydillyu2EHfzdVC/XFqexhSIaF+RIBA2BjVeyB6EOSW7HIj9frMD/wuk//HIeYl0W2XClogvvEHLfM=
-  app: carpetbase
-  run:
-    - "npm run migrate"
-    - "NODE_ENV=production npm run build"
+    secure: YrplZbl45O4312wbHNnzlE0ZAcOwITnAQvGpJca0Ot72He8Xlf/CvCTVzX03FFC+TgtJCQMmdFiH3zbd094cnCluMkeYsYCY8Ic2cmuoqaouCu4U42JlO+cOy3SM4sCKSeE4mFLJxl3mdhWMeuhKFoeRNjGdvfkAmnoZ/fsWQj3KoFJ/4JYpSP0tSF3B1+S9EXnoI1KP2/ZjSSI0gTv4MzUEG9Lc7s2vXcDpklg/SpUiOg2sC/livyDS+HHkFkf5hnqlHm5jECVieCt4yarCoxu5BjMSpZC44X9EAcr8QdaLkLvY4YsUNjCWj7ttdeCjO3E8914IUJiV5WVh1NQTV/vOrTBby+Ga4bH55DQviBDED2uK0f31erVYS9cHqGHFXmjmXBiCGlYYomcGcigETi8glaTxI6ug5oIOJF7ZTWfJMjRhp+LpBObT8vLe8MRQLiVq8/BKMLlj5lLIvD5gs07bSVBbdUJbg3NadQTmeyzIRRfkZThNpc+R8Gwq9odV6mH/gbmg/NSJEU5d8YdJBTmwUJ6ma31nawDvewjrkN+11bcE4zWADBhcnDeK5KWGXoq/zbY3uKFBLDYho3T0AnNffjbgy+CuVWcxE+XSOVZvV6IeMoIRyWkJ2Z8v3i20aOLfgFvlAAEM4/yupIUQP/R9vTbYx8jpygUsIIdw9Rg=
+  app: carpet-base
   on:
     repo: Pture/CarpetBase
