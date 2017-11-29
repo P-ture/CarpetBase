@@ -144,7 +144,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
 
                     {galleries.length > 0 && (
                         <section className="galleries">
-                            <h2>Galleries ({galleries.length})</h2>
                             <ul>
                                 {galleries.map(model => {
                                     return isGallery ? <Gallery key={hash(model)} model={model} /> : <Link key={hash(model)} model={model} />;

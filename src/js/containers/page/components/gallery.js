@@ -27,23 +27,6 @@ export default class Gallery extends PureComponent {
         return (
             <li>
 
-                <figure>
-
-                    <picture>
-                        <source
-                            srcSet={`${createThumbnail(model.media[0].url, 200)},
-                                    ${createThumbnail(model.media[0].url, 400)} 2x`}
-                            />
-                        <img src={createThumbnail(model.media[0].url, 200)} alt="Photograph" />
-                    </picture>
-
-                    <figcaption>
-                        <header>{model.name} ({model.media.length} pictures in gallery)</header>
-                        {model.description && <p>{model.description}</p>}
-                    </figcaption>
-
-                </figure>
-
             </li>
         );
 
