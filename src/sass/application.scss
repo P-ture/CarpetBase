@@ -1,0 +1,171 @@
+@import './shared/reset';
+@import './shared/config';
+@import url('https://fonts.googleapis.com/css?family=Tinos');
+@import './components/modal';
+
+body {
+  font-family: 'Tinos', serif;
+  font-size: 16px;
+
+  section.carpetbase {
+    > header {
+      padding: 20px;
+      box-sizing: border-box;
+      background: $brandColour;
+
+      > section.top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        > a:first-of-type {
+          width: 300px;
+          height: 85px;
+          background: url('/images/logo.png') 50% no-repeat;
+          background-size: cover;
+
+          @media (max-width: $tablet-break) {
+            width: 225px;
+            height: 64px;
+          }
+
+          @media (max-width: $mobile-break) {
+            width: 150px;
+            height: 43px;
+          }
+
+          > h1 {
+            position: absolute;
+            left: -999999px;
+          }
+        }
+
+        > section.header-contact {
+          display: flex;
+
+          span.email {
+            background: url('/images/email.svg') 50% no-repeat;
+            background-size: 30px;
+
+            @media (max-width: $mobile-break) {
+              background-size: 23px;
+            }
+          }
+
+          span.telephone {
+            background: url('/images/phone.svg') 50% no-repeat;
+            background-size: 28px;
+            margin-right: 15px;
+
+            @media (max-width: $mobile-break) {
+              background-size: 21px;
+              margin-right: 8px;
+            }
+          }
+        }
+      }
+
+      > section.bottom {
+        margin: 20px 0 0 30px;
+        box-sizing: border-box;
+
+        @media (max-width: $mobile-break) {
+          margin: 10px 0 0 15px;
+        }
+
+        h4 {
+          color: $headerFooterFont;
+          font-size: 20px;
+          font-weight: normal;
+
+          @media (max-width: $mobile-break) {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    > nav.navigation {
+      background: $brandColour;
+
+      > div > ul {
+        display: flex;
+        align-items: center;
+        width: 600px;
+        margin-left: 50px;
+
+        > li {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: relative;
+          padding: 0 5px;
+
+          &:not(:first-of-type):not(:last-of-type):after {
+            $size: 20px;
+
+            content: "-";
+            text-align: center;
+            color: white;
+            margin-right: -($size / 2);
+            position: absolute;
+            width: $size;
+            right: 0;
+          }
+
+          &:first-of-type > a {
+            text-indent: -999999px;
+            background: url('/images/home.svg') 50% no-repeat;
+            background-size: contain;
+            padding: 12px;
+            transition: all 0.4s;
+
+            &:hover {
+              text-decoration: none;
+              opacity: 0.8;
+            }
+          }
+
+          > a {
+            display: block;
+            padding: 10px;
+            box-sizing: border-box;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+
+          > span {
+            color: white;
+          }
+        }
+      }
+    }
+
+    > footer {
+      background: $brandColour;
+      padding: 20px 50px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      > ul {
+        > li {
+          > a {
+            color: white;
+            text-decoration: none;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+}
