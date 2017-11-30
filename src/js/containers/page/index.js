@@ -32,7 +32,7 @@ export const mapStateToProps = state => {
     return {
         page: dissoc('galleries')(state.page.content),
         galleries: state.page.content ? state.page.content.galleries.map(model => {
-            return state.gallery.media[model.id];
+            return { slug: model.slug, ...state.gallery.media[model.id] };
         }).filter(model => model.media.length > 0) : [],
         featuredGallery: featuredGalleryId ? state.gallery.media[featuredGalleryId] : null
     };

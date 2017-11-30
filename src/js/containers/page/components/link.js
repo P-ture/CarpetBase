@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { createThumbnail } from '../helpers/thumbnail';
 
 /**
  * @class Link
@@ -21,9 +22,30 @@ export default class Link extends PureComponent {
      */
     render() {
 
+        const { model } = this.props;
+
         return (
+
             <li>
-                Links...
+
+                <figure>
+
+                    <picture>
+                        <source
+                            srcSet={`${createThumbnail(model.media[0].url, 200)},
+                                    ${createThumbnail(model.media[0].url, 400)} 2x`}
+                            />
+                        <img src={createThumbnail(model.media[0].url, 200)} alt="Photograph" />
+                    </picture>
+
+                    <figcaption>
+                        <header>{model.name}</header>
+                        {model.description && <p>{model.description}</p>}
+                        {model.slug && <a href={`/${model.slug}.html`}>Explore</a>}
+                    </figcaption>
+
+                </figure>
+
             </li>
         );
 
