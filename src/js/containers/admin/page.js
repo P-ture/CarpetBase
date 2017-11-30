@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { request } from 'axios';
 import DocumentTitle from 'react-document-title';
-import { compose, append, reject, contains, dissoc } from 'ramda';
+import { compose, append, reject, contains, dissoc, update } from 'ramda';
 import hash from 'object-hash';
 import { camelizeKeys } from 'humps';
 import Dropzone from 'react-dropzone';
@@ -32,6 +32,7 @@ export const mapStateToProps = state => {
     return {
         instance: state.config.axiosInstance,
         page: state.page.content,
+        pages: state.page.list,
         layouts: state.page.layouts,
         galleries: state.gallery.list
     };
@@ -51,14 +52,68 @@ const mapDispatchToProps = dispatch => {
  * @class SortableItem
  * @extends {Component}
  */
-const SortableItem = SortableElement(({ model }) => {
+const SortableItem = SortableElement(class extends PureComponent {
 
-    return (
-        <li>
-            {model.name}
-            <a href={`/admin/gallery/${model.id}.html`}>Edit</a>
-        </li>
-    );
+    /**
+     * @constant propTypes
+     * @type {Object}
+     */
+    static propTypes = {
+        model: PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            pageLinkId: PropTypes.number
+        }).isRequired,
+        page: PropTypes.shape({
+            layoutId: PropTypes.oneOf([1, 2])
+        }).isRequired,
+        pages: PropTypes.array.isRequired,
+        onLinkChange: PropTypes.func.isRequired
+    };
+
+    /**
+     * @method render
+     * @return {Object}
+     */
+    render() {
+
+        const { model, page, pages, onLinkChange } = this.props;
+
+        return (
+            <li>
+                {model.name}
+                <a href={`/admin/gallery/${model.id}.html`}>Edit</a>
+
+                {pages.length > 0 && (
+
+                    <section className="page-link">
+
+                        {page.layoutId === 2 && <p>Disabled because link isn&apos;t relevant for gallery layouts.</p>}
+
+                        <select
+                            name="page-link"
+                            value={model.pageLinkId ? model.pageLinkId : ''}
+                            disabled={page.layoutId === 2}
+                            onChange={({ target }) => onLinkChange(model, target.value ? Number(target.value) : null)}
+                            >
+                            <option value="">None</option>
+
+                            <optgroup label="Pages:">
+                                {pages.map(page => {
+                                    return <option key={hash(page)} value={page.id}>{page.title}</option>;
+                                })}
+                            </optgroup>
+
+                        </select>
+
+                    </section>
+
+                )}
+
+            </li>
+        );
+
+    }
 
 });
 
@@ -66,15 +121,31 @@ const SortableItem = SortableElement(({ model }) => {
  * @class SortableList
  * @extends {Component}
  */
-const SortableList = SortableContainer(({ items }) => {
+const SortableList = SortableContainer(class extends PureComponent {
 
-    return (
-        <ul>
-            {items.map((model, index) => {
-                return <SortableItem key={hash(model)} index={index} model={model} />;
-            })}
-        </ul>
-    );
+    /**
+     * @constant propTypes
+     * @type {Object}
+     */
+    static propTypes = {
+        items: PropTypes.array.isRequired
+    };
+
+    /**
+     * @method render
+     * @return {Object}
+     */
+    render() {
+
+        return (
+            <ul>
+                {this.props.items.map((model, index) => {
+                    return <SortableItem key={hash(model)} {...this.props} index={index} model={model} />;
+                })}
+            </ul>
+        );
+
+    }
 
 });
 
@@ -89,6 +160,7 @@ export const fetch = ({ dispatch, params }) => {
     return Promise.all([
         dispatch(actions.fetchLayouts()),
         dispatch(actions.fetchPage(params.id)),
+        dispatch(actions.fetchPages()),
         dispatch(actions.fetchGalleries())
     ]);
 
@@ -255,6 +327,21 @@ export default enhance(class Page extends Component {
     }
 
     /**
+     * @method changeLink
+     * @param {Object} model
+     * @param {Number|null} pageLinkId
+     * @return {void}
+     */
+    changeLink(model, pageLinkId) {
+
+        // Update the page link at the index.
+        const index = this.state.page.galleries.findIndex(x => x === model);
+        const galleries = update(index, { ...model, pageLinkId })(this.state.page.galleries);
+        this.setState({ page: { ...this.state.page, galleries } });
+
+    }
+
+    /**
      * @method render
      * @return {Object}
      */
@@ -345,9 +432,12 @@ export default enhance(class Page extends Component {
 
                                     <ul className="selected-galleries">
                                         <SortableList
+                                            {...this.props}
+                                            page={page}
                                             pressDelay={100}
                                             items={page.galleries}
                                             onSortEnd={this.reorder.bind(this)}
+                                            onLinkChange={this.changeLink.bind(this)}
                                             />
                                     </ul>
 

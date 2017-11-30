@@ -19,8 +19,10 @@ export async function getOne(request, response) {
                              .where('slug', request.params.id || HOME).orWhere('pages.id', request.params.id);
 
     // Fetch any galleries that ae associated with the page.
-    const galleries = record ? await db.select().from('page_galleries').where('page_id', '=', record.id)
+    const galleries = record ? await db.select('galleries.*', 'page_galleries.*', 'pages.slug')
+                                       .from('page_galleries').where('page_id', '=', record.id)
                                        .innerJoin('galleries', 'galleries.id', 'page_galleries.gallery_id')
+                                       .leftJoin('pages', 'pages.id', 'page_galleries.page_link_id')
                                        .orderBy('order', 'ASC') : [];
 
     // Find the hero image if it has been set.
@@ -94,10 +96,10 @@ export async function update(request, response) {
 
         // Update the ordering of the associated gallery items.
         await db.table('page_galleries').where('page_id', '=', request.body.id).delete();
-        await Promise.all(request.body.galleries.map(async ({ id }, order) => {
+        await Promise.all(camelizeKeys(request.body.galleries).map(async ({ id, pageLinkId }, order) => {
 
             // Insert the record with the required ordering.
-            const model = { pageId: request.body.id, galleryId: id, order };
+            const model = { pageId: request.body.id, galleryId: id, order, pageLinkId };
             return await db.table('page_galleries').insert(decamelizeKeys(model));
 
         }));
@@ -123,6 +125,7 @@ export async function del(request, response) {
     const db = connect();
     await db.table('pages').where('id', '=', request.params.id).delete();
     await db.table('page_galleries').where('page_id', '=', request.params.id).delete();
+    await db.table('page_galleries').update(decamelizeKeys({ pageLinkId: null })).where('page_link_id', '=', request.params.id);
     response.send({ deleted: true });
 }
 
