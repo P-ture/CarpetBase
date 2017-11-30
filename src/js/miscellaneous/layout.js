@@ -143,7 +143,10 @@ export class Layout extends Component {
                         {meta.slogan && <section className="bottom"><h4>{meta.slogan}</h4></section>}
                     </div>
                     <nav className={`navigation ${responsiveNav ? 'active' : ''}`}>
-                        <div onClick={() => this.setState({responsiveNav: !responsiveNav})} className={`trigger ${responsiveNav ? 'active' : ''}`}>
+                        <div
+                            onClick={() => this.setState({ responsiveNav: !responsiveNav })}
+                            className={`trigger ${responsiveNav ? 'active' : ''}`}
+                            >
                             <span />
                             <span />
                             <span />
