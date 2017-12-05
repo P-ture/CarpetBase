@@ -1,0 +1,29 @@
+@import '../../mixins';
+
+section.pages {
+  > h1 {
+      @include header;
+  }
+
+  > button {
+    @include button;
+  }
+
+  > ul {
+    @include list-container;
+
+    > li {
+      @include list-row;
+
+      > a {
+        text-decoration: underline;
+        cursor: pointer;
+        padding-left: 10px;
+
+        &:first-of-type {
+          margin-left: auto;
+        }
+      }
+    }
+  }
+}

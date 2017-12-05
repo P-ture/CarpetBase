@@ -121,13 +121,13 @@ export default enhance(class Pages extends Component {
                         Create Page
                     </button>
 
-                    <form>
+                    <ul>
 
                         {this.props.pages.map(model => {
 
                             return (
                                 <li key={hash(model)}>
-                                    {model.title}
+                                    <label>{model.title}</label>
                                     <a href={`/admin/page/${model.id}.html`}>Edit</a>
                                     <a href={model.slug === actions.HOME ? '/' : `/${model.slug}.html`}>View</a>
                                     <a onClick={() => this.delete(model)}>Delete</a>
@@ -136,7 +136,8 @@ export default enhance(class Pages extends Component {
 
                         })}
 
-                    </form>
+                    </ul>
+
                 </section>
             </DocumentTitle>
         );

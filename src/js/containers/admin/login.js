@@ -43,21 +43,19 @@ export default withRouter(class Login extends PureComponent {
         return (
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Login`}>
                 <section className="login">
-                    <fieldset>
-                        <legend>Login</legend>
-                        {isError && <section className="error">Incorrect username and/or password.</section>}
-                        <form method="post" encType="application/x-www-form-urlencoded">
-                            <div className="username">
-                                <label htmlFor="username">Username:</label>
-                                <input type="text" name="username" />
-                            </div>
-                            <div className="password">
-                                <label htmlFor="password">Password:</label>
-                                <input type="password" name="password" />
-                            </div>
-                            <button type="submit">Login</button>
-                        </form>
-                    </fieldset>
+                    <h1>Login</h1>
+                    {isError && <section className="error">Incorrect username and/or password.</section>}
+                    <form method="post" encType="application/x-www-form-urlencoded">
+                        <div className="username">
+                            <label htmlFor="username">Username:</label>
+                            <input type="text" name="username" />
+                        </div>
+                        <div className="password">
+                            <label htmlFor="password">Password:</label>
+                            <input type="password" name="password" />
+                        </div>
+                        <button type="submit">Login</button>
+                    </form>
                 </section>
             </DocumentTitle>
         );

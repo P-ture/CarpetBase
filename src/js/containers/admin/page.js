@@ -353,8 +353,8 @@ export default enhance(class Page extends Component {
 
         return (
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} Administrator: Page`}>
-                <section className="pages">
-                    <h1>Pages</h1>
+                <section className="page">
+                    <h1>Page</h1>
                     <form onSubmit={this.submit.bind(this)}>
 
                         {isSuccess && (
@@ -383,15 +383,13 @@ export default enhance(class Page extends Component {
                         <details className="hero">
                             <summary>Hero</summary>
                             <main>
-                                <label>Hero Banner:</label>
-                                <Dropzone onDrop={this.upload.bind(this)}>
-                                    {page.hero && <img src={page.hero.preview ? page.hero.preview : page.hero.url} />}
-                                </Dropzone>
+                                <Dropzone style={{}} onDrop={this.upload.bind(this)} />
                                 {page.hero && (
-                                    <div>
+                                    <section className="preview">
+                                        <img src={page.hero.preview ? page.hero.preview : page.hero.url} />
                                         {page.hero.preview && <span>Uploading...</span>}
                                         {!page.hero.preview && <a onClick={() => this.del(page.hero)}>Delete</a>}
-                                    </div>
+                                    </section>
                                 )}
                             </main>
                         </details>
@@ -407,7 +405,6 @@ export default enhance(class Page extends Component {
 
                                         return (
                                             <li key={hash(layout)}>
-                                                <label htmlFor={id}>{layout.name}</label>
                                                 <input
                                                     type="radio"
                                                     id={id}
@@ -415,6 +412,7 @@ export default enhance(class Page extends Component {
                                                     checked={layout.id === page.layoutId}
                                                     onChange={this.update('layoutId')}
                                                     />
+                                                <label htmlFor={id}>{layout.name}</label>
                                             </li>
                                         );
 
@@ -429,6 +427,29 @@ export default enhance(class Page extends Component {
                             <details className="galleries">
                                 <summary>Galleries ({page.galleries.length}/{galleries.length})</summary>
                                 <main>
+
+                                    {galleries.length > 0 && (
+
+                                        <div className="featured">
+                                            <label htmlFor="featured-gallery">Featured gallery:</label>
+                                            <select
+                                                onChange={this.update('featuredGalleryId')}
+                                                value={page.featuredGalleryId ? page.featuredGalleryId : ''}
+                                                >
+                                                <option value="">None</option>
+                                                <optgroup label="Galleries">
+                                                    {galleries.map(model => {
+                                                        return (
+                                                            <option key={hash(model)} value={model.id}>
+                                                                {model.name}
+                                                            </option>
+                                                        );
+                                                    })}
+                                                </optgroup>
+                                            </select>
+                                        </div>
+
+                                    )}
 
                                     <ul className="selected-galleries">
                                         <SortableList
@@ -461,29 +482,6 @@ export default enhance(class Page extends Component {
                                         })}
 
                                     </ul>
-
-                                    {galleries.length > 0 && (
-
-                                        <div className="featured">
-                                            <label htmlFor="featured-gallery">Featured gallery:</label>
-                                            <select
-                                                onChange={this.update('featuredGalleryId')}
-                                                value={page.featuredGalleryId ? page.featuredGalleryId : ''}
-                                                >
-                                                <option value="">None</option>
-                                                <optgroup label="Galleries">
-                                                    {galleries.map(model => {
-                                                        return (
-                                                            <option key={hash(model)} value={model.id}>
-                                                                {model.name}
-                                                            </option>
-                                                        );
-                                                    })}
-                                                </optgroup>
-                                            </select>
-                                        </div>
-
-                                    )}
 
                                 </main>
                             </details>

@@ -138,22 +138,26 @@ export default enhance(class Meta extends Component {
                         )}
 
                         <div className="slogan">
+                            <header>Slogan</header>
                             <label htmlFor="slogan">Slogan will appear in the header, just beneath the logo.</label>
                             <input type="text" name="slogan" value={meta.slogan} onChange={this.update('slogan')} />
                         </div>
 
                         <div className="lat-long">
-                            <label htmlFor="lat-long">Latitude and longitude values for the map on the contact form..</label>
+                            <header>Latitude/Longitude</header>
+                            <label htmlFor="lat-long">Latitude and longitude values for the map on the contact form.</label>
                             <input type="number" name="latitude" value={meta.latitude} onChange={this.update('latitude')} />
                             <input type="number" name="longitude" value={meta.longitude} onChange={this.update('longitude')} />
                         </div>
 
                         <div className="social">
+                            <header>Social</header>
                             <label htmlFor="social"><a href="https://guides.github.com/features/mastering-markdown/">Markdown</a> for enumerating the social media links.</label>
                             <textarea name="social" value={meta.social} onChange={this.update('social')} />
                         </div>
 
                         <div className="navigation">
+                            <header>Navigation</header>
                             <label htmlFor="navigation"><a href="https://guides.github.com/features/mastering-markdown/">Markdown</a> for the main navigation links.</label>
                             <textarea name="navigation" value={meta.navigation} onChange={this.update('navigation')} />
                         </div>

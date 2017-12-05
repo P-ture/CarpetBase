@@ -1,0 +1,43 @@
+@import '../../mixins';
+
+section.meta {
+  > h1 {
+    @include header;
+  }
+
+  > form {
+    > div {
+      &.lat-long > input:first-of-type {
+        border-right: none;
+      }
+
+      > header {
+        @include title;
+      }
+      
+      > label {
+        @include description;
+
+        display: block;
+      }
+    
+      > input[type="text"],
+      > input[type="number"],
+      > textarea {
+        @include textbox;
+      }
+    
+      > input[type="number"] {
+        width: 50%;
+      }
+
+      > textarea {
+        height: 120px;
+      }
+    }
+  
+    > button {
+      @include button;
+    }
+  }
+}
