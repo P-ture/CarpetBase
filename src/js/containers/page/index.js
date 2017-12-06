@@ -11,6 +11,7 @@ import * as galleryActions from '../../reducers/gallery/actions';
 import * as config from '../../miscellaneous/config';
 import NotFound from '../error/not-found';
 import Gallery from './components/gallery';
+import Carousel from './components/carousel';
 import Link from './components/link';
 import { createThumbnail } from './helpers/thumbnail';
 
@@ -110,12 +111,18 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
 
         const { page, galleries, featuredGallery } = this.props;
         const isGallery = page.layoutId === 2;
-
         return isEmpty(page) ? <NotFound /> : (
 
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} ${page.title}`}>
                 <section className={`page ${page.slug}`}>
-                    <h1>{page.title}</h1>
+                    {page.title === 'Homepage' ? '' : <h1>{page.title}</h1> }
+                    
+                    {featuredGallery && (
+                        
+                        <section className="featured-gallery">
+                            <Carousel model={{...featuredGallery}}/>
+                        </section>
+                    )}
                     <Markdown source={page.content} />
 
                     {page.hero && (
@@ -128,19 +135,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
                         </picture>
                     )}
 
-                    {featuredGallery && (
-                        <section className="featured-gallery">
-                            <h2>Featured Gallery</h2>
-                            <picture>
-                                <source
-                                    srcSet={`${createThumbnail(featuredGallery.media[0].url, 200)},
-                                            ${createThumbnail(featuredGallery.media[0].url, 400)} 2x`}
-                                    />
-                                <img src={createThumbnail(featuredGallery.media[0].url, 200)} alt="Photograph" />
-                            </picture>
-                            <h3>{featuredGallery.name}</h3>
-                        </section>
-                    )}
+                    
 
                     {galleries.length > 0 && (
                         <section className="galleries">

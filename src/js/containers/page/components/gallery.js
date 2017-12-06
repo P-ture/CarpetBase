@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { createThumbnail } from '../helpers/thumbnail';
 
+
 /**
  * @class Gallery
  * @extends {PureComponent}
@@ -26,7 +27,6 @@ export default class Gallery extends PureComponent {
 
         return (
             <li>
-
                 <figure>
 
                     <picture>
