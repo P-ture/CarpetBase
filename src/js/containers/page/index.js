@@ -123,6 +123,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
                             <Carousel model={{...featuredGallery}}/>
                         </section>
                     )}
+                    
                     <Markdown source={page.content} />
 
                     {page.hero && (

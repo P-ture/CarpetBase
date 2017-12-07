@@ -111,7 +111,7 @@ body {
               height: 5px;
               background-color: white;
               margin: 6px 0;
-              transition: 0.4s;
+              transition: 0.25s;
               display: block;
             }
 
@@ -124,7 +124,7 @@ body {
 
               > span {
                 &:first-of-type {
-                  transform: rotate(-405deg) translate(-9px, 6px);
+                  transform: rotate(-45deg) translate(-9px, 6px);
                 }
 
                 &:not(:first-of-type):not(:last-of-type) {
@@ -132,7 +132,7 @@ body {
                 }
 
                 &:last-of-type {
-                  transform: rotate(405deg) translate(-8px, -8px);
+                  transform: rotate(45deg) translate(-8px, -8px);
                 }
               }
             }
@@ -233,6 +233,27 @@ body {
 
       section.featured-gallery {
         @import './components/carousel';
+      }
+
+      section.galleries {
+        > ul {
+          display: flex;
+          flex-wrap: wrap;
+
+          > li {
+            width: 25%;
+            box-sizing: border-box;
+            padding: 10px;
+
+            @media (max-width: $tablet-break) {
+              width: 50%;
+            }
+
+            @media (max-width: $mobile-break) {
+              width: 100%;
+            }
+          }
+        }
       }
     }
 

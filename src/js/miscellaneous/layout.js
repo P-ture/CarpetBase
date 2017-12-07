@@ -170,8 +170,6 @@ export class Layout extends Component {
                         <a key="logout" href="/admin/logout.html">Sign Out</a>
                     ]}
 
-                    {!user.authenticated && <a href="/admin/login.html">Sign In</a>}
-
                 </nav>
 
                 <main>
