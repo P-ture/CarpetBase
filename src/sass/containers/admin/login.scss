@@ -1,0 +1,19 @@
+@import '../../mixins';
+
+section.login {
+
+  label {
+    display: block;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    @include textbox;
+
+    width: 300px;
+  }
+
+  button {
+    @include button;
+  }
+}

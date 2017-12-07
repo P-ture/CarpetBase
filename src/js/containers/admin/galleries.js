@@ -129,17 +129,21 @@ export default enhance(class Galleries extends Component {
                         Create Gallery
                     </button>
 
-                    {this.props.galleries.map(model => {
+                    <ul>
 
-                        return (
-                            <li key={hash(model)}>
-                                {model.name}
-                                <a href={`/admin/gallery/${model.id}.html`}>Edit</a>
-                                <a onClick={() => this.delete(model)}>Delete</a>
-                            </li>
-                        );
+                        {this.props.galleries.map(model => {
 
-                    })}
+                            return (
+                                <li key={hash(model)}>
+                                    <label>{model.name}</label>
+                                    <a href={`/admin/gallery/${model.id}.html`}>Edit</a>
+                                    <a onClick={() => this.delete(model)}>Delete</a>
+                                </li>
+                            );
+
+                        })}
+
+                    </ul>
 
                 </section>
             </DocumentTitle>

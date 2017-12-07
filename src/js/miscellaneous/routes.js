@@ -21,7 +21,8 @@ export default [
     {
         path: '/admin/login.html',
         component: AdminLogin.default,
-        auth: false
+        auth: false,
+        css: ['/css/admin-login.css']
     },
     {
         path: '/admin/logout.html',
@@ -38,13 +39,15 @@ export default [
         path: '/admin/meta.html',
         component: AdminMeta.default,
         auth: true,
-        fetch: AdminMeta.fetch
+        fetch: AdminMeta.fetch,
+        css: ['/css/admin-meta.css']
     },
     {
         path: '/admin/pages.html',
         component: AdminPages.default,
         auth: true,
-        fetch: AdminPages.fetch
+        fetch: AdminPages.fetch,
+        css: ['/css/admin-pages.css']
     },
     {
         path: '/admin/page/:id.html',
@@ -57,7 +60,8 @@ export default [
         path: '/admin/galleries.html',
         component: AdminGalleries.default,
         auth: true,
-        fetch: AdminGalleries.fetch
+        fetch: AdminGalleries.fetch,
+        css: ['/css/admin-galleries.css']
     },
     {
         path: '/admin/gallery/:id.html',
