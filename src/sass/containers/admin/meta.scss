@@ -14,19 +14,19 @@ section.meta {
       > header {
         @include title;
       }
-      
+
       > label {
         @include description;
 
         display: block;
       }
-    
+
       > input[type="text"],
       > input[type="number"],
       > textarea {
         @include textbox;
       }
-    
+
       > input[type="number"] {
         width: 50%;
       }
@@ -35,7 +35,7 @@ section.meta {
         height: 120px;
       }
     }
-  
+
     > button {
       @include button;
     }

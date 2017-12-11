@@ -7,10 +7,6 @@ body {
   font-family: 'Tinos', serif;
   font-size: 18px;
 
-  a {
-    color: green;
-  }
-
   section.carpetbase {
     > header {
       background: $brand-colour;
@@ -167,17 +163,12 @@ body {
             align-items: center;
             width: 600px;
 
-            @media (max-width: $mobile-break) {
-              width: auto;
-              flex-direction: column;
-            }
-
             > li {
               display: flex;
               justify-content: space-between;
               align-items: center;
               position: relative;
-              padding: 0 5px;
+              padding: 0 20px;
 
               &:not(:first-of-type):not(:last-of-type)::after {
                 $size: 20px;
@@ -195,31 +186,45 @@ body {
                 }
               }
 
-              &:first-of-type > a {
-                text-indent: -999999px;
-                background: url('/images/home.svg') 50% no-repeat;
-                background-size: contain;
-                padding: 12px;
-                transition: all 0.3s;
-
-                &:hover {
-                  text-decoration: none;
-                  opacity: 0.8;
-                }
-              }
-
               > a {
                 display: block;
-                padding: 10px;
                 box-sizing: border-box;
-                color: white;
                 text-decoration: none;
                 font-size: 18px;
+                color: $header-footer-font;
+
+                &:first-of-type {
+                  margin: 0;
+                }
 
                 &:hover {
                   text-decoration: underline;
+
+                  > span {
+                    > img {
+                      opacity: 0.8;
+                    }
+                  }
+                }
+
+                > span {
+                  > img {
+                    height: 25px;
+                    width: 25px;
+                    transition: all 0.4s;
+                  }
                 }
               }
+
+              &:first-child {
+                margin: 0;
+                padding: 0;
+              }
+            }
+
+            @media (max-width: $mobile-break) {
+              width: auto;
+              flex-direction: column;
             }
           }
         }
@@ -232,6 +237,10 @@ body {
       box-sizing: border-box;
 
       section.featured-gallery {
+        box-sizing: border-box;
+        padding: 10px;
+        height: 600px;
+
         @import './components/carousel';
       }
 
@@ -239,10 +248,12 @@ body {
         > ul {
           display: flex;
           flex-wrap: wrap;
+          margin: 10px 0;
 
           > li {
-            width: 25%;
+            width: 33.33%;
             box-sizing: border-box;
+            min-height: 500px;
             padding: 10px;
 
             @media (max-width: $tablet-break) {
@@ -251,6 +262,74 @@ body {
 
             @media (max-width: $mobile-break) {
               width: 100%;
+            }
+
+            li:nth-child(odd) {
+              padding: 20px;
+            }
+
+            > a {
+              box-sizing: border-box;
+              display: flex;
+              height: 100%;
+              align-items: center;
+              justify-content: space-around;
+              text-decoration: none;
+              color: $header-footer-font;
+
+              &:hover {
+                > figure {
+                  visibility: visible;
+                  background: rgba($brand-colour, 0.8);
+                  color: white;
+
+                  > figcaption {
+                    > a {
+                      visibility: visible;
+                    }
+                  }
+                }
+              }
+
+              > figure {
+                visibility: hidden;
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                height: 100%;
+                color: transparent;
+                transition: all 0.3s;
+
+                > figcaption {
+                  width: 70%;
+                  text-align: center;
+
+                  > header {
+                    margin: 20px;
+                    font-size: 2em;
+                    text-decoration: underline;
+                  }
+
+                  > a {
+                    @include button;
+
+                    background: white;
+                    color: $brand-colour;
+                    visibility: hidden;
+                    transition: visibility 0s;
+                    transition: color 0.3s;
+                    text-decoration: none;
+                    margin: 20px auto;
+                    width: 50%;
+                    display: block;
+
+                    &:hover {
+                      background: darken(white, 25);
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -312,27 +391,16 @@ body {
               display: flex;
 
               > li {
-                &:nth-of-type(1) {
-                  background: url("/images/facebook.svg") no-repeat  0 50%/34px;
-                }
-
-                &:nth-of-type(2) {
-                  background: url("/images/twitter.svg") no-repeat  0 50%/34px;
-                }
-
-                &:nth-of-type(3) {
-                  background: url("/images/linkedin.svg") no-repeat  0 50%/34px;
-                }
-
                 > a {
                   display: block;
-                  height: 100%;
-                  height: 0;
-                  padding: 20px;
-                  width: 100%;
-                  text-indent: -999999px;
-                  white-space: nowrap;
-                  overflow: hidden;
+                  margin: 0 5px;
+
+                  > span {
+                    > img {
+                      width: 40px;
+                      height: 40px;
+                    }
+                  }
                 }
               }
             }

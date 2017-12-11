@@ -27,7 +27,7 @@ export default class Gallery extends PureComponent {
 
         return (
             <li>
-                <figure>
+                <figure >
 
                     <picture>
                         <source

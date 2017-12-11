@@ -25,26 +25,16 @@ export default class Link extends PureComponent {
         const { model } = this.props;
 
         return (
-
             <li>
-
-                <figure>
-
-                    <picture>
-                        <source
-                            srcSet={`${createThumbnail(model.media[0].url, 200)},
-                                    ${createThumbnail(model.media[0].url, 400)} 2x`}
-                            />
-                        <img src={createThumbnail(model.media[0].url, 200)} alt="Photograph" />
-                    </picture>
-
-                    <figcaption>
-                        <header>{model.name}</header>
-                        {model.description && <p>{model.description}</p>}
-                        {model.slug && <a href={`/${model.slug}.html`}>Explore</a>}
-                    </figcaption>
-
-                </figure>
+                <a style={model.slug && {background: `url(${model.media[0].url}) 50% no-repeat /cover`}} href={`/${model.slug}.html`}>
+                    <figure>
+                        <figcaption>
+                            <header>{model.name}</header>
+                            {model.description && <p>{model.description}</p>}
+                            {model.slug && <a href={`/${model.slug}.html`}>Explore</a>}
+                        </figcaption>
+                    </figure>
+                </a>
 
             </li>
         );

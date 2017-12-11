@@ -2,11 +2,10 @@
 
 section.page {
   > h1 {
-      @include header;
+    @include header;
   }
 
   > form {
-
     > details {
       @include details-container;
 
@@ -33,6 +32,7 @@ section.page {
 
         > div {
           @include dropzone;
+
           flex: 1;
           margin-right: 10px;
         }
@@ -53,7 +53,6 @@ section.page {
           }
         }
 
-
         // > div:not(.preview) {
         //   @include dropzone-container;
 
@@ -64,7 +63,6 @@ section.page {
       }
 
       &.galleries > main {
-
         > div.featured {
           display: flex;
           flex-direction: row;
@@ -88,7 +86,7 @@ section.page {
     textarea {
       @include textbox;
     }
-    
+
     > button {
       @include button;
     }
