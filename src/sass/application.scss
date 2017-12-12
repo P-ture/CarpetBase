@@ -232,6 +232,26 @@ body {
       }
     }
 
+    > nav.subnavigation {
+      padding: 10px;
+
+      > span.username {
+        display: block;
+        margin: 10px 0;
+      }
+
+      > a {
+        display: inline-block;
+        margin: 0 5px;
+        color: $brand-colour;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
     > main {
       min-height: 100vh;
       padding: 10px 20px;
