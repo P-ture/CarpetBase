@@ -17,9 +17,9 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db, callback) {
   db.insert('meta', ['id', 'key', 'value'], [1, 'slogan', 'Carpet & Flooring Retailers & Contractors'], callback);
   db.insert('meta', ['id', 'key', 'value'], [2, 'social', `
-* [Facebook](#)
-* [Twitter](#)
-* [LinkedIn](#)
+* [<img src="/images/facebook.svg" />](https://www.facebook.com)
+* [<img src="/images/twitter.svg" />](https://www.twitter.com)
+* [<img src="/images/linkedin.svg" />](https://www.linkedin.com)
   `.trim()], callback);
   db.insert('meta', ['id', 'key', 'value'], [3, 'latitude', '51.4492704'], callback);
   db.insert('meta', ['id', 'key', 'value'], [4, 'longitude', '-0.1462397'], callback);
@@ -27,7 +27,7 @@ exports.up = function(db, callback) {
   db.insert('meta', ['id', 'key', 'value'], [6, 'telephone', '020 8675 2232'], callback);
   db.insert('meta', ['id', 'key', 'value'], [7, 'email', 'info@carpetbase.co.uk'], callback);
   db.insert('meta', ['id', 'key', 'value'], [8, 'navigation', `
-* [Home](/)
+* [<img src="/images/home.svg" />](/)
 * [About](/about.html)
 * [Services](/services.html)
 * [Commercial](/commercial.html)

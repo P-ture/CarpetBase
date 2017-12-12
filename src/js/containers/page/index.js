@@ -115,28 +115,25 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
 
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} ${page.title}`}>
                 <section className={`page ${page.slug}`}>
-                    {page.title === 'Homepage' ? '' : <h1>{page.title}</h1> }
-                    
+
+                    {page.hero && (
+                        <section className="hero" style={{background: `url(${page.hero.url}) 50% no-repeat /cover`}}>
+                        
+                        </section>
+                    )}
+
                     {featuredGallery && (
                         
                         <section className="featured-gallery">
                             <Carousel model={{...featuredGallery}}/>
                         </section>
                     )}
-                    
-                    <Markdown source={page.content} />
 
-                    {page.hero && (
-                        <picture>
-                            <source
-                                srcSet={`${createThumbnail(page.hero.url, 200)},
-                                        ${createThumbnail(page.hero.url, 400)} 2x`}
-                                />
-                            <img src={createThumbnail(page.hero.url, 200)} alt="Photograph" />
-                        </picture>
-                    )}
-
+                    {page.title === 'Homepage' ? '' : <h1>{page.title}</h1> }
                     
+                    <section className="information">
+                        <Markdown source={page.content} />
+                    </section>
 
                     {galleries.length > 0 && (
                         <section className="galleries">

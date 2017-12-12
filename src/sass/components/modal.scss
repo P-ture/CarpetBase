@@ -9,6 +9,10 @@ div.modal-container {
     @media (max-width: $mobile-break) {
       padding: 15px;
     }
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 
   > section.modal-wrapper {

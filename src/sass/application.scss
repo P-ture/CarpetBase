@@ -247,6 +247,20 @@ body {
             margin: 20px 0 30px;
           }
         }
+
+        section.information {
+          text-align: center;
+
+          > div {
+            width: 80%;
+            margin: 0 auto;
+
+            > p {
+              font-size: 18px;
+              margin-bottom: 20px;
+            }
+          }
+        }
       }
 
       section.featured-gallery {
@@ -356,6 +370,18 @@ body {
           }
         }
       }
+
+      section.hero {
+        height: 400px;
+
+        @media (max-width: $tablet-break) {
+          height: 350px;
+        }
+
+        @media (max-width: $mobile-break) {
+          height: 250px;
+        }
+      }
     }
 
     > footer {
@@ -421,6 +447,16 @@ body {
                     > img {
                       width: 40px;
                       height: 40px;
+                    }
+                  }
+
+                  &:hover {
+                    text-decoration: underline;
+
+                    > span {
+                      > img {
+                        opacity: 0.8;
+                      }
                     }
                   }
                 }
