@@ -124,7 +124,7 @@ export class Layout extends Component {
                                         onOpen={() => this.setState({ telephoneModal: true })}
                                         onClose={() => this.setState({ telephoneModal: false })}
                                         >
-                                        <p>{meta.telephone}</p>
+                                        <a href={`tel:${meta.telephone}`}>{meta.telephone}</a>
                                     </Modal>
 
                                     <Modal
