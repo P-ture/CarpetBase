@@ -1,3 +1,66 @@
+@import './shared/config';
+@import './shared/mixin';
+
 section.map {
   height: 400px;
+
+  @media (max-width: $tablet-break) {
+    height: 300px;
+  }
+
+  @media (max-width: $mobile-break) {
+    height: 250px;
+  }
+}
+
+section.contact {
+  > form {
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+
+    > button {
+      @include button;
+
+      width: 100px;
+      margin: 20px auto;
+      font-size: 15px;
+    }
+
+    > div {
+      width: 80%;
+      margin: 0 auto;
+      display: flex;
+      align-content: center;
+      flex-direction: column;
+      text-align: center;
+
+      > input,
+      > textarea {
+        text-align: center;
+        border: 1px solid $brand-colour;
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+
+      > textarea {
+        overflow: scroll;
+        max-width: 100%;
+        box-sizing: border-box;
+        min-width: 100%;
+        min-height: 200px;
+        max-height: 250px;
+      }
+
+      > label {
+        margin-top: 10px;
+        font-size: 25px;
+
+        @media (max-width: $mobile-break) {
+          font-size: 20px;
+        }
+      }
+    }
+  }
 }

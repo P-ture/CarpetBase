@@ -168,7 +168,7 @@ body {
               justify-content: space-between;
               align-items: center;
               position: relative;
-              padding: 0 20px;
+              padding: 10px 20px;
 
               &:not(:first-of-type):not(:last-of-type)::after {
                 $size: 20px;
@@ -211,7 +211,6 @@ body {
                   > img {
                     height: 25px;
                     width: 25px;
-                    transition: all 0.4s;
                   }
                 }
               }
@@ -236,10 +235,32 @@ body {
       padding: 10px 20px;
       box-sizing: border-box;
 
+      > section {
+        > h1 {
+          font-size: 50px;
+          text-align: center;
+          margin: 30px 0 50px;
+          text-decoration: underline;
+
+          @media (max-width: $mobile-break) {
+            font-size: 30px;
+            margin: 20px 0 30px;
+          }
+        }
+      }
+
       section.featured-gallery {
         box-sizing: border-box;
         padding: 10px;
         height: 600px;
+
+        @media (max-width: $tablet-break) {
+          height: 450px;
+        }
+
+        @media (max-width: $mobile-break) {
+          height: 350px;
+        }
 
         @import './components/carousel';
       }
@@ -257,18 +278,19 @@ body {
             padding: 10px;
 
             @media (max-width: $tablet-break) {
-              width: 50%;
+              min-height: 400px;
             }
 
             @media (max-width: $mobile-break) {
               width: 100%;
+              min-height: 300px;
             }
 
             li:nth-child(odd) {
               padding: 20px;
             }
 
-            > a {
+            > span {
               box-sizing: border-box;
               display: flex;
               height: 100%;
@@ -306,13 +328,13 @@ body {
                   text-align: center;
 
                   > header {
-                    margin: 20px;
+                    margin: 20px 0;
                     font-size: 2em;
                     text-decoration: underline;
                   }
 
                   > a {
-                    @include button;
+                    @include lightenButton;
 
                     background: white;
                     color: $brand-colour;

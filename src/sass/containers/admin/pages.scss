@@ -2,7 +2,7 @@
 
 section.pages {
   > h1 {
-      @include header;
+    @include header;
   }
 
   > button {

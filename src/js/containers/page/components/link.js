@@ -26,7 +26,7 @@ export default class Link extends PureComponent {
 
         return (
             <li>
-                <a style={model.slug && {background: `url(${model.media[0].url}) 50% no-repeat /cover`}} href={`/${model.slug}.html`}>
+                <span style={model.slug && {background: `url(${model.media[0].url}) 50% no-repeat /cover`}}>
                     <figure>
                         <figcaption>
                             <header>{model.name}</header>
@@ -34,8 +34,7 @@ export default class Link extends PureComponent {
                             {model.slug && <a href={`/${model.slug}.html`}>Explore</a>}
                         </figcaption>
                     </figure>
-                </a>
-
+                </span>
             </li>
         );
 

@@ -1,6 +1,6 @@
 @import './config';
 
-@mixin button {
+@mixin lightenButton {
   background-color: lighten($brand-colour, 25);
   transition: opacity 0.25s, background-color 0.25s;
   color: white;
@@ -17,5 +17,27 @@
 
   &:hover {
     background-color: $brand-colour;
+  }
+}
+
+@mixin button {
+  background-color: darken($brand-colour, 40);
+  transition: opacity 0.25s, background-color 0.25s;
+  color: white;
+  border-radius: 0;
+  padding: 10px 15px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  outline: none;
+  border: none;
+
+  &:disabled {
+    opacity: 0.25;
+  }
+
+  &:hover {
+    background-color: darken($brand-colour, 1);
+    color: white;
   }
 }
