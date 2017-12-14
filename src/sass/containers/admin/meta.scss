@@ -5,6 +5,14 @@ section.meta {
     @include header;
   }
 
+  a {
+    color: #545452;
+
+    &:hover {
+      color: darkgreen;
+    }
+  }
+
   > form {
     > div {
       &.lat-long > input:first-of-type {
@@ -13,11 +21,14 @@ section.meta {
 
       > header {
         @include title;
+
+        margin: 10px 0;
       }
 
       > label {
         @include description;
 
+        margin-bottom: 5px;
         display: block;
       }
 
@@ -32,12 +43,14 @@ section.meta {
       }
 
       > textarea {
-        height: 120px;
+        min-height: 120px;
       }
     }
 
     > button {
       @include button;
+
+      margin: 10px 0;
     }
   }
 }

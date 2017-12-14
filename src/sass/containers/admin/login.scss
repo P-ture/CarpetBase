@@ -1,8 +1,15 @@
 @import '../../mixins';
 
 section.login {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  text-align: center;
+
   label {
     display: block;
+    margin: 10px 0;
   }
 
   input[type="text"],
@@ -10,9 +17,12 @@ section.login {
     @include textbox;
 
     width: 300px;
+    text-align: center;
   }
 
   button {
     @include button;
+
+    margin: 10px 0;
   }
 }

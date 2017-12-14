@@ -1,6 +1,75 @@
+@import '../../mixins';
+
+form {
+  > details {
+    > summary {
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    > main {
+      padding: 10px;
+
+      > ul {
+        display: flex;
+        flex-direction: column;
+
+        > li {
+          display: flex;
+          align-items: baseline;
+          flex-direction: column;
+          margin: 10px 0;
+
+          > a {
+            display: block;
+            margin-top: 5px;
+            color: #545452;
+
+            &:hover {
+              color: darkgreen;
+            }
+          }
+        }
+      }
+
+      > div {
+        padding: 10px 0;
+        display: flex;
+
+        &.description {
+          @media (max-width: 767px) {
+            flex-direction: column;
+          }
+
+          > textarea {
+            margin-top: 5px;
+          }
+        }
+
+        > label {
+          display: inline-block;
+          margin-right: 10px;
+        }
+
+        > textarea {
+          min-width: 80%;
+          max-width: 80%;
+          min-height: 150px;
+        }
+      }
+    }
+  }
+
+  > button {
+    @include button;
+
+    margin: 10px 0;
+  }
+}
+
 img {
-  width: 30px;
-  height: 30px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   cursor: move;
 }

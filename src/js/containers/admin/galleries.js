@@ -130,9 +130,8 @@ export default enhance(class Galleries extends Component {
                     </button>
 
                     <ul>
-
                         {this.props.galleries.map(model => {
-
+                            console.log(model);
                             return (
                                 <li key={hash(model)}>
                                     <label>{model.name}</label>

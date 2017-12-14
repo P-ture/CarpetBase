@@ -1,5 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Lightbox from 'react-image-lightbox';
 import { createThumbnail } from '../helpers/thumbnail';
 
 
@@ -7,7 +8,16 @@ import { createThumbnail } from '../helpers/thumbnail';
  * @class Gallery
  * @extends {PureComponent}
  */
-export default class Gallery extends PureComponent {
+export default class Gallery extends Component {
+
+     /**
+     * @constant state
+     * @type {Object}
+     */
+    state = {
+        photoIndex: 0,
+        isOpen: false
+    }
 
     /**
      * @constant propTypes
@@ -24,25 +34,34 @@ export default class Gallery extends PureComponent {
     render() {
 
         const { model } = this.props;
-
+        const { isOpen, photoIndex } = this.state;
+        const images = model.media;
+        console.log(model)
         return (
-            <li>
-                <figure >
+            <li className={`${this.props.type}`}>
+                <section className="content" onClick={() => this.setState({ isOpen: true })}>
+                    <div
+                        style={{background: `url(${model.media[0].url}) 50% no-repeat /cover`}}
+                    />
+                    <h4>{model.name}</h4> 
+                </section>
+                
 
-                    <picture>
-                        <source
-                            srcSet={`${createThumbnail(model.media[0].url, 200)},
-                                    ${createThumbnail(model.media[0].url, 400)} 2x`}
-                            />
-                        <img src={createThumbnail(model.media[0].url, 200)} alt="Photograph" />
-                    </picture>
+                {isOpen &&
+                    <Lightbox
+                    mainSrc={images[photoIndex].url}
+                    nextSrc={images[(photoIndex + 1) % images.length].url}
+                    prevSrc={images[(photoIndex + images.length - 1) % images.length].url}
 
-                    <figcaption>
-                        <header>{model.name} ({model.media.length} pictures in gallery)</header>
-                        {model.description && <p>{model.description}</p>}
-                    </figcaption>
-
-                </figure>
+                    onCloseRequest={() => this.setState({ isOpen: false })}
+                    onMovePrevRequest={() => this.setState({
+                        photoIndex: (photoIndex + images.length - 1) % images.length,
+                    })}
+                    onMoveNextRequest={() => this.setState({
+                        photoIndex: (photoIndex + 1) % images.length,
+                    })}
+                />
+                }
 
             </li>
         );

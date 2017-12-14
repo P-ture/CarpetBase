@@ -81,8 +81,7 @@ const SortableItem = SortableElement(class extends PureComponent {
 
         return (
             <li>
-                {model.name}
-                <a href={`/admin/gallery/${model.id}.html`}>Edit</a>
+                <p>{model.name}:</p>
 
                 {pages.length > 0 && (
 
@@ -109,6 +108,8 @@ const SortableItem = SortableElement(class extends PureComponent {
                     </section>
 
                 )}
+
+                <a href={`/admin/gallery/${model.id}.html`}>Edit</a>
 
             </li>
         );
@@ -427,7 +428,7 @@ export default enhance(class Page extends Component {
                             <details className="galleries">
                                 <summary>Galleries ({page.galleries.length}/{galleries.length})</summary>
                                 <main>
-
+                                    <h3>Active Galleries</h3>
                                     {galleries.length > 0 && (
 
                                         <div className="featured">
@@ -450,7 +451,6 @@ export default enhance(class Page extends Component {
                                         </div>
 
                                     )}
-
                                     <ul className="selected-galleries">
                                         <SortableList
                                             {...this.props}
@@ -461,6 +461,8 @@ export default enhance(class Page extends Component {
                                             onLinkChange={this.changeLink.bind(this)}
                                             />
                                     </ul>
+
+                                    <h3>Available Galleries</h3>
 
                                     <ul className="available-galleries">
 

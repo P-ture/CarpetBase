@@ -7,10 +7,14 @@ section.galleries {
 
   > button {
     @include button;
+
+    margin: 10px 0;
   }
 
   > ul {
     @include list-container;
+
+    justify-content: space-between;
 
     > li {
       @include list-row;
@@ -19,6 +23,11 @@ section.galleries {
         text-decoration: underline;
         cursor: pointer;
         padding-left: 10px;
+        color: #545452;
+
+        &:hover {
+          color: darkgreen;
+        }
 
         &:first-of-type {
           margin-left: auto;

@@ -55,6 +55,8 @@
     "react-document-title": "~2.0.3",
     "react-dom": "~16.2.0",
     "react-dropzone": "~3.13.3",
+    "react-image-lightbox": "^4.3.0",
+    "react-images": "^0.5.13",
     "react-markdown": "~2.5.1",
     "react-redux": "~5.0.6",
     "react-responsive": "^4.0.3",

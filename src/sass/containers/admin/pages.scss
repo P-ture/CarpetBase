@@ -1,12 +1,16 @@
 @import '../../mixins';
 
 section.pages {
+  padding-bottom: 20px;
+
   > h1 {
     @include header;
   }
 
   > button {
     @include button;
+
+    margin: 10px 0;
   }
 
   > ul {
@@ -15,10 +19,17 @@ section.pages {
     > li {
       @include list-row;
 
+      padding: 20px 15px;
+
       > a {
         text-decoration: underline;
         cursor: pointer;
         padding-left: 10px;
+        color: #545452;
+
+        &:hover {
+          color: darkgreen;
+        }
 
         &:first-of-type {
           margin-left: auto;

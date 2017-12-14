@@ -14,11 +14,13 @@ body {
       padding: 20px;
       box-sizing: border-box;
       font-family: 'Tinos', serif;
+      min-height: $headerHeight;
 
       @media (max-width: $mobile-break) {
         padding: 10px;
         display: flex;
         justify-content: space-between;
+        min-height: 90px;
       }
 
       > div.wrapper {
@@ -233,11 +235,16 @@ body {
     }
 
     > nav.subnavigation {
-      padding: 10px;
+      padding: 10px 20px;
 
       > span.username {
         display: block;
         margin: 10px 0;
+        text-transform: capitalize;
+
+        > em {
+          color: darkgreen;
+        }
       }
 
       > a {
@@ -245,17 +252,23 @@ body {
         margin: 0 5px;
         color: $brand-colour;
         text-decoration: none;
+        transition: all 0.3s;
 
         &:hover {
           text-decoration: underline;
+          color: darkgreen;
         }
       }
     }
 
     > main {
-      min-height: 100vh;
+      min-height: calc(100vh - 210px - 115px);
       padding: 10px 20px;
       box-sizing: border-box;
+
+      @media (max-width: $mobile-break) {
+        min-height: calc(100vh - 90px - 1px);
+      }
 
       > section {
         > h1 {
@@ -275,7 +288,7 @@ body {
           text-align: center;
 
           > div {
-            width: 80%;
+            width: 90%;
             margin: 0 auto;
 
             > p {
@@ -308,7 +321,34 @@ body {
           flex-wrap: wrap;
           margin: 10px 0;
 
-          > li {
+          > li.gallery {
+            width: 25%;
+            box-sizing: border-box;
+            padding: 10px;
+
+            @media (max-width: $mobile-break) {
+              width: 100%;
+            }
+
+            li:nth-child(odd) {
+              padding: 20px;
+            }
+
+            > section.content {
+              cursor: pointer;
+
+              > div {
+                height: 200px;
+              }
+
+              > h4 {
+                text-align: center;
+                padding: 10px;
+              }
+            }
+          }
+
+          > li.link {
             width: 33.33%;
             box-sizing: border-box;
             min-height: 500px;
@@ -418,11 +458,13 @@ body {
       justify-content: space-between;
       align-items: center;
       overflow: hidden;
+      min-height: $footerHeight;
 
       @media (max-width: $mobile-break) {
         flex-direction: column-reverse;
         align-items: left;
         padding: 10px;
+        min-height: 180px;
       }
 
       > ul {
