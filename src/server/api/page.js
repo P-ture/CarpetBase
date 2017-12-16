@@ -17,6 +17,7 @@ export async function getOne(request, response) {
     // Fetch the content from the database by the passed slug.
     const [record] = await db.select().from('pages')
                              .where('slug', request.params.id || HOME).orWhere('pages.id', request.params.id);
+    const model = camelizeKeys(record);
 
     // Fetch any galleries that ae associated with the page.
     const galleries = record ? await db.select('galleries.*', 'page_galleries.*', 'pages.slug')
@@ -25,11 +26,13 @@ export async function getOne(request, response) {
                                        .leftJoin('pages', 'pages.id', 'page_galleries.page_link_id')
                                        .orderBy('order', 'ASC') : [];
 
+    // Fetch the page that is being linked to from the featured gallery.
+    const [link] = (record && model.featuredPageId) ? await db.select('slug').from('pages').where('id', '=', model.featuredPageId) : [null];
+
     // Find the hero image if it has been set.
-    const model = camelizeKeys(record);
     const [hero] = model.mediaId ? await db.select().from('media').where('id', model.mediaId) : [null];
 
-    record ? response.send({ ...record, hero, galleries }) : response.status(404).send({});
+    record ? response.send({ ...record, hero, galleries, link }) : response.status(404).send({});
 
 }
 

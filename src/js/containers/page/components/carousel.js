@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createThumbnail } from '../helpers/thumbnail';
-
 
 /**
  * @class Carousel
@@ -14,15 +12,29 @@ export default class Carousel extends Component {
      * @type {Object}
      */
     static propTypes = {
-        model: PropTypes.object.isRequired
+        model: PropTypes.object.isRequired,
+        link: PropTypes.shape({
+            slug: PropTypes.string.isRequired
+        })
     };
 
+    /**
+     * @constant defaultProps
+     * @type {Object}
+     */
+    static defaultProps = {
+        link: null
+    };
+
+    /**
+     * @constant state
+     * @type {Object}
+     */
     state = {
         model: this.props.model,
         show: 0
     }
 
-    
     /**
      * @method render
      * @return {Object}
@@ -36,15 +48,13 @@ export default class Carousel extends Component {
 
         return (
             model && (
-                <section className="carousel" style={{background: `url(${model.media[show].url}) no-repeat 50%/cover`}}>
-                    <div className="previous"
-                        onClick={() => this.setState({ show: prevIndex })}
-                        />
-                    <div className="next"
-                        onClick={() => this.setState({ show: nextIndex })}
-                        />
-
-                    <p className="text">Api to include this data</p>
+                <section className="carousel" style={{ background: `url(${model.media[show].url}) no-repeat 50%/cover` }}>
+                    <div className="previous" onClick={() => this.setState({ show: prevIndex })} />
+                    <div className="next" onClick={() => this.setState({ show: nextIndex })} />
+                    <p className="text">
+                        {this.props.link && <a href={`/${this.props.link.slug}.html`}>Goto Page</a>}
+                        {model.media[show].description}
+                    </p>
                 </section>
         ));
 

@@ -6,7 +6,7 @@ import { request } from 'axios';
 import { connect } from 'react-redux';
 import { camelizeKeys } from 'humps';
 import DocumentTitle from 'react-document-title';
-import { compose, update, reject } from 'ramda';
+import { compose, update, reject, dissoc } from 'ramda';
 import Dropzone from 'react-dropzone';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 import * as actions from '../../reducers/gallery/actions';
@@ -38,7 +38,7 @@ const mapDispatchToProps = dispatch => {
 
 /**
  * @class SortableItem
- * @extends {Component}
+ * @extends {PureComponent}
  */
 const SortableItem = SortableElement(class extends PureComponent {
 
@@ -49,7 +49,8 @@ const SortableItem = SortableElement(class extends PureComponent {
     static propTypes = {
         model: PropTypes.object.isRequired,
         instance: PropTypes.func.isRequired,
-        onRemove: PropTypes.func.isRequired
+        onRemove: PropTypes.func.isRequired,
+        onChange: PropTypes.func.isRequired
     };
 
     /**
@@ -78,6 +79,10 @@ const SortableItem = SortableElement(class extends PureComponent {
         return (
             <li>
                 <img src={isPreview ? model.preview : model.url} />
+                <textarea
+                    value={model.description ? model.description : ''}
+                    onChange={event => this.props.onChange({ ...model, description: event.target.value })}
+                    />
                 {isPreview && <span>Uploading...</span>}
                 {!isPreview && <a onClick={() => this.del(model)}>Delete</a>}
             </li>
@@ -96,7 +101,7 @@ const SortableList = SortableContainer(props => {
     return (
         <ul>
             {props.items.map((model, index) => {
-                const key = model.preview ? model.preview : hash(model);
+                const key = model.preview ? model.preview : hash(dissoc('description')(model));
                 return <SortableItem key={key} {...props} index={index} model={model} />;
             })}
         </ul>
@@ -252,6 +257,19 @@ export default enhance(class Galleries extends Component {
     }
 
     /**
+     * @method change
+     * @param {Object} model
+     * @return {void}
+     */
+    change(model) {
+        const media = this.state.gallery.media.map(current => {
+            return current.mediaId === model.mediaId ? model : current;
+        });
+        console.log(media);
+        this.setState({ gallery: { ...this.state.gallery, media } });
+    }
+
+    /**
      * @method render
      * @return {Object}
      */
@@ -306,9 +324,10 @@ export default enhance(class Galleries extends Component {
                                 <Dropzone onDrop={this.upload.bind(this)} />
                                 <SortableList
                                     {...this.props}
-                                    pressDelay={100}
+                                    distance={1}
                                     items={gallery.media}
                                     onRemove={this.remove.bind(this)}
+                                    onChange={this.change.bind(this)}
                                     onSortEnd={this.reorder.bind(this)}
                                     />
                             </main>

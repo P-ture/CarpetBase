@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { createThumbnail } from '../helpers/thumbnail';
 
 /**
  * @class Link
@@ -13,7 +12,8 @@ export default class Link extends PureComponent {
      * @type {Object}
      */
     static propTypes = {
-        model: PropTypes.object.isRequired
+        model: PropTypes.object.isRequired,
+        type: PropTypes.string.isRequired
     };
 
     /**
@@ -26,7 +26,7 @@ export default class Link extends PureComponent {
 
         return (
             <li className={`${this.props.type}`}>
-                <span style={model.slug && {background: `url(${model.media[0].url}) 50% no-repeat /cover`}}>
+                <span style={model.slug && { background: `url(${model.media[0].url}) 50% no-repeat /cover` }}>
                     <figure>
                         <figcaption>
                             <header>{model.name}</header>

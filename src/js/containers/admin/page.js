@@ -198,6 +198,7 @@ export default enhance(class Page extends Component {
         isSuccess: PropTypes.bool.isRequired,
         layouts: PropTypes.array.isRequired,
         galleries: PropTypes.array.isRequired,
+        pages: PropTypes.array.isRequired,
         page: PropTypes.shape({
             title: PropTypes.string.isRequired,
             content: PropTypes.string.isRequired
@@ -229,7 +230,7 @@ export default enhance(class Page extends Component {
         event.preventDefault();
         this.props.setSending(true);
 
-        const strip = compose(dissoc('hero'), dissoc('mediaId'));
+        const strip = compose(dissoc('hero'), dissoc('mediaId'), dissoc('link'));
         const model = strip({ ...this.state.page, slug: slug(this.state.page.title, { lower: true }) });
 
         this.props.instance.put(`/page/${this.props.match.params.id}.json`, model).then(response => {
@@ -349,7 +350,7 @@ export default enhance(class Page extends Component {
     render() {
 
         const { page } = this.state;
-        const { layouts, galleries, isDisabled, isSending, isError, isSuccess } = this.props;
+        const { layouts, galleries, pages, isDisabled, isSending, isError, isSuccess } = this.props;
         const selectedGalleryIds = page.galleries.map(model => model.id);
 
         return (
@@ -448,6 +449,21 @@ export default enhance(class Page extends Component {
                                                     })}
                                                 </optgroup>
                                             </select>
+                                            <select
+                                                onChange={this.update('featuredPageId')}
+                                                value={page.featuredPageId ? page.featuredPageId : ''}
+                                                >
+                                                <option value="">None</option>
+                                                <optgroup label="Pages">
+                                                    {pages.map(model => {
+                                                        return (
+                                                            <option key={hash(model)} value={model.id}>
+                                                                {model.title}
+                                                            </option>
+                                                        );
+                                                    })}
+                                                </optgroup>
+                                            </select>
                                         </div>
 
                                     )}
@@ -455,7 +471,7 @@ export default enhance(class Page extends Component {
                                         <SortableList
                                             {...this.props}
                                             page={page}
-                                            pressDelay={100}
+                                            distance={1}
                                             items={page.galleries}
                                             onSortEnd={this.reorder.bind(this)}
                                             onLinkChange={this.changeLink.bind(this)}

@@ -13,7 +13,6 @@ import NotFound from '../error/not-found';
 import Gallery from './components/gallery';
 import Carousel from './components/carousel';
 import Link from './components/link';
-import { createThumbnail } from './helpers/thumbnail';
 
 /**
  * @constant actions
@@ -111,26 +110,24 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
 
         const { page, galleries, featuredGallery } = this.props;
         const isGallery = page.layoutId === 2;
+
         return isEmpty(page) ? <NotFound /> : (
 
             <DocumentTitle title={`${config.DOCUMENT_TITLE_PREPEND} ${page.title}`}>
                 <section className={`page ${page.slug}`}>
 
                     {page.hero && (
-                        <section className="hero" style={{background: `url(${page.hero.url}) 50% no-repeat /cover`}}>
-                        
-                        </section>
+                        <section className="hero" style={{ background: `url(${page.hero.url}) 50% no-repeat /cover` }} />
                     )}
 
                     {featuredGallery && (
-                        
                         <section className="featured-gallery">
-                            <Carousel model={{...featuredGallery}}/>
+                            <Carousel model={{ ...featuredGallery }} link={page.link} />
                         </section>
                     )}
 
                     {page.title === 'Homepage' ? '' : <h1>{page.title}</h1> }
-                    
+
                     <section className="information">
                         <Markdown source={page.content} />
                     </section>
@@ -139,7 +136,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
                         <section className="galleries">
                             <ul>
                                 {galleries.map(model => {
-                                    return isGallery ? <Gallery type="gallery" key={hash(model)} model={model} /> : <Link type="link" key={hash(model)} model={model} />;
+                                    return isGallery ? <Gallery key={hash(model)} type="gallery" model={model} /> : <Link key={hash(model)} type="link" model={model} />;
                                 })}
                             </ul>
                         </section>

@@ -114,6 +114,11 @@ export async function update(request, response) {
         // Update the relevant gallery by the passed id.
         await db.table('galleries').update(dissoc('media')(request.body)).where('id', '=', request.body.id);
 
+        // Update all of the descriptions for the associated media items.
+        await Promise.all(request.body.media.map(async model => {
+            return await db.table('media').update({ description: model.description }).where('id', '=', model.id);
+        }));
+
         // Update the ordering of the associated media items.
         const order = request.body.media.map(model => model.id);
         await Promise.all(order.map((id, order) => db.table('galleries_media').update({ order }).where('media_id', '=', id)));
