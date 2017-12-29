@@ -26,7 +26,7 @@ export default class Link extends PureComponent {
 
         return (
             <li className={`${this.props.type}`}>
-                <span style={model.slug && { background: `url(${model.media[0].url}) 50% no-repeat /cover` }}>
+                <span style={model.slug && { background: `url(/media/${model.media[0].filename}) 50% no-repeat /cover` }}>
                     <figure>
                         <figcaption>
                             <header>{model.name}</header>

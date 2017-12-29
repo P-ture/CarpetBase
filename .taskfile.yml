@@ -6,6 +6,7 @@
     - - webpack --config webpack/development.application.js
     - - npm run images
     - - npm run sass
+    - - (mkdir -p public/assets/media && chmod 0755 public/assets/media)
 
 - name: build
   env: production
@@ -16,6 +17,7 @@
     - - webpack --config webpack/production.application.js
     - - npm run images
     - - npm run sass
+    - - (mkdir -p public/assets/media && chmod 0755 public/assets/media)
 
 - name: watch
   task: npm run build && concurrently 'nodemon public/server.js' 'webpack --config webpack/development.server.js --watch' 'webpack --config webpack/development.application.js --watch' 'taskfile sass --watch'

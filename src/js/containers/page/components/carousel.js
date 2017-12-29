@@ -48,7 +48,7 @@ export default class Carousel extends Component {
 
         return (
             model && (
-                <section className="carousel" style={{ background: `url(${model.media[show].url}) no-repeat 50%/cover` }}>
+                <section className="carousel" style={{ background: `url(/media/${model.media[show].filename}) no-repeat 50%/cover` }}>
                     <div className="previous" onClick={() => this.setState({ show: prevIndex })} />
                     <div className="next" onClick={() => this.setState({ show: nextIndex })} />
                     <p className="text">

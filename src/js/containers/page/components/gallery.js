@@ -39,15 +39,15 @@ export default class Gallery extends Component {
         return (
             <li className={`${this.props.type}`}>
                 <section className="content" onClick={() => this.setState({ isOpen: true })}>
-                    <div style={{ background: `url(${model.media[0].url}) 50% no-repeat /cover` }} />
+                    <div style={{ background: `url(/media/${model.media[0].filename}) 50% no-repeat /cover` }} />
                     <h4>{model.name}</h4>
                 </section>
 
                 {isOpen &&
                     <Lightbox
-                        mainSrc={images[photoIndex].url}
-                        nextSrc={images[(photoIndex + 1) % images.length].url}
-                        prevSrc={images[(photoIndex + images.length - 1) % images.length].url}
+                        mainSrc={`/media/${images[photoIndex].filename}`}
+                        nextSrc={`/media/${images[(photoIndex + 1) % images.length].filename}`}
+                        prevSrc={`/media/${images[(photoIndex + images.length - 1) % images.length].filename}`}
                         onCloseRequest={() => this.setState({ isOpen: false })}
                         onMovePrevRequest={() => this.setState({ photoIndex: (photoIndex + images.length - 1) % images.length })}
                         onMoveNextRequest={() => this.setState({ photoIndex: (photoIndex + 1) % images.length })}
