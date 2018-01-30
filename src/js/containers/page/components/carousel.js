@@ -25,6 +25,10 @@ export default class Carousel extends Component {
     static defaultProps = {
         link: null
     };
+    
+    componentWillReceiveProps(nextProps) {
+        return nextProps !== this.props;
+    }
 
     /**
      * @constant state
