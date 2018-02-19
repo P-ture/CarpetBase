@@ -55,10 +55,11 @@ export default class Carousel extends Component {
                 <section className="carousel" style={{ background: `url(${model.media[show].url}) no-repeat 50%/cover` }}>
                     <div className="previous" onClick={() => this.setState({ show: prevIndex })} />
                     <div className="next" onClick={() => this.setState({ show: nextIndex })} />
-                    <p className="text">
-                        {this.props.link && <a href={`/${this.props.link.slug}.html`}>Goto Page</a>}
-                        {model.media[show].description}
-                    </p>
+                    {model.media[show].description && (
+                        <p className="text">
+                            <a href={`/${this.props.link.slug}.html`}>{model.media[show].description}</a>
+                        </p> 
+                    )}
                 </section>
         ));
 

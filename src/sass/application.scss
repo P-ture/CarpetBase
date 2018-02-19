@@ -170,7 +170,6 @@ body {
           > div > ul {
             display: flex;
             align-items: center;
-            width: 600px;
 
             > li {
               display: flex;
@@ -270,6 +269,11 @@ body {
       min-height: calc(100vh - 210px - 115px);
       padding: 10px 20px;
       box-sizing: border-box;
+
+      section.success {
+        color: green;
+        margin: 5px;
+      }
 
       @media (max-width: $mobile-break) {
         min-height: calc(100vh - 90px - 1px);
