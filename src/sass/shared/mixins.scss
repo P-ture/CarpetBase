@@ -66,7 +66,6 @@
   border-radius: 0;
   width: 100%;
   height: 200px;
-  display: flex;
   justify-content: center;
   align-items: center;
   color: rgba(0, 0, 0, 0.25);
@@ -79,7 +78,6 @@
 }
 
 @mixin dropzone-preview {
-  
   > img {
     width: 200px;
   }

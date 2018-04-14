@@ -1,30 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Lightbox from 'react-image-lightbox';
 
 /**
- * @class Gallery
- * @extends {PureComponent}
+ * @class Carousel
+ * @extends {Component}
  */
 export default class Gallery extends Component {
-
-     /**
-     * @constant state
-     * @type {Object}
-     */
-    state = {
-        photoIndex: 0,
-        isOpen: false
-    }
 
     /**
      * @constant propTypes
      * @type {Object}
      */
     static propTypes = {
-        model: PropTypes.object.isRequired,
-        type: PropTypes.string.isRequired
+        model: PropTypes.array.isRequired
     };
+
+    componentWillReceiveProps(nextProps) {
+        return nextProps !== this.props && this.setState({ model: nextProps.model, index: 0 });
+    }
+
+    /**
+     * @constant state
+     * @type {Object}
+     */
+    state = {
+        model: this.props.model,
+        index: 0
+    }
 
     /**
      * @method render
@@ -32,30 +34,16 @@ export default class Gallery extends Component {
      */
     render() {
 
-        const { model } = this.props;
-        const { isOpen, photoIndex } = this.state;
-        const images = model.media;
+        const { model, index } = this.state;
+        const prevIndex = index <= 0 ? (model.length - 1) : index - 1;
+        const nextIndex = index >= (model.length - 1) ? 0 : index + 1;
 
-        return (
-            <li className={`${this.props.type}`}>
-                <section className="content" onClick={() => this.setState({ isOpen: true })}>
-                    <div style={{ background: `url(/media/${model.media[0].filename}) 50% no-repeat /cover` }} />
-                    <h4>{model.name}</h4>
-                </section>
-
-                {isOpen &&
-                    <Lightbox
-                        mainSrc={`/media/${images[photoIndex].filename}`}
-                        nextSrc={`/media/${images[(photoIndex + 1) % images.length].filename}`}
-                        prevSrc={`/media/${images[(photoIndex + images.length - 1) % images.length].filename}`}
-                        onCloseRequest={() => this.setState({ isOpen: false })}
-                        onMovePrevRequest={() => this.setState({ photoIndex: (photoIndex + images.length - 1) % images.length })}
-                        onMoveNextRequest={() => this.setState({ photoIndex: (photoIndex + 1) % images.length })}
-                        />
-                }
-
-            </li>
-        );
+        return model ? (
+            <section className="carousel" style={{ background: `url(${model[index].url}) no-repeat 50%/cover` }}>
+                <div className="previous" onClick={() => this.setState({ index: prevIndex })} />
+                <div className="next" onClick={() => this.setState({ index: nextIndex })} />
+            </section>
+         ) : null;
 
     }
 

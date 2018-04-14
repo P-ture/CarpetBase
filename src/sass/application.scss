@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css?family=Tinos');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import './components/modal';
+@import './components/carousel';
 
 body {
   font-family: 'Open Sans', sans-serif;
@@ -169,7 +170,6 @@ body {
           > div > ul {
             display: flex;
             align-items: center;
-            width: 600px;
 
             > li {
               display: flex;
@@ -270,6 +270,11 @@ body {
       padding: 10px 20px;
       box-sizing: border-box;
 
+      section.success {
+        color: green;
+        margin: 5px;
+      }
+
       @media (max-width: $mobile-break) {
         min-height: calc(100vh - 90px - 1px);
       }
@@ -319,8 +324,6 @@ body {
         @media (max-width: $mobile-break) {
           height: 350px;
         }
-
-        @import './components/carousel';
       }
 
       section.galleries {
@@ -409,6 +412,12 @@ body {
                 color: transparent;
                 transition: all 0.3s;
 
+                @media (max-width: $tablet-break) {
+                  visibility: visible;
+                  background: rgba($brand-colour, 0.8);
+                  color: white;
+                }
+
                 > figcaption {
                   width: 70%;
                   text-align: center;
@@ -432,6 +441,10 @@ body {
                     margin: 20px auto;
                     width: 50%;
                     display: block;
+
+                    @media (max-width: $tablet-break) {
+                      visibility: visible;
+                    }
 
                     &:hover {
                       background: darken(white, 25);

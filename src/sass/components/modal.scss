@@ -31,6 +31,21 @@ div.modal-container {
     visibility: hidden;
     opacity: 0;
 
+    &.gallery-modal {
+      > section.modal > section.content {
+        > div.children {
+          padding: 0;
+          width: 80vw;
+          height: 50vw;
+
+          @media (max-width: $mobile-break) {
+            width: 100%;
+            height: 40vh;
+          }
+        }
+      }
+    }
+
     &.open {
       visibility: visible;
       opacity: 1;

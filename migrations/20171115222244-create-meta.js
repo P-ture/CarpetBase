@@ -19,7 +19,7 @@ exports.up = function(db, callback) {
   db.insert('meta', ['id', 'key', 'value'], [2, 'social', `
 * [<img src="/images/facebook.svg" />](https://www.facebook.com)
 * [<img src="/images/twitter.svg" />](https://www.twitter.com)
-* [<img src="/images/linkedin.svg" />](https://www.linkedin.com)
+* [<img src="/images/instagram.svg" />](https://www.instagram.com)
   `.trim()], callback);
   db.insert('meta', ['id', 'key', 'value'], [3, 'latitude', '51.4492704'], callback);
   db.insert('meta', ['id', 'key', 'value'], [4, 'longitude', '-0.1462397'], callback);
@@ -34,6 +34,7 @@ exports.up = function(db, callback) {
 * [Projects](/projects.html)
 * [Gallery](/gallery.html)
 * [Contact](/contact.html)
+* [T&Cs](/terms.html)
     `.trim()], callback);
 };
 

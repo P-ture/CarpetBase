@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { dissoc, isEmpty } from 'ramda';
 import hash from 'object-hash';
@@ -10,6 +10,8 @@ import * as pageActions from '../../reducers/page/actions';
 import * as galleryActions from '../../reducers/gallery/actions';
 import * as config from '../../miscellaneous/config';
 import NotFound from '../error/not-found';
+import Modal from '../components/modal/index';
+import Galleries from './components/galleries';
 import Gallery from './components/gallery';
 import Carousel from './components/carousel';
 import Link from './components/link';
@@ -75,7 +77,7 @@ export const fetch = async ({ dispatch, params }) => {
  * @class Page
  * @extends {PureComponent}
  */
-export default connect(mapStateToProps, mapDispatchToProps)(class Page extends PureComponent {
+export default connect(mapStateToProps, mapDispatchToProps)(class Page extends Component {
 
     /**
      * @constant displayName
@@ -102,6 +104,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
         featuredGallery: null
     };
 
+    state = {
+        media: [],
+        modalName: '',
+        modal: false
+    }
+
+    handleMedia(media, name) {
+        return this.setState({ media, modalName: name, modal: true });
+    }
+
     /**
      * @method render
      * @return {Object}
@@ -109,6 +121,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
     render() {
 
         const { page, galleries, featuredGallery } = this.props;
+        const { media, modalName, modal } = this.state;
         const isGallery = page.layoutId === 2;
 
         return isEmpty(page) ? <NotFound /> : (
@@ -136,9 +149,23 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends P
                         <section className="galleries">
                             <ul>
                                 {galleries.map(model => {
-                                    return isGallery ? <Gallery key={hash(model)} type="gallery" model={model} /> : <Link key={hash(model)} type="link" model={model} />;
+                                    return isGallery ?
+                                        <Galleries key={hash(model)} type="gallery" model={model} onMedia={this.handleMedia.bind(this)} /> :
+                                        <Link key={hash(model)} type="link" model={model} />;
                                 })}
                             </ul>
+                            {media.length > 0 && (
+                                <Modal
+                                    className="gallery-modal"
+                                    title={modalName}
+                                    Open={modal === true}
+                                    onOpen={() => this.setState({ modal: true })}
+                                    onClose={() => this.setState({ modal: false })}
+                                    >
+                                    <Gallery model={media} />
+                                </Modal>
+                        )}
+
                         </section>
                     )}
 
