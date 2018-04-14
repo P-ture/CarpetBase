@@ -17,7 +17,7 @@ const store = createStoreWithMiddleware(reducers, JSON.parse(base64.decode(windo
 const LayoutWithRouter = withRouter(Layout);
 
 const instance = create({
-    baseURL: `/api/`,
+    baseURL: '/api/',
     timeout: config.REQUEST_TIMEOUT,
     headers: { 'Content-Type': 'application/json' },
     transformRequest: [decamelizeKeys, JSON.stringify],

@@ -32,13 +32,13 @@ export default class Galleries extends Component {
     render() {
 
         const { model, onMedia, type } = this.props;
-
         const images = model.media;
         const name = model.name;
+
         return (
             <li className={`${type}`}>
                 <section className="content" onClick={() => onMedia(images, name)}>
-                    <div style={{ background: `url(${model.media[0].url}) 50% no-repeat /cover` }} />
+                    <div style={{ background: `url(/media/${model.media[0].filename}) 50% no-repeat /cover` }} />
                     <h4>{model.name}</h4>
                 </section>
             </li>

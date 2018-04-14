@@ -39,7 +39,7 @@ export default class Gallery extends Component {
         const nextIndex = index >= (model.length - 1) ? 0 : index + 1;
 
         return model ? (
-            <section className="carousel" style={{ background: `url(${model[index].url}) no-repeat 50%/cover` }}>
+            <section className="carousel" style={{ background: `url(/media/${model[index].filename}) no-repeat 50%/cover` }}>
                 <div className="previous" onClick={() => this.setState({ index: prevIndex })} />
                 <div className="next" onClick={() => this.setState({ index: nextIndex })} />
             </section>
