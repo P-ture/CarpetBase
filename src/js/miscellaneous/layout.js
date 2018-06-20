@@ -23,7 +23,7 @@ const actions = { ...authActions, ...configActions };
  * @return {Object}
  */
 export const mapStateToProps = state => {
-
+    
     return {
         user: state.auth.user,
         meta: state.config.meta

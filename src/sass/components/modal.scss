@@ -55,6 +55,7 @@ div.modal-container {
     > section.modal {
       min-width: 300px;
       background: white;
+      max-height: calc(100% - 72px);
 
       > section.content {
         > header {
