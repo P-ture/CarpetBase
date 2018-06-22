@@ -25,7 +25,7 @@ export default class Carousel extends Component {
     static defaultProps = {
         link: null
     };
-    
+
     componentWillReceiveProps(nextProps) {
         return nextProps !== this.props;
     }
@@ -58,7 +58,7 @@ export default class Carousel extends Component {
                     {model.media[show].description && (
                         <p className="text">
                             <a href={`/${this.props.link.slug}.html`}>{model.media[show].description}</a>
-                        </p> 
+                        </p>
                     )}
                 </section>
         ));

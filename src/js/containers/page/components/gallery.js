@@ -12,11 +12,11 @@ export default class Gallery extends Component {
      * @type {Object}
      */
     static propTypes = {
-        model: PropTypes.array.isRequired,
+        model: PropTypes.array.isRequired
     };
-    
+
     componentWillReceiveProps(nextProps) {
-        return nextProps !== this.props && this.setState({model: nextProps.model, index: 0});
+        return nextProps !== this.props && this.setState({ model: nextProps.model, index: 0 });
     }
 
     /**

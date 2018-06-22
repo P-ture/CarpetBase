@@ -10,10 +10,10 @@ import * as pageActions from '../../reducers/page/actions';
 import * as galleryActions from '../../reducers/gallery/actions';
 import * as config from '../../miscellaneous/config';
 import NotFound from '../error/not-found';
+import Modal from '../components/modal/index';
 import Galleries from './components/galleries';
 import Gallery from './components/gallery';
 import Carousel from './components/carousel';
-import Modal from '../components/modal/index';
 import Link from './components/link';
 
 /**
@@ -111,8 +111,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends C
     }
 
     handleMedia(media, name) {
-        
-        return this.setState({ media: media, modalName: name, modal: true })
+        return this.setState({ media, modalName: name, modal: true });
     }
 
     /**
@@ -150,7 +149,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends C
                         <section className="galleries">
                             <ul>
                                 {galleries.map(model => {
-                                    return isGallery ? <Galleries onMedia={this.handleMedia.bind(this)} key={hash(model)} type="gallery" model={model} /> : <Link key={hash(model)} type="link" model={model} />;
+                                    return isGallery ? <Galleries key={hash(model)} type="gallery" model={model} onMedia={this.handleMedia.bind(this)} /> : <Link key={hash(model)} type="link" model={model} />;
                                 })}
                             </ul>
                             {media.length > 0 && (
@@ -167,8 +166,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends C
 
                         </section>
                     )}
-
-                    
 
                 </section>
             </DocumentTitle>
