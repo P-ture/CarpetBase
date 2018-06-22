@@ -131,7 +131,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(class Page extends C
                 <section className={`page ${page.slug}`}>
 
                     {page.hero && (
-                        <section className="hero" style={{ background: `url(${page.hero.url}) 50% no-repeat /cover` }} />
+                        <section className="hero" style={{ background: `url(/media/${page.hero.filename}) 50% no-repeat /cover` }} />
                     )}
 
                     {featuredGallery && (

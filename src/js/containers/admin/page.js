@@ -387,8 +387,7 @@ export default enhance(class Page extends Component {
                             <main>
                                 <Dropzone style={{}} onDrop={this.upload.bind(this)} />
                                 {page.hero && (
-                                    <section className="preview">
-                                        <img src={page.hero.preview ? page.hero.preview : page.hero.url} />
+                                    <section className="preview"><img src={page.hero.preview ? page.hero.preview : `/media/${page.hero.filename}`} />
                                         {page.hero.preview && <span>Uploading...</span>}
                                         {!page.hero.preview && <a onClick={() => this.del(page.hero)}>Delete</a>}
                                     </section>

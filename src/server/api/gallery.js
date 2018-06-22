@@ -1,7 +1,8 @@
+import { rename } from 'fs';
 import { camelizeKeys, decamelizeKeys } from 'humps';
 import { dissoc } from 'ramda';
-import cloudinary from '../cdn';
 import connect from '../database';
+import { createDestination, removeFile } from '../media';
 
 /**
  * @method create
@@ -74,20 +75,20 @@ export async function upload(request, response) {
     try {
         
         const db = connect();
-        
-        cloudinary.uploader.upload(request.file.path, async result => { 
+        const file = createDestination(request.file.originalname);
 
-            const media = camelizeKeys(result);
+        rename(request.file.path, file.path, async err => {
 
-            // Insert into the media table and the joining table that links them to the relevant gallery.
-            const [id] = await db.table('media').insert(decamelizeKeys({ url: media.url, publicId: media.publicId }));
+            if (err) {
+                response.send({ uploaded: false, error: err });
+                return;
+            }
+
+            const [id] = await db.table('media').insert(decamelizeKeys({ filename: file.name }));
             await db.table('galleries_media').insert(decamelizeKeys({ mediaId: Number(id), galleryId: request.params.id }));
-
-            // Find the image model that was just uploaded.
             const [image] = await db.select().from('media').where('id', '=', Number(id));
-
             response.send({ image, uploaded: true, error: null });
-    
+
         });
 
     } catch (err) {
@@ -144,12 +145,14 @@ export async function delAll(request, response) {
 
     const db = connect();
 
-    const records = await db.select().from('media').where('gallery_id', '=', Number(request.params.id));
+    const records = await db.select().from('galleries_media')
+                            .innerJoin('media', 'galleries_media.media_id', 'media.id')
+                            .where('gallery_id', '=', Number(request.params.id));
     const models = camelizeKeys(records);
 
     // Delete all of the media items associated to the gallery.
     await models.map(async model => {
-        cloudinary.uploader.destroy(model.publicId);
+        removeFile(model.filename);
         await db.table('media').where('id', '=', Number(model.id)).delete();
         await db.table('galleries_media').where('media_id', '=', Number(model.id)).delete();
     });
@@ -182,6 +185,7 @@ export async function delOne(request, response) {
                            .where(decamelizeKeys({ featuredGalleryId: request.params.id }));
 
     // Finally attempt to delete the media item from the Cloundinary service.
-    cloudinary.uploader.destroy(model.publicId, ({ result }) => response.send({ deleted: result === 'ok' }));
+    removeFile(model.filename);
+    response.send({ deleted: true });
 
 }

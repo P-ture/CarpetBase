@@ -1,8 +1,9 @@
+import { rename } from 'fs';
 import { decamelizeKeys, camelizeKeys } from 'humps';
 import { dissoc } from 'ramda';
 import connect from '../database';
-import cloudinary from '../cdn';
 import { HOME } from '../../../src/js/reducers/page/actions';
+import { createDestination, removeFile } from '../media';
 
 /**
  * @method getOne
@@ -144,21 +145,27 @@ export async function upload(request, response) {
     
     try {
 
-        cloudinary.uploader.upload(request.file.path, async result => { 
+        const file = createDestination(request.file.originalname);
+
+        rename(request.file.path, file.path, async err => {
+
+            if (err) {
+                response.send({ uploaded: false, error: err });
+                return;
+            }
 
             // Delete any existing media associated with the page.
-            const [record] = await db.select('media_id AS mediaId', 'public_id as publicId')
+            const [record] = await db.select('media_id AS mediaId', 'filename')
                                      .from('pages').innerJoin('media', 'media.id', 'pages.media_id')
                                      .where('pages.id', '=', Number(request.params.id));
-            record && cloudinary.uploader.destroy(record.publicId);
+            record && removeFile(record.filename);
             record && !Number.isNaN(record.mediaId) && await db.select().from('media').where('id', '=', record.mediaId).del();
 
-            const media = camelizeKeys(result);
-            const [id] = await db.table('media').insert(decamelizeKeys({ url: media.url, publicId: media.publicId }));
+            const [id] = await db.table('media').insert(decamelizeKeys({ filename: file.name }));
             const [image] = await db.select().from('media').where('id', '=', Number(id));
             await db.table('pages').update(decamelizeKeys({ mediaId: image.id })).where('id', '=', Number(request.params.id));
             response.send({ image, uploaded: true, error: null });
-    
+
         });
 
     } catch (err) {

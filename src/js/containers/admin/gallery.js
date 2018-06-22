@@ -78,7 +78,7 @@ const SortableItem = SortableElement(class extends PureComponent {
 
         return (
             <li>
-                <img src={isPreview ? model.preview : model.url} />
+                <img src={isPreview ? model.preview : `/media/${model.filename}`} />
                 <textarea
                     value={model.description ? model.description : ''}
                     onChange={event => this.props.onChange({ ...model, description: event.target.value })}
@@ -210,7 +210,9 @@ export default enhance(class Galleries extends Component {
             const media = update(index, response.image)(this.state.gallery.media);
 
             // Update the media with the temporary file having been replaced.
-            this.setState({ gallery: { ...this.state.gallery, media } });
+            this.setState(state => ({
+                gallery: { ...state.gallery, media }
+            }));
 
         });
 
@@ -263,9 +265,9 @@ export default enhance(class Galleries extends Component {
      */
     change(model) {
         const media = this.state.gallery.media.map(current => {
-            return current.mediaId === model.mediaId ? model : current;
+            return current.id === model.id ? model : current;
         });
-        console.log(media);
+
         this.setState({ gallery: { ...this.state.gallery, media } });
     }
 
