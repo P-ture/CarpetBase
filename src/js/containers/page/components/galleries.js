@@ -38,7 +38,7 @@ export default class Galleries extends Component {
         return (
             <li className={`${type}`}>
                 <section className="content" onClick={() => onMedia(images, name)}>
-                    <div style={{ background: `url(/media/${model.media[0].filename}) 50% no-repeat /contain` }} />
+                    <div style={{ background: `url(/media/${model.media[0].filename}) 50% no-repeat / contain` }} />
                     <h4>{model.name}</h4>
                 </section>
             </li>
