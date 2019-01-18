@@ -32,7 +32,7 @@ export function send(request, response) {
         const fullName = `${first} ${last}`;
         const body = {
             from: email,
-            to: process.env.CARPETBASE_EMAIL,
+            to: 'info@carpetbase.co.uk',
             replyTo: `${first} ${last} ${email}`,
             subject: 'CarpetBase - General Enquiry',
             text: `
