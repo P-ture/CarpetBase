@@ -32,7 +32,7 @@ export function send(request, response) {
         const fullName = `${first} ${last}`;
         const body = {
             from: email,
-            to: 'info@carpetbase.co.uk',
+            to: 'jackgavin85@gmail.com',
             replyTo: `${first} ${last} ${email}`,
             subject: 'CarpetBase - General Enquiry',
             text: `
