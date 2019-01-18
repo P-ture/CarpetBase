@@ -62,8 +62,8 @@ export const fetch = ({ dispatch }) => {
  * @type {Object}
  */
 const defaultForm = {
-    firstName: '',
-    lastName: '',
+    first: '',
+    last: '',
     email: '',
     message: ''
 };
@@ -185,25 +185,25 @@ export default enhance(class Contact extends Component {
                             <section className="error">Unable to send the e-mail at this moment in time.</section>
                         )}
 
-                        <div className="first-name">
-                            <label htmlFor="firstName">First Name</label>
+                        <div className="first">
+                            <label htmlFor="first">First Name</label>
                             <input
                                 type="text"
-                                name="firstName"
-                                value={form.firstName}
+                                name="first"
+                                value={form.first}
                                 disabled={isDisabled}
-                                onChange={this.update('firstName')}
+                                onChange={this.update('first')}
                                 />
                         </div>
 
-                        <div className="last-name">
-                            <label htmlFor="lastName">Last Name</label>
+                        <div className="last">
+                            <label htmlFor="last">Last Name</label>
                             <input
                                 type="text"
-                                name="lastName"
-                                value={form.lastName}
+                                name="last"
+                                value={form.last}
                                 disabled={isDisabled}
-                                onChange={this.update('lastName')}
+                                onChange={this.update('last')}
                                 />
                         </div>
 

@@ -28,12 +28,12 @@ export function send(request, response) {
 
         const apiKey = process.env.CARPETBASE_SMTP_KEY;
         const mail = mailgun({ apiKey, domain: 'sandbox5c634282fac543aa8ab43c9558a6c3c6.mailgun.org' });
-        const { firstName, lastName, email, message } = request.body;
-        const fullName = `${firstName} ${lastName}`;
+        const { first, last, email, message } = request.body;
+        const fullName = `${first} ${last}`;
         const body = {
             from: email,
             to: process.env.CARPETBASE_EMAIL,
-            replyTo: `${firstName} ${lastName} ${email}`,
+            replyTo: `${first} ${last} ${email}`,
             subject: 'CarpetBase - General Enquiry',
             text: `
                 You have received a new general enquiry from ${fullName}.
@@ -44,7 +44,7 @@ export function send(request, response) {
                 ${message}
                 ---
     
-                You can hit "reply" to respond to ${firstName} directly, or you can use ${gender(fullName)} e-mail address: ${email}.
+                You can hit "reply" to respond to ${first} directly, or you can use ${gender(fullName)} e-mail address: ${email}.
     
                 Regards,
                 CarpetBot.
