@@ -31,7 +31,7 @@ export async function getOne(request, response) {
     const [link] = (record && model.featuredPageId) ? await db.select('slug').from('pages').where('id', '=', model.featuredPageId) : [null];
 
     // Find the hero image if it has been set.
-    const [hero] = model.mediaId ? await db.select().from('media').where('id', model.mediaId) : [null];
+    const [hero] = (model && model.mediaId) ? await db.select().from('media').where('id', model.mediaId) : [null];
 
     record ? response.send({ ...record, hero, galleries, link }) : response.status(404).send({});
 

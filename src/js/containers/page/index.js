@@ -29,6 +29,10 @@ const actions = { ...pageActions, ...galleryActions };
  */
 export const mapStateToProps = state => {
 
+    if (!state.page.content) {
+        return { page: {}, galleries: [], featuredGallery: null };
+    }
+
     const { featuredGalleryId } = state.page.content;
 
     return {
